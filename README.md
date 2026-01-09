@@ -8,8 +8,8 @@ My goal is to solve everyday problems by connecting apps, automating repetitive 
 
 | Project Name | Type | Description | Tech Stack |
 | :--- | :--- | :--- | :--- |
-| [01. Automated Job Hunter](./01-automated-job-hunter) | 👔 Career | Scrapes job boards for "Python" roles, filters them using Gemini AI, and alerts me via Telegram. | n8n, Python (RSS/Scraping), Gemini AI |
-| [02. Vintage Price Checker](./https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/02-vintage-price-checker) | 🛍️ E-commerce | (Coming Soon) Checks eBay prices for vintage clothes automatically. | n8n, Python (BeautifulSoup) |
+| [01. Automated Job Hunter](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/%E2%80%8B01-automated-job-hunter) | 👔 Career | Scrapes job boards for "Python" roles, filters them using Gemini AI, and alerts me via Telegram. | n8n, Python (RSS/Scraping), Gemini AI |
+| [02. Vintage Price Checker](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/02-vintage-price-checker) | 🛍️ E-commerce | (Coming Soon) Checks eBay prices for vintage clothes automatically. | n8n, Python (BeautifulSoup) |
 
 ---
 
