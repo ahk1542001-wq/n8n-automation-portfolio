@@ -1,0 +1,167 @@
+{
+  "name": "notion to telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "event": "pagedUpdatedInDatabase",
+        "databaseId": {
+          "__rl": true,
+          "value": "2e48083e-1b41-8043-ab85-eb52330a4747",
+          "mode": "list",
+          "cachedResultName": "2e48083e-1b41-8043-ab85-eb52330a4747",
+          "cachedResultUrl": "https://www.notion.so/2e48083e1b418043ab85eb52330a4747"
+        }
+      },
+      "type": "n8n-nodes-base.notionTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d44f51d8-0692-4f97-b89c-b24b46afd22f",
+      "name": "Notion Trigger",
+      "credentials": {
+        "notionApi": {
+          "id": "73AKA0FFnh1qTxZd",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "544752ed-7216-4b93-92c1-2cbdc049ab26",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "Ready to Post",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f9085739-1ce2-467a-b18f-5dc33a67c5c2",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "@victor_ai_content",
+        "file": "={{ $('Notion Trigger').item.json.Image }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        544,
+        0
+      ],
+      "id": "c782b572-f495-4178-bc67-1fddd969b264",
+      "name": "Send a photo message",
+      "webhookId": "3e58bd82-ed83-4568-ae9b-67c3731f7501",
+      "credentials": {
+        "telegramApi": {
+          "id": "lIdnYF8E2qK7BfYa",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "@victor_ai_content",
+        "text": "={{ $json.Caption }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        0
+      ],
+      "id": "8499478c-0922-419b-ac4c-d571bef8a283",
+      "name": "Send a text message",
+      "webhookId": "d642be8f-6fd5-482b-895f-33444703ef32",
+      "credentials": {
+        "telegramApi": {
+          "id": "lIdnYF8E2qK7BfYa",
+          "name": "Telegram account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Notion Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "0xC8BFGltlTItJBU"
+  },
+  "versionId": "382478df-f1e0-4fd6-8792-c36d2c23b770",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5be75e3cc304e5657a31c0239c6d3da417296cb23afe6c1e2d21f6607f4d0ea3"
+  },
+  "id": "fgwELRSeUJfNaS7c",
+  "tags": []
+}
