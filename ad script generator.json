@@ -1,0 +1,163 @@
+{
+  "name": "ad script generator",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "databaseId": {
+          "__rl": true,
+          "value": "2e48083e-1b41-80ea-aa3f-de3a83384144",
+          "mode": "list",
+          "cachedResultName": "Dropshipping Research",
+          "cachedResultUrl": "https://www.notion.so/2e48083e1b4180eaaa3fde3a83384144"
+        }
+      },
+      "type": "n8n-nodes-base.notionTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e4fbffcd-bb24-4ef1-8116-c3d4319f533f",
+      "name": "Notion Trigger",
+      "credentials": {
+        "notionApi": {
+          "id": "73AKA0FFnh1qTxZd",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional TikTok Ads Copywriter. I have a product called \nPlease write a 30-second viral TikTok ad script for this productand tour limit words is 1999\nThe script should include:\n​A strong Hook\n​Product benefits\n​Call to Action (CTA).\nMake it engaging and trendy",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "21b0ba24-16b3-472a-9293-4d13b4b5a783",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "e2327fdf-5602-47c8-adf0-b24b040b8e5a",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "JKdVQwLIZz4rwzCR",
+          "name": "Ollama account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "2e48083e-1b41-80ea-aa3f-de3a83384144",
+          "mode": "list",
+          "cachedResultName": "Dropshipping Research",
+          "cachedResultUrl": "https://www.notion.so/2e48083e1b4180eaaa3fde3a83384144"
+        },
+        "title": "={{ $('Notion Trigger').item.json['Product Name'] }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "ad script|rich_text",
+              "richText": true,
+              "text": {
+                "text": [
+                  {
+                    "text": "={{ $json.output }}",
+                    "annotationUi": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "af1a50b4-2435-4542-9660-d141aaedccee",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "73AKA0FFnh1qTxZd",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Notion Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "3fbf0523-7729-4daf-bf23-ba70d9d5acef",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5be75e3cc304e5657a31c0239c6d3da417296cb23afe6c1e2d21f6607f4d0ea3"
+  },
+  "id": "i3majaYxJypyscBM",
+  "tags": []
+}
