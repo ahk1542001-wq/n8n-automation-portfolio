@@ -1,0 +1,237 @@
+{
+  "name": "Automated Maket Research System",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5cc2c583-3c81-4045-8676-7eeb231dd7cf",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://dummyjson.com/products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5888644e-5e68-4aee-8c11-ef7c1f517db1",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "4c88a6e4-217f-4337-807c-b83f2495c44f",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "2e48083e-1b41-80ea-aa3f-de3a83384144",
+          "mode": "list",
+          "cachedResultName": "Dropshipping Research",
+          "cachedResultUrl": "https://www.notion.so/2e48083e1b4180eaaa3fde3a83384144"
+        },
+        "title": "={{ $json.output }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Product Name|title",
+              "title": "={{ $('Split Out').item.json.title }}"
+            },
+            {
+              "key": "Viral Link|url",
+              "ignoreIfEmpty": true,
+              "urlValue": "={{ $json.thumbnail }}"
+            },
+            {
+              "key": "Supplier Link|url",
+              "ignoreIfEmpty": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "7f8485a8-0b7a-47da-856e-322bd0867234",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "73AKA0FFnh1qTxZd",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\"You are an expert Dropshipping Product Researcher. Your task is to evaluate a product name and determine if it belongs to the 'Women's Beauty' niche (Skincare, Makeup, Haircare, Fragrance, or Beauty Accessories).\n​Product Name: {{ $json.title }}\n​Instructions:\n​Analyze if the product is primarily used by women for beauty or self-care.\n​If it belongs to the Women's Beauty niche, respond ONLY with the word 'TRUE'.\n​If it does not belong, respond ONLY with the word 'FALSE'.\n​Do not provide any explanations, notes, or additional text.\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "be2eae2a-7b36-4dc0-91a7-6ba7c7f47a20",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        496,
+        208
+      ],
+      "id": "ff1fb6dd-d222-4e2e-8383-28919c4ea1bc",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "JKdVQwLIZz4rwzCR",
+          "name": "Ollama account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "002ff46f-f796-46e5-80a6-65a6e5d9c96d",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "TRUE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        960,
+        0
+      ],
+      "id": "bafc8636-d7d4-45d9-b85b-fd9f8c31e05e",
+      "name": "Filter"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "9b8debd9-ef98-4038-99ed-ca717f938312",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5be75e3cc304e5657a31c0239c6d3da417296cb23afe6c1e2d21f6607f4d0ea3"
+  },
+  "id": "apDtHYvNN5rGFu9D",
+  "tags": []
+}
