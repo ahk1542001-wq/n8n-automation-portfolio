@@ -10,7 +10,7 @@ My goal is to solve everyday problems by connecting apps, automating repetitive 
 | :--- | :--- | :--- | :--- |
 | [01. Automated Job Hunter](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/%E2%80%8B01-automated-job-hunter) | 👔 Career | Scrapes job boards for "Python" roles, filters them using Gemini AI, and alerts me via Telegram. | n8n, Python (RSS/Scraping), Gemini AI |
 | [02. Vintage Price Checker](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/02-vintage-price-checker) | 🛍️ E-commerce | (Coming Soon) Checks eBay prices for vintage clothes automatically. | n8n, Python (BeautifulSoup) |
-| [03. AI Market Researcher](https://github.com/ahk1542001-wq/n8n-automation-portfolio/commit/f8044bc5f7a5028f785d1a13df8e012ee05a653c./03-ai-market-researcher) | 🛍️ E-commerce | Fetches trending products and uses Local AI (Ollama) to filter items for the Women's Beauty niche. | n8n, Ollama (Llama 3), Notion |
+| [03. AI Market Researcher](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/03-ai-market-researcher) | 🛍️ E-commerce | Fetches trending products and uses Local AI (Ollama) to filter items for the Women's Beauty niche. | n8n, Ollama (Llama 3), Notion |
 
 ---
 
