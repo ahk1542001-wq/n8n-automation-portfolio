@@ -12,6 +12,7 @@ My goal is to solve everyday problems by connecting apps, automating repetitive 
 | [02. Vintage Price Checker](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/02-vintage-price-checker) | 🛍️ E-commerce | (Coming Soon) Checks eBay prices for vintage clothes automatically. | n8n, Python (BeautifulSoup) |
 | [03. AI Market Researcher](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/03-ai-market-research) | 🛍️ E-commerce | Scrapes products and uses Local AI (Ollama) to filter for beauty niche. | n8n, Ollama, Notion |
 | [04. AI News Sentinel](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/04-ai%20and%20tech%20sential) | 📰 News/Trends | Tracks latest AI news from RSS feeds and sends summaries via Telegram. | n8n, RSS, Telegram Bot |
+| [05. Dropshipping Content Bot](./05-ai-ad-script-generator) | 🛍️ E-commerce | My personal assistant that writes viral TikTok scripts for any product added to Notion. No more writer's block. | n8n, OpenAI, Notion |
 
 ---
 
