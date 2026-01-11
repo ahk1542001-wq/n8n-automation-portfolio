@@ -10,7 +10,7 @@ My goal is to solve everyday problems by connecting apps, automating repetitive 
 | :--- | :--- | :--- | :--- |
 | [01. Automated Job Hunter](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/%E2%80%8B01-automated-job-hunter) | 👔 Career | Scrapes job boards for "Python" roles, filters them using Gemini AI, and alerts me via Telegram. | n8n, Python (RSS/Scraping), Gemini AI |
 | [02. Vintage Price Checker](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/02-vintage-price-checker) | 🛍️ E-commerce | (Coming Soon) Checks eBay prices for vintage clothes automatically. | n8n, Python (BeautifulSoup) |
-| [03. AI Market Researcher](./03-ai-market-researcher) | 🛍️ E-commerce | Fetches trending products and uses Local AI (Ollama) to filter items for the Women's Beauty niche. | n8n, Ollama (Llama 3), Notion |
+| [03. AI Market Researcher](./Autom03-automated researcher) | 🛍️ E-commerce | Fetches trending products and uses Local AI (Ollama) to filter items for the Women's Beauty niche. | n8n, Ollama (Llama 3), Notion |
 | [04. AI News Sentinel](./05-ai-news-sentinel) | 📰 News/Trends | Automatically tracks the latest AI/Tech news from RSS feeds, filters for relevance, and sends summaries via Telegram. | n8n, RSS/News APIs, Telegram Bot |
 
 ---
