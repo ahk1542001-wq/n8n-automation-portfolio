@@ -8,7 +8,7 @@ My goal is to solve everyday problems by connecting apps, automating repetitive 
 
 | Project Name | Type | Description | Tech Stack |
 | :--- | :--- | :--- | :--- |
-| [01. Automated Job Hunter](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/%E2%80%8B01-automated-job-hunter) | 👔 Career | Scrapes job boards for "Python" roles, filters them using Gemini AI, and alerts me via Telegram. | n8n, Python (RSS/Scraping), Gemini AI |
+| [01. Automated Job Hunter](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/%E2%80%8B01-automated-job-hunter) | 👔 Career | Career Scrapes LinkedIn for automation roles, filters using AI Agents for CV match, and sends personalized cover letters via Telegram. | n8n, n8n, AI Agents, SerpApi, Telegram |
 | [02. Vintage Price Checker](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/02-vintage-price-checker) | 🛍️ E-commerce | (Coming Soon) Checks eBay prices for vintage clothes automatically. | n8n, Python (BeautifulSoup) |
 | [03. AI Market Researcher](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/03-ai-market-research) | 🛍️ E-commerce | Scrapes products and uses Local AI (Ollama) to filter for beauty niche. | n8n, Ollama, Notion |
 | [04. AI News Sentinel](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/04-ai%20and%20tech%20sential) | 📰 News/Trends | Tracks latest AI news from RSS feeds and sends summaries via Telegram. | n8n, RSS, Telegram Bot |
