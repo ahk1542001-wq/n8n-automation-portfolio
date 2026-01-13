@@ -22,75 +22,20 @@
     },
     {
       "parameters": {
-        "jsCode": "// HTTP Request node ကနေ ရလာတဲ့ XML text ကို ယူခြင်း\n// n8n v1+ မှာ အရှေ့ node က data ကို $input.first().json ထဲမှာ သိမ်းပါတယ်\nconst xmlText = $input.first().json.data; \n\n// XML ထဲက <item> tag တစ်ခုချင်းစီကို ခွဲထုတ်ခြင်း\nconst items = xmlText.match(/<item>[\\s\\S]*?<\\/item>/g) || [];\n\nconst filteredJobs = [];\n\nfor (const item of items) {\n    // Title နဲ့ Link ကို Extract လုပ်ခြင်း\n    const titleMatch = item.match(/<title><!\\[CDATA\\[(.*?)\\]\\]><\\/title>/) || item.match(/<title>(.*?)<\\/title>/);\n    const linkMatch = item.match(/<link>(.*?)<\\/link>/);\n    \n    const title = titleMatch ? titleMatch[1] : '';\n    const link = linkMatch ? linkMatch[1] : '';\n\n    // Filter Logic: \"Python\" သို့မဟုတ် \"Junior\" ပါ၊ မပါ စစ်ခြင်း\n    if (title.toLowerCase().includes('python') || title.toLowerCase().includes('junior')) {\n        filteredJobs.push({\n            json: {\n                job_title: title,\n                link: link\n            }\n        });\n    }\n}\n\n// ရလဒ်များကို return ပြန်ခြင်း\nreturn filteredJobs;"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        448,
-        128
-      ],
-      "id": "7f3e30d0-7ef2-43b4-80e1-aeb02b79fe7a",
-      "name": "Code in JavaScript"
-    },
-    {
-      "parameters": {
-        "url": "https://weworkremotely.com/categories/remote-back-end-programming-jobs.rss",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "text"
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        224,
-        128
-      ],
-      "id": "a2622a54-331a-45dd-a815-2d5fec09b6de",
-      "name": "HTTP Request"
-    },
-    {
-      "parameters": {
         "promptType": "define",
-        "text": "=You are a helpful job assistant.\nHere is the Job Title: {{ $json.job_title }}\nHere is the Link: {{ $json.link }}\n\nTask: You are an expert copywriter helping me write a cover letter. I need you to write a cover letter for the position of {{ $json.job_title }} at [INSERT COMPANY NAME HERE].\n\nCRITICAL INSTRUCTIONS (Read Carefully):\n1.  Tone: Write in a conversational, professional yet human tone. Avoid being overly formal or robotic. Write as if you are emailing a respected colleague.\n2.  Sentence Structure (Burstiness): You MUST vary your sentence length. Use some very short, punchy sentences. Then use longer, more complex ones. Do not use a repetitive structure.\n3.  Vocabulary Ban: Do NOT use the following \"AI-sounding\" words:\n    - Delve, Realm, Landscape, Tapestry, Testament to, Underscore, Spearhead, Foster, Seamlessly, Pivotal, Game-changer.\n4.  Structure:\n    - Opening: Don't start with \"I am writing to apply...\". Start with a \"Hook\" (e.g., why I admire the company or a specific problem I solve).\n    - Middle: Focus on [INSERT my TOP SKILL, e.g., Python Automation] and mention a specific result.\n    - Closing: Confident, short, and call to action.\n\n\nGOAL:\nWrite a draft that gets a low score on AI detectors. Keep it under 250 words.\n\nVERY IMPORTANT OUTPUT RULE:\nDo not output JSON format. Write a clean, professional cover letter like i mention. Do not add any footers like 'sent automatically by n8n'\n",
-        "options": {}
+        "text": "=Check if this job matches my CV: \nTitle: {{ $json.title }}\nSnippet: {{ $json.snippet }}\nLink: {{ $json.link }}\n\nIF IT IS A MATCH, you MUST output in this format:\n📌 Job: {{ $json.title }}\n🔗 Application Link: <a href=\"{{ $json.link }}\">Click here to apply</a>\n\n---\n💡 Match Analysis: [Short explanation]\n✍️ Personalized Message: \n[Generate the human-like message here]",
+        "options": {
+          "systemMessage": "\"You are a Career Manager for victor.\nCandidate Data:\n​CV Link: https://drive.google.com/file/d/1dwFrfHjHtbjbvxKdeQ7mK5TKLKxFK5Dn/view?usp=sharing\n​GitHub: https://github.com/ahk1542001-wq/n8n-automation-portfolio\n​Core Skills: n8n, Docker, Python, JavaScript.\n​Instructions:\n​Compare the job with the CV.\n​If it matches, write a human-sounding (no clichés) intro message. Mention specific GitHub projects like the Video Factory.\n​If no match, strictly return: No match.\""
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        944,
+        1776,
         144
       ],
       "id": "00832047-a639-4e61-9d57-5b12b52a15d1",
       "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "chatId": "919432208",
-        "text": "=🔥 *New Job Alert*\n\nJob Title = {{ $('Loop Over Items').item.json.job_title }}\n\nLink = {{ $('Loop Over Items').item.json.link }}\n{{ $json.output }}\n\n",
-        "additionalFields": {
-          "parse_mode": "HTML"
-        }
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        1344,
-        144
-      ],
-      "id": "eca231e3-e3c3-4b18-8ccc-56a78c859985",
-      "name": "Send a text message",
-      "webhookId": "7d16df3a-5453-4b8c-af72-b117f207caa0",
-      "credentials": {
-        "telegramApi": {
-          "id": "lIdnYF8E2qK7BfYa",
-          "name": "Telegram account 3"
-        }
-      }
     },
     {
       "parameters": {
@@ -99,7 +44,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
-        944,
+        1776,
         368
       ],
       "id": "9ec9400b-17e1-4550-b2ba-c69298ccd7f5",
@@ -118,7 +63,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        656,
+        1488,
         128
       ],
       "id": "9e64949e-b5c5-457b-b251-2addfa39022e",
@@ -129,12 +74,143 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1376,
+        2624,
         400
       ],
       "id": "f1d45147-a80f-4a48-bcdc-100ea10123a8",
       "name": "Wait",
       "webhookId": "fd4a0fcf-4a63-421a-8af1-b1b6f9e58e6a"
+    },
+    {
+      "parameters": {
+        "q": "site:linkedin.com/jobs/view \"Automation Engineer\" Bangkok",
+        "location": "Thailand",
+        "additionalFields": {
+          "tbs": "tbs=qdr:d"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApi",
+      "typeVersion": 1,
+      "position": [
+        208,
+        128
+      ],
+      "id": "8de3c833-017e-431c-8fd6-995280184866",
+      "name": "Google search",
+      "credentials": {
+        "serpApi": {
+          "id": "hK7yfJqKe2LPGXiD",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "\"Extract all automation jobs from the search results. Ensure the 'link' is the direct website URL and include the full snippet text.\"",
+        "options": {
+          "systemMessage": "\"You are a Data Extraction Specialist. Your job is to take search results and turn them into a clean JSON array.\nOutput Format (STRICT):\n[{\"title\": \"Job Name\", \"link\": \"Direct URL\", \"snippet\": \"Description\"}]\nOnly output the JSON. No conversational text.\"\n​User Prompt:\n\"When extracting the job link, you MUST use the 'link' property from the search results. DO NOT use 'redirect_link'. Ensure the URL starts with https:// and leads directly to the job site (e.g., glassdoor.com, linkedin.com).\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        128
+      ],
+      "id": "78009e48-472f-4fc9-89b4-9f736cb9abbe",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        288,
+        336
+      ],
+      "id": "5813c076-7035-4322-a433-b24605696a07",
+      "name": "Ollama Chat Model1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "JKdVQwLIZz4rwzCR",
+          "name": "Ollama account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ၁။ AI Agent 1 ဆီကလာတဲ့ Output (စာသား) ကို ယူမယ်\nconst aiRawOutput = $node[\"AI Agent1\"].json.output;\nlet jobsArray = []; // ဒီမှာ jobsArray ကို အရင် define လုပ်ပေးရပါတယ်\n\ntry {\n    // ၂။ စာသားထဲက JSON Array ကို ဆွဲထုတ်မယ်\n    const jsonMatch = aiRawOutput.match(/\\[.*\\]/s);\n    if (jsonMatch) {\n        jobsArray = JSON.parse(jsonMatch[0]);\n    } else {\n        jobsArray = JSON.parse(aiRawOutput);\n    }\n} catch (e) {\n    return [{ json: { error: \"Parse Error: AI output is not valid JSON\" } }];\n}\n\n// ၃။ Link တွေကို သန့်စင်ပေးမယ့်အပိုင်း\nreturn jobsArray.map(job => {\n    let rawLink = job.link || \"\";\n    let finalLink = rawLink;\n\n    // Google Redirect Link ဖြစ်နေရင် Direct Link ပြောင်းမယ်\n    if (rawLink.includes(\"google.com/url?\")) {\n        try {\n            const urlParams = new URLSearchParams(rawLink.split('?')[1]);\n            finalLink = urlParams.get('url') || rawLink;\n        } catch (err) {}\n    }\n    \n    // LinkedIn link ဖြစ်ရင် tracking code တွေ ဖြတ်မယ် (Link အသေမဖြစ်အောင်)\n    if (finalLink.includes(\"linkedin.com/jobs\")) {\n        finalLink = finalLink.split('?')[0];\n    }\n\n    return {\n        json: {\n            title: job.title || \"No Title\",\n            link: finalLink,\n            snippet: job.snippet || \"No Description\"\n        }\n    };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        128
+      ],
+      "id": "7a091eb8-69d9-4f18-8362-239aeea08014",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "chatId": "919432208",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2592,
+        144
+      ],
+      "id": "eca231e3-e3c3-4b18-8ccc-56a78c859985",
+      "name": "Send a text message",
+      "webhookId": "7d16df3a-5453-4b8c-af72-b117f207caa0",
+      "credentials": {
+        "telegramApi": {
+          "id": "lIdnYF8E2qK7BfYa",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f0ff7936-bb3d-4fa0-8753-82f09ea96b0e",
+              "leftValue": "",
+              "rightValue": "No match",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2128,
+        144
+      ],
+      "id": "e5726c52-1f95-46f3-b276-a80a10abc7a4",
+      "name": "Filter"
     }
   ],
   "pinData": {},
@@ -143,29 +219,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code in JavaScript": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
+            "node": "Google search",
             "type": "main",
             "index": 0
           }
@@ -176,7 +230,7 @@
       "main": [
         [
           {
-            "node": "Send a text message",
+            "node": "Filter",
             "type": "main",
             "index": 0
           }
@@ -206,6 +260,61 @@
         ]
       ]
     },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Send a text message": {
       "main": [
         [
@@ -217,11 +326,11 @@
         ]
       ]
     },
-    "Wait": {
+    "Filter": {
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Send a text message",
             "type": "main",
             "index": 0
           }
@@ -232,9 +341,12 @@
   "active": false,
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "0xC8BFGltlTItJBU"
   },
-  "versionId": "6e00afc2-1ee2-432c-a1a4-d87061fb3d52",
+  "versionId": "91916422-c12b-4c7c-bcd3-01611ed7872c",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "5be75e3cc304e5657a31c0239c6d3da417296cb23afe6c1e2d21f6607f4d0ea3"
