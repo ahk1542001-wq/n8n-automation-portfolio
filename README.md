@@ -13,6 +13,7 @@ My goal is to solve everyday problems by connecting apps, automating repetitive 
 | [03. AI Market Researcher](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/03-ai-market-research) | 🛍️ E-commerce | Scrapes products and uses Local AI (Ollama) to filter for beauty niche. | n8n, Ollama, Notion |
 | [04. AI News Sentinel](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/04-ai%20and%20tech%20sential) | 📰 News/Trends | Tracks latest AI news from RSS feeds and sends summaries via Telegram. | n8n, RSS, Telegram Bot |
 | [05. Dropshipping Content Bot](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/05-ad%20script%20generator) | 🛍️ E-commerce | My personal assistant that writes viral TikTok scripts for any product added to Notion. No more writer's block. | n8n, OpenAI, Notion |
+| [06. Automated Video Factory](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/06-Automated%20Video%20Factory) | 🎬 Content Creation | Automatically researches trending fashion items and generates a 5-scene video storyboard with audio scripts directly to Notion. | n8n, AI Agent, SerpApi, Notion |
 
 ---
 
