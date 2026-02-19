@@ -1,7 +1,0 @@
-Automated Job Hunter
-​Goal: To eliminate manual job searching and application message writing.
-​Workflow Logic:
-​Search: Uses SerpApi with a qdr:d (24-hour) filter to ensure only active, non-broken links are retrieved.
-​Filtering: A custom JavaScript node cleans Google redirect URLs into direct job page links.
-​AI Analysis: A dual AI Agent system (using Ollama/Gemini) compares the job snippet with my CV and GitHub portfolio to determine a "Match".
-​Notification: Generates a human-like application message and sends it to Telegram if a match is found.
