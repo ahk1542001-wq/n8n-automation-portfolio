@@ -1,5 +1,1 @@
-Technical Overview
-​Market Research: Uses an AI Agent with SerpApi to find the top 5 trending fashion items.
-​Creative Logic: Selects the best item and breaks it down into a 5-scene video script using a custom Information Extractor.
-​Infrastructure: Hosted on a self-hosted n8n Docker instance with Cloudflare Tunnel for secure webhook handling.
-​Data Pipeline: Implements a sequential Loop Over Items logic to ensure all scene data is accurately populated into Notion without data loss.
+
