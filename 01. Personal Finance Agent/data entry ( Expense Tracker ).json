@@ -1,433 +1,359 @@
 {
-  "name": "data entry ( Expense Tracker )",
-  "nodes": [
-    {
-      "parameters": {
-        "updates": [
-          "message"
-        ],
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegramTrigger",
-      "typeVersion": 1.2,
-      "position": [
-        -1792,
-        -240
-      ],
-      "id": "2a87592c-6437-4ca1-ad05-90f387220f53",
-      "name": "Telegram Trigger",
-      "webhookId": "6d044e06-1395-425f-ab94-7d3db76fc71d",
-      "credentials": {
-        "telegramApi": {
-          "id": "lviwXQAXkTDEwgOI",
-          "name": "Telegram account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Today's actual current date is {{ $now.format('yyyy-MM-dd') }}.\n\nYou are a financial data extraction assistant. Your task is to extract transaction details from the user's message and format them into a valid JSON array.\n\n### SIGN RULES FOR \"amount\" (MANDATORY):\n1. INCOME: If the user receives money (e.g., \"Salary\", \"Received\", \"Income\", \"Profit\", \"Got paid\"), the \"amount\" MUST be a POSITIVE number (e.g., 50000).\n2. EXPENSE: If the user spends money (e.g., \"Spent\", \"Bought\", \"Paid for\", \"Lunch at\", \"KFC\", \"Dinner\"), the \"amount\" MUST be a NEGATIVE number (e.g., -25000).\n\n### JSON STRUCTURE:\nReturn ONLY a valid JSON Array of objects with these keys:\n- \"vendor\" (string: Shop name, person's name, or source of income)\n- \"amount\" (number: Positive for income, negative for expense)\n- \"currency\" (string: e.g., MMK, USD)\n- \"date\" (string: Use \"{{ $now.format('yyyy-MM-dd') }}\" if not specified)\n- \"category\" (string: Choose one from [Food, Transport, Shopping, Bills, Health, Entertainment, Income, Others])\n\n### CONSTRAINTS:\n- Do not include any text, markdown formatting, or explanations outside of the JSON array.\n- Handle multiple transactions if mentioned in a single message.\n\nUser Message: \n{{ $('Telegram Trigger').item.json.message.text }}",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        -1600,
-        -240
-      ],
-      "id": "b234911a-f2d6-4a96-b578-7b9920bced12",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "model": "llama3.2:latest",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
-      "typeVersion": 1,
-      "position": [
-        -1648,
-        0
-      ],
-      "id": "a6d1d5b2-4f3f-433e-b4c2-1832ffd2eec3",
-      "name": "Ollama Chat Model",
-      "credentials": {
-        "ollamaApi": {
-          "id": "hspW48GbYQpfnwXT",
-          "name": "Ollama account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "e135d3ef-a9c6-4cfb-ab95-9a891b1b211c",
-              "name": "invoice_data",
-              "value": "={{ JSON.parse($json.output) }}",
-              "type": "array"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -1312,
-        -240
-      ],
-      "id": "daac3759-9276-465f-87d0-425a6fa50418",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1LoZxb3gG47isE8ZBGfWGaj00dzOasObm8h_kP8BmjnA",
-          "mode": "list",
-          "cachedResultName": "expense traker",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LoZxb3gG47isE8ZBGfWGaj00dzOasObm8h_kP8BmjnA/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LoZxb3gG47isE8ZBGfWGaj00dzOasObm8h_kP8BmjnA/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Vendor ": "={{ $json.vendor }}",
-            "Amount": "={{ $json.amount }}",
-            "Date ": "={{ $json.date }}",
-            "Currency": "={{ $json.currency }}"
-          },
-          "matchingColumns": [
-            "Date "
-          ],
-          "schema": [
-            {
-              "id": "Date ",
-              "displayName": "Date ",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Vendor ",
-              "displayName": "Vendor ",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Amount",
-              "displayName": "Amount",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Currency",
-              "displayName": "Currency",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        -928,
-        -240
-      ],
-      "id": "c2b172ed-e4c0-4b10-ac0b-ae833d2625e4",
-      "name": "Append row in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "lMXi7rj03qjYKmZW",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "invoice_data",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [
-        -1168,
-        -240
-      ],
-      "id": "95a90d0c-8639-43af-9890-bcf54826f51a",
-      "name": "Split Out"
-    },
-    {
-      "parameters": {
-        "aggregate": "aggregateAllItemData",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        -912,
-        -32
-      ],
-      "id": "0904221b-79cf-4f5a-a8a5-b3939adbedfa",
-      "name": "Aggregate"
-    },
-    {
-      "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1LoZxb3gG47isE8ZBGfWGaj00dzOasObm8h_kP8BmjnA",
-          "mode": "list",
-          "cachedResultName": "expense traker",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LoZxb3gG47isE8ZBGfWGaj00dzOasObm8h_kP8BmjnA/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LoZxb3gG47isE8ZBGfWGaj00dzOasObm8h_kP8BmjnA/edit#gid=0"
-        },
-        "options": {
-          "dataLocationOnSheet": {
-            "values": {
-              "rangeDefinition": "specifyRangeA1",
-              "range": "F1:F2"
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        -912,
-        192
-      ],
-      "id": "03259b67-738b-4805-9d48-ffc2bf059bd0",
-      "name": "Get row(s) in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "lMXi7rj03qjYKmZW",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "=✅ Expense Recorded Successfully!  📊 Total Revenue in Sheet:  {{ $json['Grand Total'] }}",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        -912,
-        320
-      ],
-      "id": "b7c24a90-f413-4241-a927-ba2f8613326e",
-      "name": "Send a text message",
-      "webhookId": "04a8c59d-2b57-44f8-b937-3a991b6d3580",
-      "credentials": {
-        "telegramApi": {
-          "id": "lviwXQAXkTDEwgOI",
-          "name": "Telegram account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "databasePage",
-        "databaseId": {
-          "__rl": true,
-          "value": "30c8083e-1b41-8013-8be0-ccc33a7e33e4",
-          "mode": "list",
-          "cachedResultName": "Expense",
-          "cachedResultUrl": "https://www.notion.so/30c8083e1b4180138be0ccc33a7e33e4"
-        },
-        "propertiesUi": {
-          "propertyValues": [
-            {
-              "key": "Amount|number",
-              "numberValue": "={{ $json.amount }}"
-            },
-            {
-              "key": "Currency|rich_text",
-              "textContent": "={{ $json.currency }}"
-            },
-            {
-              "key": "Date|date",
-              "date": "={{ $json.date }}"
-            },
-            {
-              "key": "Vendor|title",
-              "title": "={{ $json.vendor }}"
-            },
-            {
-              "key": "Category|select",
-              "selectValue": "={{ $json.category }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.notion",
-      "typeVersion": 2.2,
-      "position": [
-        -1280,
-        64
-      ],
-      "id": "65434607-b5d0-4ba9-8556-453d75cc2796",
-      "name": "Create a database page",
-      "credentials": {
-        "notionApi": {
-          "id": "J09VwknXNaZxRyFa",
-          "name": "Notion account 2"
-        }
-      }
-    }
-  ],
-  "pinData": {},
-  "connections": {
-    "Telegram Trigger": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Ollama Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Split Out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Out": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Create a database page",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Append row in sheet": {
-      "main": [
-        [
-          {
-            "node": "Aggregate",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Aggregate": {
-      "main": [
-        [
-          {
-            "node": "Get row(s) in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get row(s) in sheet": {
-      "main": [
-        [
-          {
-            "node": "Send a text message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create a database page": {
-      "main": [
-        []
-      ]
-    }
-  },
-  "active": false,
-  "settings": {
-    "executionOrder": "v1",
-    "binaryMode": "separate",
-    "availableInMCP": false
-  },
-  "versionId": "ed690171-c32f-4d57-9a8d-6aba81618750",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "46bb73ecced9b0699420e4f7dfc67baf640134985fb1f4e41d1b5647067d40a0"
-  },
-  "id": "36SkSfaduPyliXaE",
-  "tags": []
+"name": "data entry ( Expense Tracker )",
+"nodes": [
+{
+"parameters": {
+"updates": [
+"message"
+],
+"additionalFields": {}
+},
+"type": "n8n-nodes-base.telegramTrigger",
+"typeVersion": 1.2,
+"position": [
+-1792,
+-240
+],
+"id": "telegram-trigger-node",
+"name": "Telegram Trigger",
+"webhookId": "YOUR_WEBHOOK_ID",
+"credentials": {
+"telegramApi": {
+"id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+"name": "Telegram account"
+}
+}
+},
+{
+"parameters": {
+"promptType": "define",
+"text": "=Today's actual current date is {{ $now.format('yyyy-MM-dd') }}.\n\nYou are a financial data extraction assistant. Your task is to extract transaction details from the user's message and format them into a valid JSON array.\n\n### SIGN RULES FOR \"amount\" (MANDATORY):\n1. INCOME: If the user receives money (e.g., \"Salary\", \"Received\", \"Income\", \"Profit\", \"Got paid\"), the \"amount\" MUST be a POSITIVE number (e.g., 50000).\n2. EXPENSE: If the user spends money (e.g., \"Spent\", \"Bought\", \"Paid for\", \"Lunch at\", \"KFC\", \"Dinner\"), the \"amount\" MUST be a NEGATIVE number (e.g., -25000).\n\n### JSON STRUCTURE:\nReturn ONLY a valid JSON Array of objects with these keys:\n- \"vendor\" (string: Shop name, person's name, or source of income)\n- \"amount\" (number: Positive for income, negative for expense)\n- \"currency\" (string: e.g., MMK, USD)\n- \"date\" (string: Use \"{{ $now.format('yyyy-MM-dd') }}\" if not specified)\n- \"category\" (string: Choose one from [Food, Transport, Shopping, Bills, Health, Entertainment, Income, Others])\n\n### CONSTRAINTS:\n- Do not include any text, markdown formatting, or explanations outside of the JSON array.\n- Handle multiple transactions if mentioned in a single message.\n\nUser Message: \n{{ $('Telegram Trigger').item.json.message.text }}",
+"options": {}
+},
+"type": "@n8n/n8n-nodes-langchain.agent",
+"typeVersion": 3.1,
+"position": [
+-1600,
+-240
+],
+"id": "ai-agent-node",
+"name": "AI Agent"
+},
+{
+"parameters": {
+"model": "llama3.2:latest",
+"options": {}
+},
+"type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+"typeVersion": 1,
+"position": [
+-1648,
+0
+],
+"id": "ollama-node",
+"name": "Ollama Chat Model",
+"credentials": {
+"ollamaApi": {
+"id": "YOUR_OLLAMA_CREDENTIAL_ID",
+"name": "Ollama account"
+}
+}
+},
+{
+"parameters": {
+"assignments": {
+"assignments": [
+{
+"id": "assignment-1",
+"name": "invoice_data",
+"value": "={{ JSON.parse($json.output) }}",
+"type": "array"
+}
+]
+},
+"options": {}
+},
+"type": "n8n-nodes-base.set",
+"typeVersion": 3.4,
+"position": [
+-1312,
+-240
+],
+"id": "edit-fields-node",
+"name": "Edit Fields"
+},
+{
+"parameters": {
+"operation": "append",
+"documentId": {
+"__rl": true,
+"value": "YOUR_GOOGLE_SHEET_ID",
+"mode": "id"
+},
+"sheetName": {
+"__rl": true,
+"value": "gid=0",
+"mode": "list"
+},
+"columns": {
+"mappingMode": "defineBelow",
+"value": {
+"Vendor ": "={{ $json.vendor }}",
+"Amount": "={{ $json.amount }}",
+"Date ": "={{ $json.date }}",
+"Currency": "={{ $json.currency }}"
+},
+"matchingColumns": [
+"Date "
+]
+},
+"options": {}
+},
+"type": "n8n-nodes-base.googleSheets",
+"typeVersion": 4.7,
+"position": [
+-928,
+-240
+],
+"id": "gsheet-append-node",
+"name": "Append row in sheet",
+"credentials": {
+"googleSheetsOAuth2Api": {
+"id": "YOUR_GSHEETS_CREDENTIAL_ID",
+"name": "Google Sheets account"
+}
+}
+},
+{
+"parameters": {
+"fieldToSplitOut": "invoice_data",
+"options": {}
+},
+"type": "n8n-nodes-base.splitOut",
+"typeVersion": 1,
+"position": [
+-1168,
+-240
+],
+"id": "split-out-node",
+"name": "Split Out"
+},
+{
+"parameters": {
+"aggregate": "aggregateAllItemData",
+"options": {}
+},
+"type": "n8n-nodes-base.aggregate",
+"typeVersion": 1,
+"position": [
+-912,
+-32
+],
+"id": "aggregate-node",
+"name": "Aggregate"
+},
+{
+"parameters": {
+"documentId": {
+"__rl": true,
+"value": "YOUR_GOOGLE_SHEET_ID",
+"mode": "id"
+},
+"sheetName": {
+"__rl": true,
+"value": "gid=0",
+"mode": "list"
+},
+"options": {
+"dataLocationOnSheet": {
+"values": {
+"rangeDefinition": "specifyRangeA1",
+"range": "F1:F2"
+}
+}
+}
+},
+"type": "n8n-nodes-base.googleSheets",
+"typeVersion": 4.7,
+"position": [
+-912,
+192
+],
+"id": "gsheet-get-node",
+"name": "Get row(s) in sheet",
+"credentials": {
+"googleSheetsOAuth2Api": {
+"id": "YOUR_GSHEETS_CREDENTIAL_ID",
+"name": "Google Sheets account"
+}
+}
+},
+{
+"parameters": {
+"chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+"text": "=✅ Expense Recorded Successfully!  📊 Total Revenue in Sheet:  {{ $json['Grand Total'] }}",
+"additionalFields": {
+"appendAttribution": false
+}
+},
+"type": "n8n-nodes-base.telegram",
+"typeVersion": 1.2,
+"position": [
+-912,
+320
+],
+"id": "telegram-send-node",
+"name": "Send a text message",
+"credentials": {
+"telegramApi": {
+"id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+"name": "Telegram account"
+}
+}
+},
+{
+"parameters": {
+"resource": "databasePage",
+"databaseId": {
+"__rl": true,
+"value": "YOUR_NOTION_DATABASE_ID",
+"mode": "id"
+},
+"propertiesUi": {
+"propertyValues": [
+{
+"key": "Amount|number",
+"numberValue": "={{ $json.amount }}"
+},
+{
+"key": "Currency|rich_text",
+"textContent": "={{ $json.currency }}"
+},
+{
+"key": "Date|date",
+"date": "={{ $json.date }}"
+},
+{
+"key": "Vendor|title",
+"title": "={{ $json.vendor }}"
+},
+{
+"key": "Category|select",
+"selectValue": "={{ $json.category }}"
+}
+]
+},
+"options": {}
+},
+"type": "n8n-nodes-base.notion",
+"typeVersion": 2.2,
+"position": [
+-1280,
+64
+],
+"id": "notion-node",
+"name": "Create a database page",
+"credentials": {
+"notionApi": {
+"id": "YOUR_NOTION_CREDENTIAL_ID",
+"name": "Notion account"
+}
+}
+}
+],
+"connections": {
+"Telegram Trigger": {
+"main": [
+[
+{
+"node": "AI Agent",
+"type": "main",
+"index": 0
+}
+]
+]
+},
+"Ollama Chat Model": {
+"ai_languageModel": [
+[
+{
+"node": "AI Agent",
+"type": "ai_languageModel",
+"index": 0
+}
+]
+]
+},
+"AI Agent": {
+"main": [
+[
+{
+"node": "Edit Fields",
+"type": "main",
+"index": 0
+}
+]
+]
+},
+"Edit Fields": {
+"main": [
+[
+{
+"node": "Split Out",
+"type": "main",
+"index": 0
+}
+]
+]
+},
+"Split Out": {
+"main": [
+[
+{
+"node": "Append row in sheet",
+"type": "main",
+"index": 0
+},
+{
+"node": "Create a database page",
+"type": "main",
+"index": 0
+}
+]
+]
+},
+"Append row in sheet": {
+"main": [
+[
+{
+"node": "Aggregate",
+"type": "main",
+"index": 0
+}
+]
+]
+},
+"Aggregate": {
+"main": [
+[
+{
+"node": "Get row(s) in sheet",
+"type": "main",
+"index": 0
+}
+]
+]
+},
+"Get row(s) in sheet": {
+"main": [
+[
+{
+"node": "Send a text message",
+"type": "main",
+"index": 0
+}
+]
+]
+}
+}
 }
