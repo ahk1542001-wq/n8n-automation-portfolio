@@ -6,7 +6,11 @@ Welcome to my automation engineering portfolio! This repository serves as a mono
 
 | Project Name | Type | Description | Tech Stack |
 | :--- | :--- | :--- | :--- |
-| [01. Automated Job Hunter](https://github.com/ahk1542001-wq/n8n-automation-portfolio/tree/main/%E2%80%8B01-automated-job-hunter) | 👔 Career | Career Scrapes LinkedIn for automation roles, filters using AI Agents for CV match, and sends personalized cover letters via Telegram. | n8n, n8n, AI Agents, SerpApi, Telegram |
+## 📂 Project Directory
+
+| Project Name | Type | Description | Tech Stack |
+| :--- | :--- | :--- | :--- |
+| [01. Personal Finance Agent](./01.%20Personal%20Finance%20Agent) | 💰 Finance | Autonomous AI agent that tracks expenses and income via Telegram with automated categorization. | n8n, Ollama, Notion, Google Sheets |
 
 ---
 
