@@ -14,4 +14,3 @@ Welcome to my automation engineering portfolio! This repository serves as a mono
 I am an aspiring AI Automation Engineer based in Bangkok, specializing in building intelligent workflows that save time and drive efficiency.
 
 ---
-*If you find these workflows useful, feel free to star ⭐ this repository!*
