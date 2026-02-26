@@ -6,10 +6,6 @@ Welcome to my automation engineering portfolio! This repository serves as a mono
 
 | Project Name | Type | Description | Tech Stack |
 | :--- | :--- | :--- | :--- |
-## 📂 Project Directory
-
-| Project Name | Type | Description | Tech Stack |
-| :--- | :--- | :--- | :--- |
 | [01. Personal Finance Agent](./01.%20Personal%20Finance%20Agent) | 💰 Finance | Autonomous AI agent that tracks expenses and income via Telegram with automated categorization. | n8n, Ollama, Notion, Google Sheets |
 
 ---
