@@ -1,0 +1,793 @@
+{
+  "name": "AI Appointment Booking \u2014 Lead Scoring with Groq + Qdrant + Ollama",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b0da42f5-bea9-4e48-a210-2f65d29a15ce",
+              "leftValue": "={{ $json.match_score }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2832,
+        1648
+      ],
+      "id": "node-602",
+      "name": "If Score >= 70"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-incoming",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1856,
+        1648
+      ],
+      "id": "node-942",
+      "name": "Webhook1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Role: You are Your Company's Strategic Business Assistant.\n\nMANDATORY CONSTRAINTS:\n- Zero Thinking: DO NOT show any internal reasoning, thoughts, or phrases like \"Okay, let's see,\" \"Wait,\" or \"I will analyze.\"\n- Direct Start: Your response MUST start immediately with the message for the customer.\n- Tool Usage: Always use 'search_company_rule' to verify your company's prices and services.\n- Evaluation: Use Budget: {{ $json.body.budget_usd }} and Needs: {{ $json.body.needs }}.\n- Customer Name: {{ $json.body.name }}\n\nOUTPUT STRUCTURE:\n[Friendly response to the customer - plain text only, NO markdown, NO special characters like < > & # *]\n\n<lead_data>\n{\n\"match_score\": [0-100],\n\"reason\": \"[Short internal analysis here - plain text only]\"\n}\n</lead_data>\n\nEXAMPLE:\n\"Hi [Customer Name]! I have reviewed your request. For a $1,500 budget, our AI Voice Agent is the perfect solution to handle your appointments 24/7.\"\n\n<lead_data>\n{\n\"match_score\": 95,\n\"reason\": \"Budget matches AI Voice Agent setup cost exactly.\"\n}\n</lead_data>",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2112,
+        1328
+      ],
+      "id": "node-594",
+      "name": "AI Agent1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        1648
+      ],
+      "id": "node-784",
+      "name": "Groq Chat Model1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to answer questions about YOUR_COMPANY_NAME company. This includes services, pricing, office hours, and booking rules.",
+        "topK": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        2208,
+        1552
+      ],
+      "id": "node-487",
+      "name": "search_company_rule1"
+    },
+    {
+      "parameters": {
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "YOUR_QDRANT_COLLECTION",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        2112,
+        1760
+      ],
+      "id": "node-674",
+      "name": "Qdrant Vector Store1"
+    },
+    {
+      "parameters": {
+        "model": "nomic-embed-text:latest"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        1904
+      ],
+      "id": "node-773",
+      "name": "Embeddings Ollama1"
+    },
+    {
+      "parameters": {
+        "model": "qwen3:1.7b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmOllama",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        1760
+      ],
+      "id": "node-975",
+      "name": "Ollama Model1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse AI Agent output \u2192 extract match_score, reason, customer reply\nconst rawOutput = $node[\"AI Agent1\"].json.output || \"\";\n\nlet matchScore = 0;\nlet reasonText = \"Evaluation failed.\";\nlet customerAnswer = rawOutput;\n\n// Step 1: Extract <lead_data> XML block\nconst xmlRegex = /<lead_data>([\\s\\S]*?)<\\/lead_data>/i;\nconst xmlMatch = rawOutput.match(xmlRegex);\n\nif (xmlMatch && xmlMatch[1]) {\n  try {\n    const leadData = JSON.parse(xmlMatch[1].trim());\n    matchScore = parseInt(leadData.match_score || 0);\n    reasonText = leadData.reason || \"Evaluated.\";\n    customerAnswer = rawOutput.replace(xmlRegex, \"\").trim();\n  } catch (e) {\n    reasonText = \"Error: Invalid JSON format in lead_data.\";\n  }\n} else {\n  reasonText = \"Error: Missing lead_data block.\";\n}\n\n// Step 2: Strip AI monologue prefixes\nconst monologueRegex = /^(okay|wait|let's see|analysis|thinking|hmm)[\\s\\S]*?(\"?Hello|\"?Hi|\"?Dear|\u1019\u1004\u103a\u1039\u1002\u101c\u102c\u1015\u102b)/i;\nconst monologueMatch = customerAnswer.match(monologueRegex);\nif (monologueMatch) {\n  const startIndex = customerAnswer.search(/(\"?Hello|\"?Hi|\"?Dear|\u1019\u1004\u103a\u1039\u1002\u101c\u102c\u1015\u102b)/i);\n  if (startIndex !== -1) {\n    customerAnswer = customerAnswer.substring(startIndex).replace(/^\"|\"$/g, '').trim();\n  }\n}\n\n// BUG FIX 1: Sanitize ALL text sent to Telegram to prevent HTML entity parse errors\n// Replaces < > & which break Telegram's HTML parser\nfunction sanitize(text) {\n  return String(text)\n    .replace(/&/g, 'and')\n    .replace(/</g, '(')\n    .replace(/>/g, ')')\n    .replace(/[*_`#]/g, '')\n    .trim();\n}\n\nreturn {\n  json: {\n    customer_answer: sanitize(customerAnswer),\n    match_score: matchScore,\n    reason: sanitize(reasonText),\n    lead_name: $node[\"Webhook1\"].json.body.name || \"Customer\",\n    lead_email: $node[\"Webhook1\"].json.body.email || \"\",\n    lead_budget: $node[\"Webhook1\"].json.body.budget_usd || \"\",\n    lead_needs: $node[\"Webhook1\"].json.body.needs || \"\"\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2608,
+        1648
+      ],
+      "id": "node-608",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "message": "=\ud83d\udd25 HOT LEAD ALERT!\n\nName: {{ $json.lead_name }}\nEmail: {{ $json.lead_email }}\nBudget: ${{ $json.lead_budget }}\nNeeds: {{ $json.lead_needs }}\nScore: {{ $json.match_score }}%\n\nAI Reason: {{ $json.reason }}\n\nAI Draft Reply:\n{{ $json.customer_answer }}\n\nApprove to send this email, or edit below.",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "decision",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Approve"
+                  },
+                  {
+                    "option": "Reject"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "edit answer",
+              "fieldType": "textarea",
+              "defaultValue": "={{ $json.customer_answer }}"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3040,
+        1648
+      ],
+      "id": "node-200",
+      "name": "Send a text message3",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data.decision }}",
+                    "rightValue": "Approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "singleValue": true
+                    },
+                    "id": "76c858c7-e5e5-486a-9f46-5db1e7ee08d0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Send Reply"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "13ea8b78-e4b1-465e-af32-0dc8eeabe7bb",
+                    "leftValue": "={{ $json.data.decision }}",
+                    "rightValue": "Reject",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Stop"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        3280,
+        1648
+      ],
+      "id": "node-520",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook1').item.json.body.email }}",
+        "subject": "=Thank you for your interest, {{ $('Webhook1').item.json.body.name }}!",
+        "message": "={{ $json.data['edit answer'] }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3600,
+        1472
+      ],
+      "id": "node-356",
+      "name": "Send a message1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Webhook1').item.json.body.email }}",
+            "Budget": "={{ $('Webhook1').item.json.body.budget_usd }}",
+            "Needs": "={{ $('Webhook1').item.json.body.needs }}",
+            "Final Sent Message": "={{ $json.data['edit answer'] }}",
+            "Status": "Approved - Email Sent",
+            "Score": "={{ $('Code in JavaScript1').item.json.match_score }}",
+            "Name": "={{ $('Webhook1').item.json.body.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Needs",
+              "displayName": "Needs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Sent Message",
+              "displayName": "Final Sent Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3632,
+        1744
+      ],
+      "id": "node-4",
+      "name": "Hot Accept1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Score": "={{ $('Code in JavaScript1').item.json.match_score }}",
+            "Name": "={{ $('Webhook1').item.json.body.name }}",
+            "Email": "={{ $('Webhook1').item.json.body.email }}",
+            "Budget": "={{ $('Webhook1').item.json.body.budget_usd }}",
+            "Needs": "={{ $('Webhook1').item.json.body.needs }}",
+            "Final Sent Message": "={{ $('Code in JavaScript1').item.json.customer_answer }}",
+            "Status": "Rejected"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Needs",
+              "displayName": "Needs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Sent Message",
+              "displayName": "Final Sent Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3392,
+        1920
+      ],
+      "id": "node-668",
+      "name": "Hot Reject1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_ID",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Score": "={{ $('Code in JavaScript1').item.json.match_score }}",
+            "Name": "={{ $('Webhook1').item.json.body.name }}",
+            "Email": "={{ $('Webhook1').item.json.body.email }}",
+            "Budget": "={{ $('Webhook1').item.json.body.budget_usd }}",
+            "Needs": "={{ $('Webhook1').item.json.body.needs }}",
+            "Final Sent Message": "={{ $('Code in JavaScript1').item.json.customer_answer }}",
+            "Status": "Cold - Below 70%"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Needs",
+              "displayName": "Needs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Sent Message",
+              "displayName": "Final Sent Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2944,
+        1920
+      ],
+      "id": "node-861",
+      "name": "Cold Data1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-oss-120b",
+          "mode": "list",
+          "cachedResultName": "gpt-oss-120b"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        2128,
+        1664
+      ],
+      "id": "node-53",
+      "name": "OpenAI Chat Model"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "If Score >= 70": {
+      "main": [
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cold Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_company_rule1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "search_company_rule1",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "search_company_rule1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "If Score >= 70",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message3": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Hot Accept1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hot Reject1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}
