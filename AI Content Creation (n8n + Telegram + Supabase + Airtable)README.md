@@ -1,4 +1,4 @@
-# ✍️ AI Content Creation & Publishing Agent (n8n + Telegram + Supabase + Airtable)
+# ✍️ AI Content Creation  (n8n + Telegram + Supabase + Airtable)
 
 An advanced, autonomous **n8n** workflow designed to act as your personal AI content team. You simply text an idea to your Telegram bot, and the system researches the topic, emulates your specific writing persona using RAG (Vector Embeddings), drafts a high-converting LinkedIn post, asks for your review via Telegram, and finally logs the data to both Supabase and Airtable.
 
