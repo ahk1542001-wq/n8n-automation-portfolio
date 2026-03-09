@@ -10,6 +10,7 @@ Welcome to my automation engineering portfolio! This repository serves as a mono
 | [02. AI Appointment Booking](./AI%20Appointment%20booking) | 📅 Lead Scoring | AI scores leads automatically and routes to accept or reject flow. | n8n, Groq, Qdrant, Ollama, Gmail, Google Sheets |
 | [03. AI Voice Receptionist for Dental Clinic](./AI%20Voice%20Receptionist%20for%20Dental%20Clinic%20(Vapi%20+%20n8n)) | 📞 Voice Agent | Fully automated AI voice receptionist for dental clinics capable of booking, rescheduling, and canceling appointments with real-time checking. | Vapi, n8n, OpenAI, Google Calendar, Google Sheets |
 | [04. Career Automation Agent](./Career%20Automation%20Agent) | 💼 AI Career Assistant | Fully automated n8n workflow that searches for jobs daily, evaluates them against your CV using LLMs, sends Telegram alerts for high matches, and generates custom cover letters. | n8n, LLMs, Telegram |
+| [05. AI Lead Nurturing CRM](./AI%20Lead%20Nurturing%20CRM%20-%20Airtable%20+%20Sheets) | 📊 AI Lead Nurturing & CRM | Fully automated lead management system that captures leads, intelligently scores them using Groq (Llama-3.3), syncs data across Airtable and Sheets, and executes personalized 7-day email drip campaigns. | n8n, Groq, Airtable, Google Sheets, Gmail, Telegram |
 
 ---
 
