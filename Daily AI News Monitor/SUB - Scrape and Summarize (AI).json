@@ -1,0 +1,196 @@
+{
+  "name": "SUB - Scrape and Summarize (AI)",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "trigger-1",
+      "name": "Execute Workflow Trigger",
+      "position": [
+        240,
+        304
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.feed_url }}",
+        "options": {}
+      },
+      "id": "rss-1",
+      "name": "RSS Read",
+      "position": [
+        464,
+        304
+      ],
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\nconst limit = Math.min(inputItems.length, 5);\nconst parts = [];\n\nfor (let i = 0; i < limit; i++) {\n  const it = inputItems[i].json;\n  const title = it.title || 'No Title';\n  const link = it.link || '';\n  const rawContent = it.content || it.summary || it.description || '';\n  const excerpt = rawContent.replace(/<[^>]*>/g, '').substring(0, 500);\n  parts.push('Article ' + (i + 1) + ': ' + title + '\\nURL: ' + link + '\\nExcerpt: ' + excerpt);\n}\n\nconst articlesText = parts.join('\\n\\n---\\n\\n');\nconst output = { articles: articlesText, item_count: limit };\nreturn [{ json: output }];"
+      },
+      "id": "code-1",
+      "name": "Aggregate Articles",
+      "position": [
+        688,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.articles }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an expert AI news analyst. Focus ONLY on topics related to AI, AI agents, LLMs, and automation. Summarize the provided articles into exactly 3 concise bullet points in Burmese language. Each bullet must start with a bullet character. Skip anything unrelated to AI or automation."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "id": "llm-1",
+      "name": "Summarize with Groq",
+      "position": [
+        912,
+        304
+      ],
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "id": "groq-1",
+      "name": "Groq Chat Model",
+      "position": [
+        912,
+        480
+      ],
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "credentials": {
+        "groqApi": {
+          "id": "YOUR_GROQ_CRED_ID",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1",
+              "name": "summary",
+              "type": "string",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "id": "f2",
+              "name": "source_name",
+              "type": "string",
+              "value": "={{ $('Execute Workflow Trigger').first().json.source_name }}"
+            },
+            {
+              "id": "f3",
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-1",
+      "name": "Return Summary",
+      "position": [
+        1184,
+        304
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Aggregate Articles": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Summarize with Groq",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "RSS Read",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "index": 0,
+            "node": "Summarize with Groq",
+            "type": "ai_languageModel"
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Articles",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Summarize with Groq": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Return Summary",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "YOUR_VERSION_ID",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "YOUR_INSTANCE_ID"
+  },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
