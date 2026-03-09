@@ -1,0 +1,88 @@
+{
+  "name": "SUB - Update Appointment",
+  "nodes": [
+    {
+      "parameters": { "inputSource": "passthrough" },
+      "id": "upd-trigger", "name": "Execute Workflow Trigger", "position": [ 240, 304 ], "type": "n8n-nodes-base.executeWorkflowTrigger", "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nlet args = {};\ntry {\n  args = input.body.message.toolCalls[0].function.arguments;\n} catch(e) {\n  args = input;\n}\nconst patientName  = args.name     ? String(args.name).trim()     : '';\nconst patientPhone = args.phone    ? String(args.phone).trim()    : '';\nconst oldDate      = args.old_date ? String(args.old_date).trim() : '';\nconst oldTime      = args.old_time ? String(args.old_time).trim() : '';\nconst newDate      = args.new_date ? String(args.new_date).trim() : '';\nconst newTime      = args.new_time ? String(args.new_time).trim() : '';\nconst reason       = args.reason   ? String(args.reason).trim()   : 'General Consultation';\nlet oldStartISO = ''; let oldEndISO = '';\nif (oldDate && oldTime) {\n  const p = oldTime.split(':').map(Number);\n  const s = new Date(oldDate + 'T' + String(p[0]).padStart(2,'0') + ':' + String(p[1] ? p[1] : 0).padStart(2,'0') + ':00+06:30');\n  oldStartISO = s.toISOString();\n  oldEndISO   = new Date(s.getTime() + 31*60*1000).toISOString();\n}\nlet newStartISO = ''; let newEndISO = '';\nif (newDate && newTime) {\n  const p = newTime.split(':').map(Number);\n  const s = new Date(newDate + 'T' + String(p[0]).padStart(2,'0') + ':' + String(p[1] ? p[1] : 0).padStart(2,'0') + ':00+06:30');\n  newStartISO = s.toISOString();\n  newEndISO   = new Date(s.getTime() + 30*60*1000).toISOString();\n}\nreturn [{ json: {\n  patientName, patientPhone, reason,\n  oldDate, oldTime, oldStartISO, oldEndISO,\n  newDate, newTime, newStartISO, newEndISO,\n  eventSummary: 'Booking for ' + patientName + ' - ' + patientPhone\n}}];"
+      },
+      "id": "upd-extract", "name": "Extract Update Details", "position": [ 464, 304 ], "type": "n8n-nodes-base.code", "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": { "__rl": true, "value": "YOUR_CALENDAR_ID@group.calendar.google.com", "mode": "list", "cachedResultName": "victor dental booking" },
+        "timeMin": "={{ $json.oldStartISO }}", "timeMax": "={{ $json.oldEndISO }}", "options": { "query": "={{ $json.patientPhone }}" }
+      },
+      "id": "upd-cal-find", "name": "Find Calendar Event", "position": [ 688, 304 ], "type": "n8n-nodes-base.googleCalendar", "typeVersion": 1.3, "alwaysOutputData": true,
+      "credentials": { "googleCalendarOAuth2Api": { "id": "YOUR_CALENDAR_CRED_ID", "name": "Google Calendar account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": { "__rl": true, "value": "YOUR_CALENDAR_ID@group.calendar.google.com", "mode": "list", "cachedResultName": "victor dental booking" },
+        "eventId": "={{ $('Find Calendar Event').first().json.id }}\n",
+        "updateFields": {
+          "description": "={{ 'Rescheduled from ' + $('Extract Update Details').first().json.oldDate + ' ' + $('Extract Update Details').first().json.oldTime }}",
+          "end": "={{ $('Extract Update Details').first().json.newEndISO }}",
+          "start": "={{ $('Extract Update Details').first().json.newStartISO }}",
+          "summary": "={{ $('Extract Update Details').first().json.eventSummary }}"
+        }
+      },
+      "id": "upd-cal-update", "name": "Update Calendar Event", "position": [ 912, 304 ], "type": "n8n-nodes-base.googleCalendar", "typeVersion": 1.3, "alwaysOutputData": true,
+      "credentials": { "googleCalendarOAuth2Api": { "id": "YOUR_CALENDAR_CRED_ID", "name": "Google Calendar account" } }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID_HERE", "mode": "list", "cachedResultName": "Untitled spreadsheet", "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit?usp=drivesdk" },
+        "sheetName": { "__rl": true, "value": "gid=0", "mode": "list", "cachedResultName": "Sheet1", "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit#gid=0" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $('Extract Update Details').first().json.newDate }}",
+            "Phone": "={{ $('Extract Update Details').first().json.patientPhone }}",
+            "Status": "Rescheduled",
+            "Time": "={{ $('Extract Update Details').first().json.newTime }}",
+            "Name": "={{ $('Extract Update Details').first().json.patientName }}"
+          },
+          "matchingColumns": [ "Phone" ],
+          "schema": [],
+          "attemptToConvertTypes": false, "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "upd-sheets", "name": "Update CRM Sheet Row", "position": [ 1104, 304 ], "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5,
+      "credentials": { "googleSheetsOAuth2Api": { "id": "YOUR_SHEETS_CRED_ID", "name": "Google Sheets account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": { "assignments": [
+            { "id": "r1", "name": "result", "type": "string", "value": "=Successfully rescheduled in both Calendar and CRM" },
+            { "id": "r2", "name": "message", "type": "string", "value": "={{ $('Extract Update Details').first().json.patientName + ' rescheduled to ' + $('Extract Update Details').first().json.newDate + ' at ' + $('Extract Update Details').first().json.newTime }}" },
+            { "id": "r3", "name": "success", "type": "boolean", "value": "=true" }
+          ] }, "options": {}
+      },
+      "id": "upd-response", "name": "Reschedule Confirmed Response", "position": [ 1312, 304 ], "type": "n8n-nodes-base.set", "typeVersion": 3.4
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Execute Workflow Trigger": { "main": [ [ { "index": 0, "node": "Extract Update Details", "type": "main" } ] ] },
+    "Extract Update Details": { "main": [ [ { "index": 0, "node": "Find Calendar Event", "type": "main" } ] ] },
+    "Find Calendar Event": { "main": [ [ { "index": 0, "node": "Update Calendar Event", "type": "main" } ] ] },
+    "Update CRM Sheet Row": { "main": [ [ { "index": 0, "node": "Reschedule Confirmed Response", "type": "main" } ] ] },
+    "Update Calendar Event": { "main": [ [ { "index": 0, "node": "Update CRM Sheet Row", "type": "main" } ] ] }
+  },
+  "active": true,
+  "settings": { "executionOrder": "v1", "callerPolicy": "workflowsFromSameOwner", "availableInMCP": false, "timeSavedMode": "fixed", "errorWorkflow": "YOUR_ERROR_WORKFLOW_ID", "binaryMode": "separate" },
+  "versionId": "YOUR_VERSION_ID",
+  "meta": { "templateCredsSetupCompleted": true, "instanceId": "YOUR_INSTANCE_ID" },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
