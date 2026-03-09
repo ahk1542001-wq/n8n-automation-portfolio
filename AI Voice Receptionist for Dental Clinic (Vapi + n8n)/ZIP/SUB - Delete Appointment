@@ -1,0 +1,76 @@
+{
+  "name": "SUB - Delete Appointment",
+  "nodes": [
+    {
+      "parameters": { "inputSource": "passthrough" },
+      "id": "del-trigger", "name": "Execute Workflow Trigger", "position": [ 240, 304 ], "type": "n8n-nodes-base.executeWorkflowTrigger", "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nlet args = {};\ntry {\n  args = input.body.message.toolCalls[0].function.arguments;\n} catch(e) {\n  args = input;\n}\nconst patientName  = args.name  ? String(args.name).trim()  : '';\nconst patientPhone = args.phone ? String(args.phone).trim() : '';\nconst apptDate     = args.date  ? String(args.date).trim()  : '';\nconst apptTime     = args.time  ? String(args.time).trim()  : '';\nlet startISO = ''; let endISO = '';\nif (apptDate && apptTime) {\n  const p = apptTime.split(':').map(Number);\n  const s = new Date(apptDate + 'T' + String(p[0]).padStart(2,'0') + ':' + String(p[1] ? p[1] : 0).padStart(2,'0') + ':00+06:30');\n  startISO = s.toISOString();\n  endISO   = new Date(s.getTime() + 31*60*1000).toISOString();\n} else if (apptDate) {\n  startISO = apptDate + 'T09:00:00+06:30';\n  endISO   = apptDate + 'T18:00:00+06:30';\n}\nreturn [{ json: { patientName, patientPhone, apptDate, apptTime, startISO, endISO } }];"
+      },
+      "id": "del-extract", "name": "Extract Cancel Details", "position": [ 464, 304 ], "type": "n8n-nodes-base.code", "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": { "__rl": true, "value": "YOUR_CALENDAR_ID@group.calendar.google.com", "mode": "list", "cachedResultName": "victor dental booking" },
+        "timeMin": "={{ $json.startISO }}", "timeMax": "={{ $json.endISO }}", "options": { "query": "={{ $json.patientPhone }}" }
+      },
+      "id": "del-cal-find", "name": "Find Event to Cancel", "position": [ 688, 304 ], "type": "n8n-nodes-base.googleCalendar", "typeVersion": 1.3,
+      "credentials": { "googleCalendarOAuth2Api": { "id": "YOUR_CALENDAR_CRED_ID", "name": "Google Calendar account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": { "__rl": true, "value": "YOUR_CALENDAR_ID@group.calendar.google.com", "mode": "list", "cachedResultName": "victor dental booking" },
+        "eventId": "={{ $('Find Event to Cancel').first().json.id }}", "options": { "sendUpdates": "none" }
+      },
+      "id": "del-cal-delete", "name": "Delete Calendar Event", "position": [ 912, 304 ], "type": "n8n-nodes-base.googleCalendar", "typeVersion": 1.3,
+      "credentials": { "googleCalendarOAuth2Api": { "id": "YOUR_CALENDAR_CRED_ID", "name": "Google Calendar account" } }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID_HERE", "mode": "list", "cachedResultName": "Untitled spreadsheet", "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit?usp=drivesdk" },
+        "sheetName": { "__rl": true, "value": "gid=0", "mode": "list", "cachedResultName": "Sheet1", "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit#gid=0" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": { "Phone": "={{ $('Extract Cancel Details').first().json.patientPhone }}", "Status": "Canceled" },
+          "matchingColumns": [ "Phone" ],
+          "schema": [],
+          "attemptToConvertTypes": false, "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "del-sheets", "name": "Mark CRM Row Canceled", "position": [ 1104, 304 ], "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5,
+      "credentials": { "googleSheetsOAuth2Api": { "id": "YOUR_SHEETS_CRED_ID", "name": "Google Sheets account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": { "assignments": [
+            { "id": "r1", "name": "result", "type": "string", "value": "=Successfully canceled the appointment" },
+            { "id": "r2", "name": "message", "type": "string", "value": "={{ 'Appointment on ' + $('Extract Cancel Details').first().json.apptDate + ' at ' + $('Extract Cancel Details').first().json.apptTime + ' has been canceled.' }}" },
+            { "id": "r3", "name": "success", "type": "boolean", "value": "=true" }
+          ] }, "options": {}
+      },
+      "id": "del-response", "name": "Cancellation Confirmed Response", "position": [ 1312, 304 ], "type": "n8n-nodes-base.set", "typeVersion": 3.4
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Delete Calendar Event": { "main": [ [ { "index": 0, "node": "Mark CRM Row Canceled", "type": "main" } ] ] },
+    "Execute Workflow Trigger": { "main": [ [ { "index": 0, "node": "Extract Cancel Details", "type": "main" } ] ] },
+    "Extract Cancel Details": { "main": [ [ { "index": 0, "node": "Find Event to Cancel", "type": "main" } ] ] },
+    "Find Event to Cancel": { "main": [ [ { "index": 0, "node": "Delete Calendar Event", "type": "main" } ] ] },
+    "Mark CRM Row Canceled": { "main": [ [ { "index": 0, "node": "Cancellation Confirmed Response", "type": "main" } ] ] }
+  },
+  "active": true,
+  "settings": { "executionOrder": "v1", "callerPolicy": "workflowsFromSameOwner", "availableInMCP": false, "timeSavedMode": "fixed", "errorWorkflow": "YOUR_ERROR_WORKFLOW_ID", "executionTimeout": -1, "binaryMode": "separate" },
+  "versionId": "YOUR_VERSION_ID",
+  "meta": { "templateCredsSetupCompleted": true, "instanceId": "YOUR_INSTANCE_ID" },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
