@@ -1,0 +1,43 @@
+{
+  "name": "SUB - Check Availability",
+  "nodes": [
+    {
+      "parameters": { "inputSource": "passthrough" },
+      "id": "avail-trigger", "name": "Execute Workflow Trigger", "position": [ 240, 304 ], "type": "n8n-nodes-base.executeWorkflowTrigger", "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nlet args = {};\ntry {\n  args = input.body.message.toolCalls[0].function.arguments;\n} catch(e) {\n  args = input;\n}\nconst requestedDate = args.date ? String(args.date).trim() : '';\nconst requestedTime = args.time ? String(args.time).trim() : '';\nlet startISO = '';\nlet endISO   = '';\nif (requestedDate && requestedTime) {\n  const parts = requestedTime.split(':').map(Number);\n  const h = parts[0]; const m = parts[1] ? parts[1] : 0;\n  const start = new Date(requestedDate + 'T' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':00+06:30');\n  const end   = new Date(start.getTime() + 30 * 60 * 1000);\n  startISO = start.toISOString();\n  endISO   = end.toISOString();\n} else if (requestedDate) {\n  startISO = requestedDate + 'T09:00:00+06:30';\n  endISO   = requestedDate + 'T18:00:00+06:30';\n}\nconst dayNames = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];\nlet dayName = '';\nif (requestedDate) {\n  const d = new Date(requestedDate + 'T12:00:00Z');\n  dayName = dayNames[d.getUTCDay()];\n}\nreturn [{ json: {\n  requestedDate, requestedTime,\n  startISO, endISO, dayName,\n  isSunday:   dayName === 'sunday',\n  isSaturday: dayName === 'saturday'\n}}];"
+      },
+      "id": "avail-extract", "name": "Extract Params", "position": [ 464, 304 ], "type": "n8n-nodes-base.code", "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": { "__rl": true, "value": "YOUR_CALENDAR_ID@group.calendar.google.com", "mode": "list", "cachedResultName": "victor dental booking" },
+        "returnAll": true, "timeMin": "={{ $json.startISO }}", "timeMax": "={{ $json.endISO }}", "options": {}
+      },
+      "id": "avail-calendar", "name": "Check Calendar Conflicts", "position": [ 688, 304 ], "type": "n8n-nodes-base.googleCalendar", "typeVersion": 1.3, "alwaysOutputData": true,
+      "credentials": { "googleCalendarOAuth2Api": { "id": "YOUR_CALENDAR_CRED_ID", "name": "Google Calendar account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const params = $('Extract Params').first().json;\nconst events = $input.all();\nif (params.isSunday) {\n  return [{ json: {\n    available: false,\n    requestedDate: params.requestedDate,\n    requestedTime: params.requestedTime,\n    result: 'Victor Dental Care is closed on Sundays. We are open Monday to Friday 9AM-6PM, and Saturday 9AM-1PM. Which day would you prefer?'\n  }}];\n}\nif (params.isSaturday && params.requestedTime) {\n  const h = parseInt(params.requestedTime.split(':')[0]);\n  if (h >= 13) {\n    return [{ json: {\n      available: false,\n      requestedDate: params.requestedDate,\n      requestedTime: params.requestedTime,\n      result: 'On Saturdays we close at 1:00 PM. Last slot is 12:30 PM. Would 12:00 PM or 12:30 PM work?'\n    }}];\n  }\n}\nconst activeEvents = events.filter(function(e) { return e.json && e.json.id && e.json.status !== 'cancelled'; });\nconst isAvailable  = activeEvents.length === 0;\nlet resultMessage;\nif (!params.requestedDate) {\n  resultMessage = 'Could you tell me which date and time you prefer for your appointment?';\n} else if (isAvailable) {\n  const t = params.requestedTime ? ' at ' + params.requestedTime : '';\n  resultMessage = 'Great news! ' + params.requestedDate + t + ' is available. Would you like me to book this slot?';\n} else {\n  resultMessage = 'Sorry, ' + params.requestedDate + ' at ' + params.requestedTime + ' is already booked. Slots are every 30 minutes. Would you like to try another time?';\n}\nreturn [{ json: {\n  available: isAvailable,\n  requestedDate: params.requestedDate,\n  requestedTime: params.requestedTime,\n  conflictCount: activeEvents.length,\n  result: resultMessage\n}}];"
+      },
+      "id": "avail-result", "name": "Build Availability Result", "position": [ 912, 304 ], "type": "n8n-nodes-base.code", "typeVersion": 2
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Check Calendar Conflicts": { "main": [ [ { "index": 0, "node": "Build Availability Result", "type": "main" } ] ] },
+    "Execute Workflow Trigger": { "main": [ [ { "index": 0, "node": "Extract Params", "type": "main" } ] ] },
+    "Extract Params": { "main": [ [ { "index": 0, "node": "Check Calendar Conflicts", "type": "main" } ] ] }
+  },
+  "active": true,
+  "settings": { "executionOrder": "v1", "callerPolicy": "workflowsFromSameOwner", "availableInMCP": false, "timeSavedMode": "fixed", "errorWorkflow": "YOUR_ERROR_WORKFLOW_ID", "executionTimeout": -1, "binaryMode": "separate" },
+  "versionId": "YOUR_VERSION_ID",
+  "meta": { "templateCredsSetupCompleted": true, "instanceId": "YOUR_INSTANCE_ID" },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
