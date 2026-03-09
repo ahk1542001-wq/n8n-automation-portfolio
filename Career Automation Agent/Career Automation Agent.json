@@ -1,0 +1,463 @@
+{
+  "name": "Career Automation Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 21
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [ 6064, 1712 ],
+      "id": "b0109e24-40be-4a9f-b17e-eae9cf0dc6c6",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_DRIVE_RESUME_LINK_HERE",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [ 6192, 1968 ],
+      "id": "fbba9f21-e661-4a72-96ff-4ad56e476274",
+      "name": "Download CV from Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YOUR_DRIVE_CRED_ID",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [ 6304, 1712 ],
+      "id": "0794c063-60ab-4bdb-9555-11b101c1d0a1",
+      "name": "Extract CV Text from PDF"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID_1_HERE",
+          "mode": "list",
+          "cachedResultName": "Job criteria",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_1_HERE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_1_HERE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [ 6416, 1968 ],
+      "id": "44ed069c-6ab1-4716-9357-a951c10a9796",
+      "name": "Get Search Criteria from Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_SHEETS_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "merge-01", "name": "cv_text", "value": "={{ $('Extract CV Text from PDF').item.json.text }}", "type": "string" },
+            { "id": "merge-02", "name": "search_query", "value": "={{ $json.job_title }} {{ $json.location }}", "type": "string" },
+            { "id": "merge-03", "name": "job_title", "value": "={{ $json.job_title }}", "type": "string" },
+            { "id": "merge-04", "name": "location", "value": "={{ $json.location }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [ 6528, 1712 ],
+      "id": "8725c9a9-b9cd-497c-ab26-389678cb04bf",
+      "name": "Merge CV + Search Criteria"
+    },
+    {
+      "parameters": {
+        "operation": "google_jobs",
+        "q": "={{ $json.search_query }}",
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApi",
+      "typeVersion": 1,
+      "position": [ 6656, 1968 ],
+      "id": "5c8bda80-8301-49a7-8c63-fa9cc2fffee1",
+      "name": "SerpAPI - Google Jobs Search",
+      "credentials": {
+        "serpApi": {
+          "id": "YOUR_SERPAPI_CRED_ID",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "jobs_results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [ 6768, 1728 ],
+      "id": "85c0b1b3-ec14-44ad-9399-9d08a69c9ac1",
+      "name": "Split Out Jobs"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "inject-01", "name": "cv_text", "value": "={{ $('Merge CV + Search Criteria').item.json.cv_text }}", "type": "string" },
+            { "id": "inject-02", "name": "title", "value": "={{ $json.title }}", "type": "string" },
+            { "id": "inject-03", "name": "company_name", "value": "={{ $json.company_name || 'N/A' }}", "type": "string" },
+            { "id": "inject-04", "name": "location", "value": "={{ $json.location || 'Remote' }}", "type": "string" },
+            { "id": "inject-05", "name": "description", "value": "={{ $json.description || '' }}", "type": "string" },
+            { "id": "inject-06", "name": "qualifications", "value": "={{ $json.job_highlights && $json.job_highlights[0] ? $json.job_highlights[0].items : [] }}", "type": "string" },
+            { "id": "inject-07", "name": "apply_link", "value": "={{ $json.apply_options && $json.apply_options[0] ? $json.apply_options[0].link : 'N/A' }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [ 6880, 1968 ],
+      "id": "a2565c7d-66c5-48e8-bda8-5a2d66074c16",
+      "name": "Inject CV into Job Data"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [ 7072, 1856 ],
+      "id": "21337cb7-fdd7-4c42-94f7-2cd8dc9e266d",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Candidate Profile:\n{{ $json.cv_text }}\n\nJob to Evaluate:\nTitle: {{ $json.title }}\nCompany: {{ $json.company_name }}\nLocation: {{ $json.location }}\nDescription: {{ $json.description }}\nQualifications: {{ $json.qualifications }}\n\nTask: Compare the candidate profile with this job.\nReturn ONLY valid JSON with no extra text:\n{\"match_score\": 85, \"summary\": \"Short reason here\"}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [ 7232, 1872 ],
+      "id": "8e54eab0-c1b0-41aa-a17f-d3d1e324309f",
+      "name": "AI Agent - Score Job"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {
+          "maxTokensToSample": 500,
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [ 7184, 2064 ],
+      "id": "8892af2b-827e-4fce-9f19-f46898a5b6ac",
+      "name": "Groq - Scoring Model (llama-3.1-8b)",
+      "credentials": {
+        "groqApi": {
+          "id": "YOUR_GROQ_CRED_ID",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [ 7536, 1872 ],
+      "id": "077f80a7-6655-451a-9d12-c42f58ba8573",
+      "name": "Wait 10s",
+      "webhookId": "YOUR_WEBHOOK_ID_1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// THE ROOT CAUSE FIX:\n// Previous version only sanitized 'summary' — but Telegram\n// also received title, company_name, location directly from\n// Loop Over Items WITHOUT sanitizing → caused byte offset error.\n//\n// FIX: Sanitize ALL fields here, Telegram ONLY reads from\n// this node's output — never directly from Loop Over Items.\n// ============================================================\n\nconst rawOutput = String($input.item.json.output || '');\n\nlet matchScore = 0;\nlet summaryText = 'No summary provided.';\n\ntry {\n  const jsonMatch = rawOutput.match(/\\{[\\s\\S]*?\\}/);\n  if (jsonMatch) {\n    const parsed = JSON.parse(jsonMatch[0]);\n    matchScore = parseInt(parsed.match_score || 0);\n    summaryText = parsed.summary || 'Evaluation completed.';\n  } else {\n    const numMatch = rawOutput.match(/\\d+/);\n    if (numMatch) matchScore = parseInt(numMatch[0]);\n    summaryText = rawOutput.substring(0, 200) + '...';\n  }\n} catch (e) {\n  summaryText = 'Parse error.';\n}\n\n// Sanitize function — removes ALL characters that crash Telegram HTML parser\nfunction sanitize(text) {\n  return String(text || '')\n    .replace(/&/g, 'and')\n    .replace(/</g, '(')\n    .replace(/>/g, ')')\n    .replace(/[*_`#{}\\[\\]]/g, '')\n    .trim();\n}\n\nconst job = $('Loop Over Items').item.json;\n\nreturn {\n  json: {\n    match_score: matchScore,\n    summary: sanitize(summaryText),\n    safe_title:    sanitize(job.title),\n    safe_company:  sanitize(job.company_name || 'N/A'),\n    safe_location: sanitize(job.location || 'Remote'),\n    safe_link:     sanitize(job.apply_link || 'N/A'),\n    raw_title:    job.title,\n    raw_company:  job.company_name || 'N/A',\n    raw_location: job.location || 'Remote',\n    raw_link:     job.apply_link || 'N/A'\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 7664, 1728 ],
+      "id": "f4e8611c-5c96-4eb2-86e1-0d853ed19fec",
+      "name": "Parse Score + Sanitize"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bb373ed9-1a70-488f-bd2d-ff68d3110027",
+              "leftValue": "={{ $json.match_score }}",
+              "rightValue": 70,
+              "operator": { "type": "number", "operation": "gte" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [ 7808, 1872 ],
+      "id": "297f2530-c16f-447b-99c4-62f58849b33d",
+      "name": "If Score >= 70"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "message": "=🔥 HIGH MATCH JOB FOUND!\n\nJob: {{ $json.safe_title }}\nCompany: {{ $json.safe_company }}\nLocation: {{ $json.safe_location }}\nScore: {{ $json.match_score }}%\n\nReason: {{ $json.summary }}\n\nApply Link: {{ $json.safe_link }}\n\nShall I write a cover letter?",
+        "approvalOptions": {
+          "values": { "approvalType": "double" }
+        },
+        "options": { "appendAttribution": false }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [ 7936, 1744 ],
+      "id": "480a7b1d-e563-4ab1-bcbd-fa475902a408",
+      "name": "Telegram - Approve Job",
+      "webhookId": "YOUR_WEBHOOK_ID_2",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CRED_ID",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "89948d13-a49e-4c64-acab-97d09e6adfea",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "equals" }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [ 8048, 1888 ],
+      "id": "33d9d623-1b3b-48b5-82cf-9805d2c4a366",
+      "name": "If Victor Approved"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a professional cover letter for this job application.\n\nCandidate Profile:\n{{ $('Loop Over Items').item.json.cv_text }}\n\nJob Details:\nTitle: {{ $('Loop Over Items').item.json.title }}\nCompany: {{ $('Loop Over Items').item.json.company_name }}\nLocation: {{ $('Loop Over Items').item.json.location }}\nDescription: {{ $('Loop Over Items').item.json.description }}\n\nMatch Summary: {{ $('Parse Score + Sanitize').item.json.summary }}\n\nInstructions:\n- Max 220 words, exactly 3 paragraphs\n- Highlight strongest matches from candidate profile\n- End with a clear call-to-action\n- Natural English only\n- No bullet points, no markdown, no special characters like < > &",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [ 8192, 1744 ],
+      "id": "a1c5c9f1-c395-4848-a584-874c9a616b17",
+      "name": "AI Agent - Write Cover Letter"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {
+          "maxTokensToSample": 1000,
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [ 8208, 1952 ],
+      "id": "3ffe7737-0464-4a4e-93b5-7928d6717078",
+      "name": "Groq - Cover Letter Model (llama-3.3-70b)",
+      "credentials": {
+        "groqApi": {
+          "id": "YOUR_GROQ_CRED_ID",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "message": "=✉️ Cover Letter Ready!\n\nJob: {{ $('Parse Score + Sanitize').item.json.safe_title }}\nCompany: {{ $('Parse Score + Sanitize').item.json.safe_company }}\n\n{{ $json.output.replace(/[&]/g, 'and').replace(/</g, '(').replace(/>/g, ')') }}\n\nSave to Google Sheet?",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Save to Sheet?",
+              "fieldType": "dropdown",
+              "fieldOptions": { "values": [ { "option": "Yes" }, { "option": "No" } ] }
+            },
+            {
+              "fieldLabel": "edit cover letter",
+              "fieldType": "textarea",
+              "defaultValue": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": { "appendAttribution": false }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [ 8432, 1888 ],
+      "id": "27c248b9-0c60-4cdb-9901-5fbf5bc99ac9",
+      "name": "Telegram - Review Cover Letter",
+      "webhookId": "YOUR_WEBHOOK_ID_3",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CRED_ID",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID_2_HERE",
+          "mode": "list",
+          "cachedResultName": "job",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_2_HERE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_2_HERE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Job Title": "={{ $('Parse Score + Sanitize').item.json.raw_title }}",
+            "Company": "={{ $('Parse Score + Sanitize').item.json.raw_company }}",
+            "Link": "={{ $('Parse Score + Sanitize').item.json.raw_link }}",
+            "Match Score": "={{ $('Parse Score + Sanitize').item.json.match_score }}",
+            "Summary": "={{ $('Parse Score + Sanitize').item.json.summary }}",
+            "Date": "={{ $now.toFormat('yyyy-MM-dd HH:mm') }}",
+            "Cover Ltter": "={{ $json.data['edit cover letter'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            { "id": "Job Title", "displayName": "Job Title", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Company", "displayName": "Company", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Match Score", "displayName": "Match Score", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Summary", "displayName": "Summary", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Cover Ltter", "displayName": "Cover Ltter", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Link", "displayName": "Link", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Date", "displayName": "Date", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [ 8544, 1744 ],
+      "id": "94969d17-d9bb-406d-aeb6-0516a9dea14c",
+      "name": "Save to Google Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_SHEETS_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [ 8688, 1888 ],
+      "id": "5a5c5e21-71bb-4474-86f4-6deb5ba7d3e0",
+      "name": "Loop Back"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": { "main": [ [ { "node": "Download CV from Drive", "type": "main", "index": 0 } ] ] },
+    "Download CV from Drive": { "main": [ [ { "node": "Extract CV Text from PDF", "type": "main", "index": 0 } ] ] },
+    "Extract CV Text from PDF": { "main": [ [ { "node": "Get Search Criteria from Sheet", "type": "main", "index": 0 } ] ] },
+    "Get Search Criteria from Sheet": { "main": [ [ { "node": "Merge CV + Search Criteria", "type": "main", "index": 0 } ] ] },
+    "Merge CV + Search Criteria": { "main": [ [ { "node": "SerpAPI - Google Jobs Search", "type": "main", "index": 0 } ] ] },
+    "SerpAPI - Google Jobs Search": { "main": [ [ { "node": "Split Out Jobs", "type": "main", "index": 0 } ] ] },
+    "Split Out Jobs": { "main": [ [ { "node": "Inject CV into Job Data", "type": "main", "index": 0 } ] ] },
+    "Inject CV into Job Data": { "main": [ [ { "node": "Loop Over Items", "type": "main", "index": 0 } ] ] },
+    "Loop Over Items": { "main": [ [], [ { "node": "AI Agent - Score Job", "type": "main", "index": 0 } ] ] },
+    "AI Agent - Score Job": { "main": [ [ { "node": "Wait 10s", "type": "main", "index": 0 } ] ] },
+    "Groq - Scoring Model (llama-3.1-8b)": { "ai_languageModel": [ [ { "node": "AI Agent - Score Job", "type": "ai_languageModel", "index": 0 } ] ] },
+    "Wait 10s": { "main": [ [ { "node": "Parse Score + Sanitize", "type": "main", "index": 0 } ] ] },
+    "Parse Score + Sanitize": { "main": [ [ { "node": "If Score >= 70", "type": "main", "index": 0 } ] ] },
+    "If Score >= 70": { "main": [ [ { "node": "Telegram - Approve Job", "type": "main", "index": 0 } ], [ { "node": "Loop Over Items", "type": "main", "index": 0 } ] ] },
+    "Telegram - Approve Job": { "main": [ [ { "node": "If Victor Approved", "type": "main", "index": 0 } ] ] },
+    "If Victor Approved": { "main": [ [ { "node": "AI Agent - Write Cover Letter", "type": "main", "index": 0 } ], [ { "node": "Loop Over Items", "type": "main", "index": 0 } ] ] },
+    "AI Agent - Write Cover Letter": { "main": [ [ { "node": "Telegram - Review Cover Letter", "type": "main", "index": 0 } ] ] },
+    "Groq - Cover Letter Model (llama-3.3-70b)": { "ai_languageModel": [ [ { "node": "AI Agent - Write Cover Letter", "type": "ai_languageModel", "index": 0 } ] ] },
+    "Telegram - Review Cover Letter": { "main": [ [ { "node": "Save to Google Sheet", "type": "main", "index": 0 } ] ] },
+    "Save to Google Sheet": { "main": [ [ { "node": "Loop Back", "type": "main", "index": 0 } ] ] },
+    "Loop Back": { "main": [ [], [ { "node": "Loop Over Items", "type": "main", "index": 0 } ] ] }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "YOUR_VERSION_ID",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "YOUR_INSTANCE_ID"
+  },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
