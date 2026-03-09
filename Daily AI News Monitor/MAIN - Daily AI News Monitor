@@ -1,0 +1,212 @@
+{
+  "name": "MAIN - Daily AI News Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "sched-1",
+      "name": "Schedule Trigger",
+      "position": [
+        240,
+        272
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "jsCode": "const feeds = [\n  { feed_url: 'https://huggingface.co/blog/feed.xml', source_name: 'HuggingFace Blog' },\n  { feed_url: 'https://openai.com/blog/rss.xml', source_name: 'OpenAI Blog' },\n  { feed_url: 'https://blog.n8n.io/rss', source_name: 'n8n Blog' },\n  { feed_url: 'https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml', source_name: 'The Rundown AI' }\n];\nconst output = [];\nfor (let i = 0; i < feeds.length; i++) {\n  output.push({ json: feeds[i] });\n}\nreturn output;"
+      },
+      "id": "feeds-1",
+      "name": "Define AI Feeds",
+      "position": [
+        464,
+        272
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "YOUR_SUB_WORKFLOW_ID"
+        },
+        "workflowInputs": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "id": "sub-1",
+      "name": "Run Sub-Workflow",
+      "position": [
+        688,
+        272
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\nconst parts = [];\nfor (let i = 0; i < inputItems.length; i++) {\n  const it = inputItems[i].json;\n  const summary = it.summary || it.text || 'No summary.';\n  const source = it.source_name || ('Source ' + (i + 1));\n  parts.push('<b>' + source + '</b>\\n' + summary);\n}\nconst divider = '\\n\\n' + '\\u2501'.repeat(14) + '\\n\\n';\nconst body = parts.join(divider);\nconst header = '\\uD83E\\uDD16 <b>AI သတင်း အနှစ်ချုပ်</b> | ' + new Date().toLocaleDateString('en-GB') + '\\n\\n';\nconst msg = header + body;\nreturn [{ json: { message: msg, item_count: inputItems.length } }];"
+      },
+      "id": "msg-1",
+      "name": "Build Final Message",
+      "position": [
+        912,
+        272
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-main-1",
+      "name": "Send Daily News",
+      "position": [
+        1120,
+        272
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "YOUR_WEBHOOK_ID_1",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CRED_ID",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "err-1",
+      "name": "Error Trigger",
+      "position": [
+        240,
+        512
+      ],
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ '<b>AI Monitor Error!</b>\\nWorkflow: ' + $json.workflow.name + '\\nNode: ' + $json.execution.lastNodeExecuted + '\\nError: ' + $json.execution.error.message }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-err-1",
+      "name": "Alert on Error",
+      "position": [
+        464,
+        512
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "YOUR_WEBHOOK_ID_2",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CRED_ID",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Build Final Message": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send Daily News",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Define AI Feeds": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Run Sub-Workflow",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Alert on Error",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Run Sub-Workflow": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Build Final Message",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Define AI Feeds",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Yangon",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "YOUR_ERROR_WORKFLOW_ID"
+  },
+  "versionId": "YOUR_VERSION_ID",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "YOUR_INSTANCE_ID"
+  },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
