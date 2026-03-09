@@ -1,0 +1,44 @@
+{
+  "name": "SUB - Client Lookup",
+  "nodes": [
+    {
+      "parameters": { "inputSource": "passthrough" },
+      "id": "sub-cl-trigger", "name": "Execute Workflow Trigger", "position": [ 240, 304 ], "type": "n8n-nodes-base.executeWorkflowTrigger", "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nlet args = {};\ntry {\n  args = input.body.message.toolCalls[0].function.arguments;\n} catch(e) {\n  args = input;\n}\nconst searchPhone = args.phone ? String(args.phone).trim() : '';\nconst searchName  = args.name  ? String(args.name).trim()  : '';\nreturn [{ json: { searchPhone, searchName } }];"
+      },
+      "id": "sub-cl-extract", "name": "Extract Search Params", "position": [ 464, 304 ], "type": "n8n-nodes-base.code", "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID_HERE", "mode": "list", "cachedResultName": "Untitled spreadsheet", "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit?usp=drivesdk" },
+        "sheetName": { "__rl": true, "value": "gid=0", "mode": "list", "cachedResultName": "Sheet1", "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID_HERE/edit#gid=0" },
+        "filtersUI": { "values": [ { "lookupColumn": "Phone", "lookupValue": "={{ $json.searchPhone }}" } ] },
+        "options": {}
+      },
+      "id": "sub-cl-sheets", "name": "Search Patient in Sheets", "position": [ 688, 304 ], "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "alwaysOutputData": true,
+      "credentials": { "googleSheetsOAuth2Api": { "id": "YOUR_SHEETS_CRED_ID", "name": "Google Sheets account" } },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const searchPhone = $('Extract Search Params').first().json.searchPhone;\nconst searchName  = $('Extract Search Params').first().json.searchName;\nconst allItems = $input.all();\nconst found = allItems.length > 0 && allItems[0].json && allItems[0].json.Phone;\nif (found) {\n  const patient = allItems[0].json;\n  return [{ json: {\n    found: true,\n    patientName: patient.Name ? patient.Name : '',\n    phone: patient.Phone ? patient.Phone : '',\n    patientId: patient['Patient ID'] ? patient['Patient ID'] : '',\n    lastVisit: patient['Last Visit'] ? patient['Last Visit'] : 'No record',\n    notes: patient.Notes ? patient.Notes : '',\n    result: 'Existing patient: ' + (patient.Name ? patient.Name : 'Unknown') + ' | Phone: ' + (patient.Phone ? patient.Phone : '') + ' | Last Visit: ' + (patient['Last Visit'] ? patient['Last Visit'] : 'No record')\n  }}];\n}\nreturn [{ json: {\n  found: false,\n  searchedPhone: searchPhone,\n  searchedName: searchName,\n  result: 'New patient not found in records. Please collect their details.'\n}}];"
+      },
+      "id": "sub-cl-process", "name": "Process Result", "position": [ 912, 304 ], "type": "n8n-nodes-base.code", "typeVersion": 2
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Execute Workflow Trigger": { "main": [ [ { "index": 0, "node": "Extract Search Params", "type": "main" } ] ] },
+    "Extract Search Params": { "main": [ [ { "index": 0, "node": "Search Patient in Sheets", "type": "main" } ] ] },
+    "Search Patient in Sheets": { "main": [ [ { "index": 0, "node": "Process Result", "type": "main" } ] ] }
+  },
+  "active": true,
+  "settings": { "executionOrder": "v1", "callerPolicy": "workflowsFromSameOwner", "availableInMCP": false },
+  "versionId": "YOUR_VERSION_ID",
+  "meta": { "templateCredsSetupCompleted": true, "instanceId": "YOUR_INSTANCE_ID" },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
