@@ -1,5 +1,5 @@
 {
-  "name": "AI Appointment Booking \u2014 Lead Scoring with Groq + Qdrant + Ollama",
+  "name": "AI Lead Qualification & Response Workflow \u2014 Groq + Qdrant + Ollama",
   "nodes": [
     {
       "parameters": {
