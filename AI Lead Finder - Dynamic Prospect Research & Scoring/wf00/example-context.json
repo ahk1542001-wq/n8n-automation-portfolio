@@ -1,0 +1,16 @@
+{
+ "business_name": "Example Co (replace with your own business context)",
+ "customer_in_users_words": "Small retail shop owners who sell through a Facebook page and run the page themselves",
+ "decision_maker": "The business owner themselves",
+ "exclusions": [
+  "Businesses with no online presence at all",
+  "Large companies with in-house marketing teams"
+ ],
+ "locations": [
+  "Yangon",
+  "Mandalay"
+ ],
+ "notes": "Example context only - SF1 derives the search profile, sources and scoring rubric from whatever context is supplied here. Nothing about the target is hardcoded.",
+ "price_range": "Service packages exist; prices are discussed in conversation, never published",
+ "what_they_sell": "AI automation and AI agent services for small businesses"
+}
