@@ -31,6 +31,7 @@ Rules:
 - Copy the user's exclusions into "exclusions" verbatim - never drop or soften them.
 - Never invent a price range, a location, or a customer fact that is not in the context.
 - If the context is too vague to build verifiable criteria, return {"error": "insufficient_context", "missing": ["what is missing"]} instead of inventing a profile.
+DETERMINISTIC SCORING CONTRACT: SF7 scores deterministically BEFORE any research, using only Google Maps fields (category, location, website, phone, rating, review_count, facebook.com in website URL). (1) One fact per criterion; split combined facts into separate criteria. (2) A criterion is deterministic only if its NAME contains a matcher keyword and how_to_verify states the exact check: location/city — "Maps location matches target location(s): <the same locations listed in sources>"; category / property type / business type / firm type — "Category/name matches any of: <comma-separated target terms>"; facebook — "Website URL contains facebook.com"; rating — "Maps rating >=4.0 full points, >=3.5 half"; review + count/volume/number — "Maps review_count >=50 full points, >=10 half"; website — "A website URL exists"; phone/contact — "A phone number exists". (3) Facts only research can establish (room count, employee size, ownership or chain affiliation, workload, reply behaviour, decision-maker) MUST end with "(research-only)" in the name and must not use matcher keywords. (4) At least 35 of 70 points deterministic; at most 35 research-only; website + phone/contact combined at most 10 points. (5) Never rename a research fact into a proxy: review_count is not a room or employee count, rating is not workload, category is not ownership. If a critical fact is research-only, keep it research-only and cut its points to fit rule (4).
 Return ONLY the JSON object. No markdown fences, no commentary.`;
 const user = 'Business context (JSON):\n' + JSON.stringify(ctx, null, 2);
 return { json: {
@@ -59,6 +60,41 @@ const fit = (p.rubric && p.rubric.fit_criteria) || [];
 const sum = fit.reduce((a, c) => a + (Number(c.max_points) || 0), 0);
 if (sum !== 70) return { json: { success: false, error: 'fit_points_sum_' + sum } };
 if (!Array.isArray(p.sources) || p.sources.length === 0) return { json: { success: false, error: 'no_sources' } };
+function classifyCriterion(crit, locTargets) {
+  const name = (crit.name || '').toLowerCase();
+  const verify = (crit.how_to_verify || '').toLowerCase();
+  const both = name + ' ' + verify;
+  if (name.includes('research-only')) return 'needs_research';
+  if (/city|location|geograph|footprint|area|region/.test(name)) {
+    return (locTargets && locTargets.length) ? 'location' : 'needs_research';
+  }
+  if (/category|property type|business type|firm type/.test(name)) {
+    const m = (crit.how_to_verify || '').match(/matches any of:\s*(.+)/i);
+    if (!m) return 'needs_research';
+    const terms = m[1].split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    return terms.length ? 'category' : 'needs_research';
+  }
+  if (/facebook/.test(name)) return 'facebook';
+  if (/rating/.test(name)) return 'rating';
+  if (/review/.test(name) && /count|volume|number/.test(both)) return 'review_volume';
+  if (/website/.test(name)) return 'website';
+  if (/phone|contact/.test(name)) return 'phone_contact';
+  return 'needs_research';
+}
+const locTargets = [];
+for (const s of (p.sources || [])) for (const L of (s.locations || [])) locTargets.push(String(L).toLowerCase());
+let detPts = 0, resPts = 0, contactPts = 0; const families = {};
+for (const c of fit) {
+  const f = classifyCriterion(c, locTargets);
+  families[c.name] = f;
+  const pts = Number(c.max_points) || 0;
+  if (f === 'needs_research') resPts += pts; else detPts += pts;
+  if (f === 'website' || f === 'phone_contact') contactPts += pts;
+}
+const coverage = { deterministic_points: detPts, research_points: resPts, contact_points: contactPts, families };
+const COVERAGE_BLOCKING = true;
+if (COVERAGE_BLOCKING && (detPts < 35 || resPts > 35 || contactPts > 10)) return { json: { success: false, error: 'coverage_below_floor', coverage } };
+const rubricOut = Object.assign({}, p.rubric, { coverage });
 const profile = {
   target_summary: p.target_summary,
   lead_unit: p.lead_unit,
@@ -74,7 +110,10 @@ return { json: {
   target_summary: p.target_summary,
   business_context_json: JSON.stringify(ctx),
   profile_json: JSON.stringify(profile),
-  rubric_json: JSON.stringify(p.rubric)
+  rubric_json: JSON.stringify(rubricOut),
+  deterministic_points: detPts,
+  research_points: resPts,
+  contact_points: contactPts
 } };
 """.strip()
 

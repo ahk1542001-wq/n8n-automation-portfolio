@@ -36,9 +36,18 @@ function detScore(crit, co) {
   const both = name + ' ' + verify;
   const max = crit.max_points || 0;
   const loc = (co.location || '').toLowerCase();
+  if (name.includes('research-only')) return { awarded: 0, basis: 'needs_research' };
   if (/city|location|geograph|footprint|area|region/.test(name)) {
     if (loc && locTargets.some(t => loc.includes(t) || t.includes(loc))) return { awarded: max, basis: 'location_match' };
     return { awarded: 0, basis: 'location_no_match' };
+  }
+  if (/category|property type|business type|firm type/.test(name)) {
+    const m = (crit.how_to_verify || '').match(/matches any of:\s*(.+)/i);
+    if (!m) return { awarded: 0, basis: 'needs_research' };
+    const terms = m[1].split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    if (!terms.length) return { awarded: 0, basis: 'needs_research' };
+    const hay = ((co.category || '') + ' ' + (co.name || '')).toLowerCase();
+    return terms.some(t => hay.includes(t)) ? { awarded: max, basis: 'category_match' } : { awarded: 0, basis: 'category_no_match' };
   }
   if (/facebook/.test(name)) {
     if (co.website && co.website.toLowerCase().includes('facebook.com')) return { awarded: Math.ceil(max / 2), basis: 'facebook_page_listed_partial' };
