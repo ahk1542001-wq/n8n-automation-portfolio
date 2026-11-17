@@ -117,15 +117,21 @@ WITH u AS (
   UPDATE companies SET linkedin_people_checked_at = now(), linkedin_people_next_check_at = NULL WHERE id = $1 AND $5 = 1
   RETURNING id
 ),
+rel AS (
+  UPDATE companies SET linkedin_people_claimed_at = NULL, linkedin_people_claim_run_id = NULL
+  WHERE id = $1 AND $6 = 1 AND linkedin_people_claim_run_id = $2
+  RETURNING id
+),
 e AS (
   INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)
-  SELECT $2, id, 'SF6b', 'apify_linkedin', $3::jsonb FROM u
+  SELECT $2, $1, 'SF6b', 'apify_linkedin', $3::jsonb
+  WHERE EXISTS (SELECT 1 FROM u) OR EXISTS (SELECT 1 FROM rel)
   RETURNING id
 ),
 l AS (
   INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)
   SELECT $2, 'SF6b', 'apify', 'charge', 1, 0.005, $1::text, 'sf6b:apify-start:' || $2
-  WHERE $4 = 1 AND EXISTS (SELECT 1 FROM u)
+  WHERE $4 = 1 AND (EXISTS (SELECT 1 FROM u) OR EXISTS (SELECT 1 FROM rel))
   ON CONFLICT (idempotency_key) DO NOTHING
   RETURNING id
 )

@@ -100,7 +100,8 @@ for (const item of $input.all()) {
     run_counts: null
   } });
 }
-const counts = { returned: out.length, dropped_schema: droppedSchema };
+const rawTotal = out.length + droppedSchema;
+const counts = { returned: out.length, dropped_schema: droppedSchema, raw_total: rawTotal, schema_total_failure: (rawTotal > 0 && out.length === 0) ? 1 : 0 };
 for (const o of out) o.json.run_counts = counts;
 if (!out.length) {
   out.push({ json: { company_id: '00000000-0000-0000-0000-000000000000', full_name: '', title: '', linkedin_url: '', save_flag: 0, is_dm_match: false, assoc_ok: false, drop_reason: 'none', raw_json: '{}', source_url: '', evidence_quote: '', run_id: stage.run_id, id_hash: '', charged: 0, run_counts: counts, sentinel: true } });
@@ -126,11 +127,17 @@ people.forEach((p, idx) => {
   else if (p.drop_reason === 'association_unverified') c.association_dropped++;
 });
 const batch = stage.batch || [];
-if (!batch.length) return [{ json: { company_id: '00000000-0000-0000-0000-000000000000', run_id: stage.run_id, detail_json: '{}', is_first: 0, act: 0 } }];
+if (!batch.length) return [{ json: { company_id: '00000000-0000-0000-0000-000000000000', run_id: stage.run_id, detail_json: '{}', is_first: 0, act: 0, drift: 0 } }];
+let schemaFail = 0; let droppedSchema = 0;
+try { const pc = $('Parse People').all().map(i => i.json).find(p => p.run_counts); if (pc) { schemaFail = Number(pc.run_counts.schema_total_failure || 0); droppedSchema = Number(pc.run_counts.dropped_schema || 0); } } catch (e) {}
 return batch.map((m, i) => {
   const c = byCompany[m.company_id];
-  const detail = Object.assign({ outcome: c.returned === 0 ? 'searched_zero' : 'searched', source: 'apify_linkedin', linkedin_url: m.linkedin_url }, c);
-  return { json: { company_id: m.company_id, run_id: stage.run_id, detail_json: JSON.stringify(detail), is_first: i === 0 ? 1 : 0, act: 1 } };
+  if (schemaFail) {
+    const detail = { outcome: 'schema_drift', source: 'apify_linkedin', linkedin_url: m.linkedin_url, dropped_schema: droppedSchema };
+    return { json: { company_id: m.company_id, run_id: stage.run_id, detail_json: JSON.stringify(detail), is_first: i === 0 ? 1 : 0, act: 0, drift: 1 } };
+  }
+  const detail = Object.assign({ outcome: c.returned === 0 ? 'searched_zero' : 'searched', source: 'apify_linkedin', linkedin_url: m.linkedin_url, dropped_schema: droppedSchema }, c);
+  return { json: { company_id: m.company_id, run_id: stage.run_id, detail_json: JSON.stringify(detail), is_first: i === 0 ? 1 : 0, act: 1, drift: 0 } };
 });
 """.strip()
 
@@ -150,7 +157,8 @@ const stage = tryFirst('Stage Context');
 const people = tryAll('Parse People').filter(p => !p.sentinel);
 const saves = tryAll('DB - Save Person');
 const saved = saves.filter(s => s.outcome === 'inserted').length;
-const counts = (people[0] && people[0].run_counts) || { returned: people.length, dropped_schema: 0 };
+const anyParse = tryAll('Parse People').find(p => p.run_counts);
+const counts = (anyParse && anyParse.run_counts) || { returned: people.length, dropped_schema: 0 };
 const chargedProfiles = people.reduce((a, p) => a + Number(p.charged || 0), 0);
 const runApifyCost = chargedProfiles * 0.01 + ((stage.batch || []).length ? 0.005 : 0);
 const mtdAfter = Number(stage.mtd_apify_usd || 0) + runApifyCost;
@@ -159,7 +167,7 @@ try { failed = $('Build Failure Items').all().length > 0; } catch (e) {}
 return [{ json: {
   success: !failed, stage: 'SF6b',
   picked: Number(stage.picked_count || 0), slug_resolved: (stage.batch || []).length,
-  people_returned: counts.returned, dropped_schema: counts.dropped_schema,
+  people_returned: counts.returned, dropped_schema: counts.dropped_schema, schema_drift: !!counts.schema_total_failure,
   people_saved: saved, decision_makers_saved: saved,
   non_dm_dropped: people.filter(p => p.drop_reason === 'non_dm').length,
   association_dropped: people.filter(p => p.drop_reason === 'association_unverified').length,
@@ -373,7 +381,7 @@ const markCheckedNode = node({{
     parameters: {{
       operation: 'executeQuery',
       query: {J(MARK_CHECKED_SQL)},
-      options: {{ queryReplacement: expr('{{{{ [ $json.company_id, $json.run_id, $json.detail_json, $json.is_first, $json.act ] }}}}') }}
+      options: {{ queryReplacement: expr('{{{{ [ $json.company_id, $json.run_id, $json.detail_json, $json.is_first, $json.act, $json.drift || 0 ] }}}}') }}
     }},
     credentials: {{ postgres: newCredential('Postgres') }}
   }},
