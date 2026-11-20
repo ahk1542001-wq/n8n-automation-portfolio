@@ -74,3 +74,21 @@ Generators emit n8n Workflow SDK code; credentials (Postgres, Google,
 Tavily, Apify, LLM endpoint) are attached inside your own n8n instance and
 are not part of this backup. Requires: n8n, Postgres (Supabase works),
 Tavily, Apify, and any OpenAI-compatible chat endpoint.
+
+## Current state (November 2026)
+
+The build is complete and verified end to end. The live chain is WF00
+v-next.14 orchestrating SF2 discovery (Google Maps plus Facebook and TikTok
+social discovery, with social results quarantined until their classification
+and location are verified), SF4 dedupe, SF7 scoring (now including evidenced
+company-size fit), SF5 research, SF6 enrichment, SF6d people finding
+(LinkedIn X-ray search via Tavily: no LinkedIn login and no platform
+scraping), SF9 timing re-score and SF8 human approval publishing.
+
+A separate planner, SF0, drafts new search profiles with an LLM and
+validates every draft against a frozen registry before a human sees it.
+Approving a profile is owner-only and enforced inside the workflow. The
+planner passed a 30-case golden campaign (27 of 30 valid on the first pass)
+with zero unsafe outputs across 12 adversarial cases. Outreach is SF10:
+drafts only, written to a review sheet, never sent. Design and stage gates
+were reviewed by a second model (Muse Wonder) throughout the build.
