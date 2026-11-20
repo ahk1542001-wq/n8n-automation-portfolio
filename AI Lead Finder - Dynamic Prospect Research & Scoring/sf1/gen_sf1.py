@@ -60,19 +60,60 @@ const fit = (p.rubric && p.rubric.fit_criteria) || [];
 const sum = fit.reduce((a, c) => a + (Number(c.max_points) || 0), 0);
 if (sum !== 70) return { json: { success: false, error: 'fit_points_sum_' + sum } };
 if (!Array.isArray(p.sources) || p.sources.length === 0) return { json: { success: false, error: 'no_sources' } };
+function categoryTerms(howToVerify) {
+  const m = (howToVerify || '').match(/matches any of:\s*(.+)/i);
+  if (!m) return null;
+  const text = m[1].toLowerCase();
+  const clauses = text
+    .split(/\s+but\s+|\s+however\s+/)
+    .flatMap(part => part.split(/[,;]/))
+    .map(s => s.trim())
+    .filter(Boolean);
+  const include = [], exclude = [];
+  for (const clause of clauses) {
+    const neg = clause.match(/\b(not|no|never|without|isn't|isnt)\b/);
+    if (neg) {
+      const after = clause.slice(neg.index + neg[0].length).slice(0, 40).trim().replace(/^(a|an|the)\s+/, '').trim();
+      if (after) exclude.push(after);
+    } else {
+      include.push(clause);
+    }
+  }
+  return { include, exclude };
+}
+const MATCHER_VERSION = 'synonyms_v1';
+const MATCHER_SYNONYMS_V1 = {
+  'operates in target cities': 'location',
+  'local presence in target markets': 'location',
+  'target markets': 'location',
+  'operates in target markets': 'location'
+};
+const KNOWN_FAMILIES = ['location', 'category', 'facebook', 'rating', 'review_volume', 'website', 'phone_contact'];
+function normPhrase(s) {
+  return String(s || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function synonymFamily(rawName) {
+  const v = MATCHER_SYNONYMS_V1[normPhrase(rawName)];
+  if (v === undefined) return null;
+  return KNOWN_FAMILIES.includes(v) ? v : 'unknown';
+}
 function classifyCriterion(crit, locTargets) {
   const name = (crit.name || '').toLowerCase();
   const verify = (crit.how_to_verify || '').toLowerCase();
   const both = name + ' ' + verify;
   if (name.includes('research-only')) return 'needs_research';
+  const syn = synonymFamily(crit.name);
+  if (syn === 'location') {
+    return (locTargets && locTargets.length) ? 'location' : 'needs_research';
+  }
+  if (syn && syn !== 'unknown') return syn;
   if (/city|location|geograph|footprint|area|region/.test(name)) {
     return (locTargets && locTargets.length) ? 'location' : 'needs_research';
   }
   if (/category|property type|business type|firm type/.test(name)) {
-    const m = (crit.how_to_verify || '').match(/matches any of:\s*(.+)/i);
-    if (!m) return 'needs_research';
-    const terms = m[1].split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-    return terms.length ? 'category' : 'needs_research';
+    const parsed = categoryTerms(crit.how_to_verify);
+    if (!parsed) return 'needs_research';
+    return parsed.include.length ? 'category' : 'needs_research';
   }
   if (/facebook/.test(name)) return 'facebook';
   if (/rating/.test(name)) return 'rating';
