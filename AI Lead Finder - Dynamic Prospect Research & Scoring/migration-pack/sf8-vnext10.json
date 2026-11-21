@@ -1,0 +1,1007 @@
+{
+ "id": "Edfy4S3T2016s2w8",
+ "name": "SF8 v-next.10 - Approval View Sync (lead_key + person_key + sheet sort + people source/evidence)",
+ "active": false,
+ "isArchived": false,
+ "versionId": "b337172d-4cb1-4fdd-ad9f-d79823e849e2",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 18,
+ "createdAt": "2026-11-19T09:33:18.017Z",
+ "updatedAt": "2026-11-19T10:02:57.836Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "DB - Ranked Leads",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Ranked Leads": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Read Existing (F32)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Read Existing (F32)": {
+   "main": [
+    [
+     {
+      "node": "Key Map + Validate (F32)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Key Map + Validate (F32)": {
+   "main": [
+    [
+     {
+      "node": "Header OK?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Header OK?": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Publish Ranked Leads",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Prep Header Error",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Publish Ranked Leads": {
+   "main": [
+    [
+     {
+      "node": "DB - People for Published",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - People for Published": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Publish People",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Publish People": {
+   "main": [
+    [
+     {
+      "node": "DB - City Ranks (Sort)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - City Ranks (Sort)": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Read All (Sort)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Read All (Sort)": {
+   "main": [
+    [
+     {
+      "node": "Build Rank Items (Sort)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Rank Items (Sort)": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Write City Rank (Sort)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Write City Rank (Sort)": {
+   "main": [
+    [
+     {
+      "node": "HTTP - Sort Range (Sort)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "HTTP - Sort Range (Sort)": {
+   "main": [
+    [
+     {
+      "node": "Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Header Error": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Header Error Draft (F32)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gmail - Header Error Draft (F32)": {
+   "main": [
+    [
+     {
+      "node": "Return - Header Error",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "1919d44b-a02d-4da4-bd25-d78e755ac3b6",
+   "name": "Sticky Note afeeffda",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF8 v-next.10 - Approval View Sync (F32 + SF6 contacts + People tab + lead_key + WHOLE-SHEET SORT + People Source/Evidence). Publishes ranked scored leads into the v-next Sheet COPY keyed by a single composite lead_key (run_id|company_id). After the People publish, a sort step re-reads ALL Lead Review rows, sorts them by city rank (Yangon -> Mandalay -> Bangkok -> other, rank from the Places record in Postgres) then Fit desc, writes city_rank + fit_num helper values (columns S and T) onto every row by lead_key, then issues ONE Sheets API sortRange call that reorders the whole Lead Review block atomically by city_rank asc then fit_num desc - so the main sheet itself stays sorted, not just each batch, with no clear/rewrite window. Decision and Note are carried from the sheet read itself (never sourced from the DB) and travel with their row. Phone values are apostrophe-prefixed on rewrite so they land as text, not formulas. Header gate: run_id, company_id, Decision, Note, lead_key must exist on the copy or zero rows are written and a Gmail draft names the missing header. insufficient_data rows show as Unknown - insufficient data (F31).",
+    "color": 5
+   }
+  },
+  {
+   "id": "a5f82af8-8f77-4c7b-bd8c-79c2195376b1",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "approval_sheet_id_vnext",
+       "type": "string"
+      },
+      {
+       "name": "publish_limit",
+       "type": "number"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "42034a64-d0ed-418f-b1d4-de052aff6e4a",
+   "name": "DB - Ranked Leads",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT $3::text AS run_id, c.id::text AS company_id, c.run_id::text || '|' || c.id::text AS lead_key, c.name AS \"Company\", c.category AS \"Category\", c.location AS \"Location\",\n       c.website AS \"Website\", CASE WHEN c.phone IS NULL OR c.phone = '' THEN '' ELSE '''' || c.phone END AS \"Phone\", c.facebook_url AS \"Facebook\", c.email AS \"Email\", c.company_size AS \"Size\",\n       c.rating AS \"Rating\", c.review_count AS \"Reviews\", COALESCE(c.raw_payload->>'social_url', '') AS \"Social\", (SELECT CASE WHEN ra.value->>'confidence_level' = 'high' THEN ra.value->>'value' WHEN ra.value->>'value' IS NOT NULL THEN (ra.value->>'value') || ' (low)' ELSE '' END FROM research_artifacts ra WHERE ra.company_id = c.id AND ra.field_name = 'company_size' ORDER BY ra.created_at DESC LIMIT 1) AS \"SizeBand\",\n       s.fit_score AS \"Fit\", s.timing_score AS \"Timing\",\n       CASE WHEN s.band = 'insufficient_data' THEN 'Unknown \u2014 insufficient data' ELSE s.band END AS \"Band\"\nFROM companies c\nJOIN scores s ON s.company_id = c.id AND s.search_profile_id = $1::uuid AND s.profile_version = $2\nWHERE ($3 = '' OR c.run_id::text = $3)\nORDER BY CASE\n           WHEN COALESCE(c.raw_payload->>'city', '') ILIKE '%yangon%' OR c.location ILIKE '%yangon%' THEN 0\n           WHEN COALESCE(c.raw_payload->>'city', '') ILIKE '%mandalay%' OR c.location ILIKE '%mandalay%' THEN 1\n           WHEN COALESCE(c.raw_payload->>'city', '') ILIKE '%bangkok%' OR c.location ILIKE '%bangkok%' OR COALESCE(c.raw_payload->>'state', '') ILIKE '%bangkok%' THEN 2\n           ELSE 3\n         END,\n         s.fit_score DESC\nLIMIT (CASE WHEN $4 > 0 THEN $4 ELSE 200 END)",
+    "options": {
+     "queryReplacement": "={{ [ $('When Executed by Another Workflow').item.json.search_profile_id, $('When Executed by Another Workflow').item.json.profile_version || 1, $('When Executed by Another Workflow').item.json.run_id || '', $('When Executed by Another Workflow').item.json.publish_limit || 200 ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "ba61d3ad-8f07-4dc9-b3d2-3ebf05dd037e",
+   "name": "Sheet - Read Existing (F32)",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "read",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM",
+     "cachedResultName": "Lead Finder - Approval View (v-next F32)"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "Lead Review",
+     "cachedResultName": "Lead Review"
+    },
+    "options": {}
+   },
+   "alwaysOutputData": true,
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "5b35a674-ac3a-4534-ae03-e29b9551a53b",
+   "name": "Key Map + Validate (F32)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const REQUIRED = ['run_id', 'company_id', 'Decision', 'Note', 'lead_key'];\nconst sheetRows = $input.all().map(i => i.json);\nconst headerSet = new Set();\nfor (const r of sheetRows) for (const k of Object.keys(r)) headerSet.add(k);\nconst missing = headerSet.size ? REQUIRED.filter(h => !headerSet.has(h)) : [];\nif (missing.length) {\n  return [{ json: { header_error: missing[0], missing_headers: missing, success: false } }];\n}\nconst byKey = new Map();\nfor (const r of sheetRows) {\n  if (r.run_id && r.company_id) byKey.set(String(r.run_id) + '|' + String(r.company_id), r);\n}\nconst leads = $('DB - Ranked Leads').all().map(i => i.json);\nconst out = [];\nlet preserved = 0;\nfor (const lead of leads) {\n  const key = String(lead.run_id || '') + '|' + String(lead.company_id || '');\n  const existing = byKey.get(key);\n  const hasDecision = !!(existing && String(existing.Decision || '').trim());\n  if (hasDecision) preserved++;\n  out.push({ json: { ...lead, _key: key, _preserved_decision: hasDecision, header_error: '' } });\n}\nif (!out.length) out.push({ json: { header_error: '', _empty: true, run_id: '', company_id: '' } });\nfor (const o of out) o.json._preserved_total = preserved;\nreturn out;"
+   }
+  },
+  {
+   "id": "23b39cc8-f389-44b0-ad29-64307efbf882",
+   "name": "Header OK?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "id": "herr",
+       "leftValue": "={{ $json.header_error }}",
+       "rightValue": "",
+       "operator": {
+        "type": "string",
+        "operation": "empty",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   }
+  },
+  {
+   "id": "ba65fce9-c6cc-482b-a32b-711e0bfed329",
+   "name": "Sheet - Publish Ranked Leads",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    1440,
+    320
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "appendOrUpdate",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM",
+     "cachedResultName": "Lead Finder - Approval View (v-next F32)"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "Lead Review",
+     "cachedResultName": "Lead Review"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "run_id": "={{ $json.run_id }}",
+      "company_id": "={{ $json.company_id }}",
+      "Company": "={{ $json.Company }}",
+      "Category": "={{ $json.Category }}",
+      "Location": "={{ $json.Location }}",
+      "Website": "={{ $json.Website }}",
+      "Phone": "={{ $json.Phone }}",
+      "Facebook": "={{ $json.Facebook }}",
+      "Email": "={{ $json.Email }}",
+      "Size": "={{ $json.Size }}",
+      "Rating": "={{ $json.Rating }}",
+      "Reviews": "={{ $json.Reviews }}",
+      "Fit": "={{ $json.Fit }}",
+      "Timing": "={{ $json.Timing }}",
+      "Band": "={{ $json.Band }}",
+      "lead_key": "={{ $json.lead_key }}",
+      "Social": "={{ $json.Social }}",
+      "SizeBand": "={{ $json.SizeBand }}"
+     },
+     "matchingColumns": [
+      "lead_key"
+     ],
+     "schema": [
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "company_id",
+       "displayName": "company_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Company",
+       "displayName": "Company",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Category",
+       "displayName": "Category",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Location",
+       "displayName": "Location",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Website",
+       "displayName": "Website",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Phone",
+       "displayName": "Phone",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Facebook",
+       "displayName": "Facebook",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Email",
+       "displayName": "Email",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Size",
+       "displayName": "Size",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Rating",
+       "displayName": "Rating",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Reviews",
+       "displayName": "Reviews",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Fit",
+       "displayName": "Fit",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Timing",
+       "displayName": "Timing",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Band",
+       "displayName": "Band",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "lead_key",
+       "displayName": "lead_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Social",
+       "displayName": "Social",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "SizeBand",
+       "displayName": "SizeBand",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "options": {}
+   },
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "28e9cddd-3860-4233-b6de-c45b512b3fd4",
+   "name": "DB - People for Published",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1580,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT c.id::text AS company_id, c.name AS \"Company\", p.full_name AS \"Person\", p.title AS \"Position\",\n       c.id::text || '|' || p.full_name AS person_key, p.linkedin_url AS \"LinkedIn\", CASE WHEN p.phone IS NULL OR p.phone = '' THEN '' ELSE '''' || p.phone END AS \"Phone\", p.email AS \"Email\", p.source AS \"Source\", p.evidence_quote AS \"Evidence\"\nFROM people p\nJOIN companies c ON c.id = p.company_id\nJOIN scores s ON s.company_id = c.id AND s.search_profile_id = $1::uuid AND s.profile_version = $2\nWHERE ($3 = '' OR c.run_id::text = $3)\nORDER BY s.fit_score DESC\nLIMIT (CASE WHEN $4 > 0 THEN $4 ELSE 200 END)",
+    "options": {
+     "queryReplacement": "={{ [ $('When Executed by Another Workflow').first().json.search_profile_id, $('When Executed by Another Workflow').first().json.profile_version || 1, $('When Executed by Another Workflow').first().json.run_id || '', $('When Executed by Another Workflow').first().json.publish_limit || 200 ] }}"
+    }
+   },
+   "executeOnce": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "83fb1875-3735-4420-be00-1b800d6bad66",
+   "name": "Sheet - Publish People",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    1860,
+    320
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "appendOrUpdate",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM",
+     "cachedResultName": "Lead Finder - Approval View (v-next F32)"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "People",
+     "cachedResultName": "People"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "company_id": "={{ $json.company_id }}",
+      "Company": "={{ $json.Company }}",
+      "Person": "={{ $json.Person }}",
+      "Position": "={{ $json.Position }}",
+      "LinkedIn": "={{ $json.LinkedIn }}",
+      "Phone": "={{ $json.Phone }}",
+      "Email": "={{ $json.Email }}",
+      "Source": "={{ $json.Source }}",
+      "Evidence": "={{ $json.Evidence }}",
+      "person_key": "={{ $json.person_key }}"
+     },
+     "matchingColumns": [
+      "person_key"
+     ],
+     "schema": [
+      {
+       "id": "company_id",
+       "displayName": "company_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Company",
+       "displayName": "Company",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Person",
+       "displayName": "Person",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Position",
+       "displayName": "Position",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "LinkedIn",
+       "displayName": "LinkedIn",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Phone",
+       "displayName": "Phone",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Email",
+       "displayName": "Email",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Source",
+       "displayName": "Source",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Evidence",
+       "displayName": "Evidence",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "person_key",
+       "displayName": "person_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "options": {}
+   },
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "14b35cf8-09f7-45ed-a1cc-95bfac5be4db",
+   "name": "DB - City Ranks (Sort)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2140,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT c.id::text AS company_id,\nCASE\n  WHEN COALESCE(c.raw_payload->>'city', '') ILIKE '%yangon%' OR c.location ILIKE '%yangon%' THEN 0\n  WHEN COALESCE(c.raw_payload->>'city', '') ILIKE '%mandalay%' OR c.location ILIKE '%mandalay%' THEN 1\n  WHEN COALESCE(c.raw_payload->>'city', '') ILIKE '%bangkok%' OR c.location ILIKE '%bangkok%' OR COALESCE(c.raw_payload->>'state', '') ILIKE '%bangkok%' THEN 2\n  ELSE 3\nEND AS city_rank\nFROM companies c",
+    "options": {}
+   },
+   "executeOnce": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "64a20a75-1642-4f39-9fe4-e61d4edb1e2e",
+   "name": "Sheet - Read All (Sort)",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    2420,
+    320
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "read",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM",
+     "cachedResultName": "Lead Finder - Approval View (v-next F32)"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "Lead Review",
+     "cachedResultName": "Lead Review"
+    },
+    "options": {}
+   },
+   "alwaysOutputData": true,
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "baa8f757-c23d-4cea-90b8-d58fcb561be2",
+   "name": "Build Rank Items (Sort)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2700,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const rankByCompany = new Map();\nfor (const it of $('DB - City Ranks (Sort)').all()) {\n  const j = it.json || {};\n  if (j.company_id) rankByCompany.set(String(j.company_id), Number(j.city_rank));\n}\nconst out = [];\nfor (const it of $input.all()) {\n  const r = it.json || {};\n  const key = String(r.lead_key || '');\n  if (!key) continue;\n  const rank = rankByCompany.has(String(r.company_id)) ? rankByCompany.get(String(r.company_id)) : 3;\n  const fv = parseFloat(r.Fit);\n  out.push({ json: { lead_key: key, city_rank: rank, fit_num: Number.isFinite(fv) ? fv : -1 } });\n}\nreturn out;"
+   }
+  },
+  {
+   "id": "17076c94-3da3-4d04-99b3-577efa40a274",
+   "name": "Sheet - Write City Rank (Sort)",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    2980,
+    320
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "appendOrUpdate",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM",
+     "cachedResultName": "Lead Finder - Approval View (v-next F32)"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "Lead Review",
+     "cachedResultName": "Lead Review"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "lead_key": "={{ $json.lead_key }}",
+      "city_rank": "={{ $json.city_rank }}",
+      "fit_num": "={{ $json.fit_num }}"
+     },
+     "matchingColumns": [
+      "lead_key"
+     ],
+     "schema": [
+      {
+       "id": "lead_key",
+       "displayName": "lead_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "city_rank",
+       "displayName": "city_rank",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "fit_num",
+       "displayName": "fit_num",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "options": {}
+   },
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "0ead598e-f716-485c-a49e-1ea34e4137a3",
+   "name": "HTTP - Sort Range (Sort)",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    3260,
+    320
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://sheets.googleapis.com/v4/spreadsheets/1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM:batchUpdate",
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "googleSheetsOAuth2Api",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ (() => { return JSON.stringify({ requests: [{ sortRange: { range: { sheetId: 0, startRowIndex: 1, endRowIndex: $('Sheet - Read All (Sort)').all().length + 1, startColumnIndex: 0, endColumnIndex: 22 }, sortSpecs: [{ dimensionIndex: 18, sortOrder: 'ASCENDING' }, { dimensionIndex: 19, sortOrder: 'DESCENDING' }] } }] }); })() }}",
+    "options": {
+     "timeout": 60000
+    }
+   },
+   "executeOnce": true,
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "400e4dd9-9bc1-4c1b-a965-563e77abbd75",
+   "name": "Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3540,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const km = $('Key Map + Validate (F32)').all();\nconst preserved = km.length ? (km[0].json._preserved_total || 0) : 0;\nconst published = km.filter(i => !i.json._empty).length;\nlet sortedRows = 0;\ntry { sortedRows = $('Sheet - Read All (Sort)').all().length; } catch (e) { sortedRows = 0; }\nreturn [{ json: { success: true, published, preserved_decisions: preserved, sorted_rows: sortedRows } }];"
+   }
+  },
+  {
+   "id": "ea7e08f3-3a6d-4ad4-8ec4-64cc2289c654",
+   "name": "Prep Header Error",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1300,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const km = $('Key Map + Validate (F32)').first().json;\nreturn [{ json: { subject: 'SF8 v-next header error - missing header: ' + (km.header_error || ''), text: 'SF8 v-next (F32) refused to write to the v-next approval Sheet copy.\\nMissing/renamed header: ' + (km.header_error || '') + '\\nAll missing: ' + JSON.stringify(km.missing_headers || []) + '\\nZero rows were written. Rename the header back to continue.' } }];"
+   }
+  },
+  {
+   "id": "41b025cf-c193-46e7-9889-77e29bd03737",
+   "name": "Gmail - Header Error Draft (F32)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1440,
+    560
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "subject": "={{ $json.subject }}",
+    "emailType": "text",
+    "message": "={{ $json.text }}",
+    "options": {}
+   },
+   "webhookId": "f98cca1b-78f7-40d2-b2e2-74be7f12e507",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "70287e55-8a80-4f21-87fc-a8a8fa4cf45f",
+   "name": "Return - Header Error",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const km = $('Key Map + Validate (F32)').first().json; return [{ json: { success: false, header_error: km.header_error || '', published: 0 } }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

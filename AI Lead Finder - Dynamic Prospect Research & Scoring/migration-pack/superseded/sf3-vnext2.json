@@ -1,0 +1,892 @@
+{
+ "id": "cCN8KY8bnIYtwNed",
+ "name": "SF3 v-next.2 - People Finder + Site Extract + Audit + Cap + Isolation (F35+D10)",
+ "active": false,
+ "isArchived": false,
+ "versionId": "5da202f3-bc2e-45ed-8f97-383dce4616f9",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 26,
+ "createdAt": "2026-11-16T04:24:26.374Z",
+ "updatedAt": "2026-11-16T04:42:27.984Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "DB - Pick Companies",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Pick Companies": {
+   "main": [
+    [
+     {
+      "node": "Stage Run Context",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Stage Run Context": {
+   "main": [
+    [
+     {
+      "node": "DB - Cap Check (F28)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cap Check (F28)": {
+   "main": [
+    [
+     {
+      "node": "Rank + Audit + Cap (F35)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Rank + Audit + Cap (F35)": {
+   "main": [
+    [
+     {
+      "node": "DB - Write Audit + Events (F34/F35)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Write Audit + Events (F34/F35)": {
+   "main": [
+    [
+     {
+      "node": "Audit Write Check (D10)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit Write Check (D10)": {
+   "main": [
+    [
+     {
+      "node": "Build Jobs",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Jobs": {
+   "main": [
+    [
+     {
+      "node": "Has Jobs?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Has Jobs?": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Search LinkedIn",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Return - Empty Run Summary",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Search LinkedIn": {
+   "main": [
+    [
+     {
+      "node": "Reattach",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Search Web",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Search Web": {
+   "main": [
+    [
+     {
+      "node": "Reattach 2",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach 2": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Extract Site",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Extract Site": {
+   "main": [
+    [
+     {
+      "node": "Pack Evidence",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pack Evidence": {
+   "main": [
+    [
+     {
+      "node": "LLM - People Extractor",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "LLM - People Extractor": {
+   "main": [
+    [
+     {
+      "node": "Parse + Validate",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Parse + Validate": {
+   "main": [
+    [
+     {
+      "node": "DB - Save People",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Save People": {
+   "main": [
+    [
+     {
+      "node": "Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Return": {
+   "main": [
+    [
+     {
+      "node": "Audit Alert Gate (D10)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit Alert Gate (D10)": {
+   "main": [
+    [
+     {
+      "node": "Audit Failed? (end)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit Failed? (end)": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Audit Alert Draft (D10, NEVER SENDS)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Audit OK Pass (end)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gmail - Audit Alert Draft (D10, NEVER SENDS)": {
+   "main": [
+    [
+     {
+      "node": "Return - Final (D10)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit OK Pass (end)": {
+   "main": [
+    [
+     {
+      "node": "Return - Final (D10)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "3b445158-e44a-4904-9129-ea6a53b0a6a7",
+   "name": "Sticky Note 2a578ec6",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF3 v-next - People Finder (F35 + F34 audit + F28 ledger/cap). Changes vs v3: (1) pick returns ALL scored companies; a Rank + Audit + Cap node classifies each (selected / cap_reached / below_cutoff / research_once_skip, SF5-selected flagged) and writes selection_audit rows (workflow SF3) + people_search_events picked rows + cap_blocked ledger rows in one statement; a spend cap (optional spend_cap_usd input, $0.024/company = 3 Tavily credits at $0.008) blocks before any paid node. (2) NEW yield lever: Tavily EXTRACT of the company site (home/about/team/contact) merged into the evidence corpus - owners are usually named there, not in search snippets. (3) Every saved person carries source_url + evidence_quote + fetched_at (people columns added at F35; retention columns land at F21). (4) cost_ledger rows per company (tavily 3 units $0.024, llm 1 unit cost NULL) beside the legacy spend_ledger row (3 credits). Deterministic verbatim quote check unchanged. No emails guessed; no outreach created.",
+    "color": 5
+   }
+  },
+  {
+   "id": "2f2dd0c8-6a98-41c6-941e-deee142f612e",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "max_companies",
+       "type": "number"
+      },
+      {
+       "name": "min_fit",
+       "type": "number"
+      },
+      {
+       "name": "spend_cap_usd",
+       "type": "number"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "01a86cc8-1402-4e23-a9a5-7f758ee53bff",
+   "name": "DB - Pick Companies",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT COALESCE(jsonb_agg(p), '[]'::jsonb) AS candidates\nFROM (\n  SELECT c.id::text AS company_id, c.name, c.category, c.location, c.website, s.fit_score,\n    EXISTS (SELECT 1 FROM people pp WHERE pp.company_id = c.id) AS has_people,\n    EXISTS (SELECT 1 FROM research_artifacts ra WHERE ra.company_id = c.id AND ra.field_name = 'people_search_pack') AS searched_before,\n    EXISTS (SELECT 1 FROM selection_audit sa WHERE sa.run_id = $3 AND sa.workflow = 'SF5' AND sa.company_id = c.id::text AND sa.selection_reason = 'selected') AS audit_selected\n  FROM companies c\n  JOIN scores s ON s.company_id = c.id AND s.search_profile_id = $1::uuid AND s.profile_version = $2\n  WHERE c.status NOT IN ('approved','rejected')\n) p",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id, $json.profile_version || 1, $json.run_id || '' ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "a8327a20-2db0-4c4f-95e1-422ba8b30b1e",
+   "name": "Stage Run Context",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json;\nconst pick = $input.first().json || {};\nreturn [{ json: { run_id: trig.run_id || '', search_profile_id: trig.search_profile_id || '', profile_version: trig.profile_version || 1,\n  min_fit: trig.min_fit || 30, max_companies: trig.max_companies || 3,\n  spend_cap_usd: (trig.spend_cap_usd === undefined || trig.spend_cap_usd === null || trig.spend_cap_usd === '') ? null : Number(trig.spend_cap_usd),\n  candidates: pick.candidates || [] } }];"
+   }
+  },
+  {
+   "id": "ef214c79-295c-4b64-a86a-6c454b04b7fb",
+   "name": "DB - Cap Check (F28)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT COALESCE(SUM(cost_usd), 0)::float AS spent FROM cost_ledger WHERE run_id = $1",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id ] }}"
+    }
+   },
+   "executeOnce": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "d77a3869-daef-405d-85ce-82c06f166a76",
+   "name": "Rank + Audit + Cap (F35)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const ctx = $('Stage Run Context').first().json;\nconst spent = Number(($('DB - Cap Check (F28)').first().json || {}).spent || 0);\nconst cands = ctx.candidates || [];\nconst minFit = ctx.min_fit || 30, maxC = ctx.max_companies || 3, cap = ctx.spend_cap_usd;\nconst PER = 0.024;\nconst sorted = [...cands].sort((a, b) => (Number(b.fit_score) - Number(a.fit_score)) || (a.company_id < b.company_id ? -1 : 1));\nconst eligible = sorted.filter(c => Number(c.fit_score) >= minFit && !c.has_people && !c.searched_before);\nlet cutoff = minFit;\nif (eligible.length > maxC) cutoff = Number(eligible[maxC - 1].fit_score);\nconst audit = [], jobs = [], capBlockedIds = [];\nlet rank = 0, proj = spent, firstSkipDone = false;\nfor (const c of sorted) {\n  const fit = Number(c.fit_score);\n  let reason, r = null, first = false;\n  if (c.has_people || c.searched_before) { reason = 'research_once_skip'; }\n  else if (fit < minFit) { reason = 'below_cutoff'; }\n  else {\n    rank++; r = rank;\n    if (rank <= maxC) {\n      if (cap !== null && proj + PER > cap) { reason = 'cap_reached'; capBlockedIds.push(c.company_id); if (!firstSkipDone) { first = true; firstSkipDone = true; } }\n      else { reason = 'selected'; proj += PER; jobs.push(c); }\n    } else { reason = 'cap_reached'; if (!firstSkipDone) { first = true; firstSkipDone = true; } }\n  }\n  audit.push({ run_id: ctx.run_id || '', workflow: 'SF3', company_id: c.company_id, rank: r, fit_score: fit, cutoff, selection_reason: reason, is_first_skipped: first, audit_selected_sf5: !!c.audit_selected });\n}\nreturn [{ json: { run_id: ctx.run_id || '', jobs, audit_rows: audit, cap_blocked_ids: capBlockedIds,\n  write_payload: JSON.stringify({ run_id: ctx.run_id || '', audit_rows: audit, cap_blocked_ids: capBlockedIds }) } }];"
+   }
+  },
+  {
+   "id": "90ceb317-4803-46f0-aff7-c122b14f6a59",
+   "name": "DB - Write Audit + Events (F34/F35)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1440,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH w AS (SELECT $1::jsonb AS j),\nins_audit AS (\n  INSERT INTO selection_audit (run_id, workflow, company_id, rank, fit_score, cutoff, selection_reason, is_first_skipped)\n  SELECT x->>'run_id', x->>'workflow', x->>'company_id', NULLIF(x->>'rank','')::int, (x->>'fit_score')::numeric, (x->>'cutoff')::numeric, x->>'selection_reason', (x->>'is_first_skipped')::boolean\n  FROM w, jsonb_array_elements(w.j->'audit_rows') x\n  ON CONFLICT (run_id, workflow, company_id) DO NOTHING RETURNING company_id),\nins_events AS (\n  INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)\n  SELECT w.j->>'run_id', (x->>'company_id')::uuid, 'SF3', 'picked', jsonb_build_object('fit_score', (x->>'fit_score')::numeric, 'rank', NULLIF(x->>'rank','')::int, 'sf5_selected', (x->>'audit_selected_sf5')::boolean)\n  FROM w, jsonb_array_elements(w.j->'audit_rows') x WHERE x->>'selection_reason' = 'selected' RETURNING id),\nins_cap AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT w.j->>'run_id', 'SF3', 'tavily', 'cap_blocked', 0, 0, x, 'sf3:cap:' || (w.j->>'run_id') || ':' || x\n  FROM w, jsonb_array_elements_text(w.j->'cap_blocked_ids') x\n  ON CONFLICT (idempotency_key) DO NOTHING RETURNING id)\nSELECT (SELECT count(*) FROM ins_audit) AS audit_rows, (SELECT count(*) FROM ins_events) AS picked_events, (SELECT count(*) FROM ins_cap) AS cap_blocked_rows",
+    "options": {
+     "queryReplacement": "={{ [ $json.write_payload ] }}"
+    }
+   },
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "3be824a7-66f2-41b3-a947-9331019b8f93",
+   "name": "Audit Write Check (D10)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1560,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const first = ($input.first() && $input.first().json) || {};\nconst failed = !!(first.error || first.message);\nconst trig = $('When Executed by Another Workflow').item.json || {};\nconst body = 'SF3 v-next.2 (D10 isolation): the F34/F35 selection-audit + funnel-events write FAILED for run ' + (trig.run_id || '') + '. People search continues - the write is isolated so its failure cannot block the search - but this run has no selection audit trail or picked events until the write is repaired.\\nError: ' + String(first.message || first.error || 'unknown').slice(0, 400);\nreturn [{ json: { audit_failed: failed, sendTo: 'victor.job154@gmail.com', subject: 'SF3 audit write failed - run ' + (trig.run_id || ''), body: body } }];"
+   }
+  },
+  {
+   "id": "b1a76710-2741-4911-bcd7-8c4739703016",
+   "name": "Build Jobs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const rank = $('Rank + Audit + Cap (F35)').first().json || {};\nconst jobs = rank.jobs || [];\nif (!jobs.length) {\n  const trig = $('When Executed by Another Workflow').item.json;\n  return [{ json: { empty_run: true, stage: 'SF3', reason: 'no_companies_selected', fit_threshold: trig.min_fit || 30, search_profile_id: trig.search_profile_id || '', profile_version: trig.profile_version || 1, run_id: trig.run_id || '' } }];\n}\nreturn jobs.map(c => {\n  const loc = (c.location || '').trim();\n  const qLinkedin = (c.name + ' ' + loc + ' LinkedIn owner founder').trim();\n  let domain = '';\n  try { domain = (c.website || '').replace(/^https?:\\/\\//, '').replace(/^www\\./, '').split('/')[0]; } catch (e) { domain = ''; }\n  const realDomain = domain && domain.indexOf('facebook.com') === -1 && domain.indexOf('.') > -1;\n  const qWeb = realDomain ? (c.name + ' ' + domain + ' team about owner founder').trim() : (c.name + ' ' + loc + ' about team owner founder').trim();\n  let urls = [];\n  if (realDomain) {\n    const base = 'https://' + domain;\n    urls = [base, base + '/about', base + '/team', base + '/contact'];\n  } else if (c.website) { urls = [c.website]; }\n  return { json: { company_id: c.company_id, name: c.name, category: c.category || '', location: loc, website: c.website || '', run_id: rank.run_id || '',\n    mcp_linkedin: JSON.stringify({ query: qLinkedin, search_depth: 'basic', max_results: 5 }),\n    mcp_web: JSON.stringify({ query: qWeb, search_depth: 'basic', max_results: 5 }),\n    mcp_extract: JSON.stringify({ urls, extract_depth: 'basic', format: 'text' }) } };\n});"
+   }
+  },
+  {
+   "id": "0161fe5b-ce8e-46eb-bdbf-80ebe304afa1",
+   "name": "Has Jobs?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1860,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ !$json.empty_run }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "888b4883-3b8d-4089-8d2c-573388feab09",
+   "name": "Tavily MCP - Search LinkedIn",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    2000,
+    400
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_search",
+     "cachedResultName": "tavily_search"
+    },
+    "jsonInput": "={{ $json.mcp_linkedin }}"
+   },
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "5fc783a4-d5d2-4047-8a80-afb30353b33a",
+   "name": "Reattach",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2280,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Build Jobs').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  let t = '';\n  try { t = typeof item.json === 'string' ? item.json : JSON.stringify(item.json); } catch (e) { t = String(item.json); }\n  return { json: { company_id: job.company_id, name: job.name, search1_text: t, mcp_input: job.mcp_web || '{}' } };\n});"
+   }
+  },
+  {
+   "id": "f71a02f2-a9a2-4b79-b721-d36751bb0237",
+   "name": "Tavily MCP - Search Web",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    2560,
+    400
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_search",
+     "cachedResultName": "tavily_search"
+    },
+    "jsonInput": "={{ $json.mcp_input }}"
+   },
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "a41b71d0-386b-4ea6-a31f-1ef9f9a00a70",
+   "name": "Reattach 2",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2840,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Build Jobs').all().map(i => i.json);\nconst first = $('Reattach').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  let t2 = '';\n  try { t2 = typeof item.json === 'string' ? item.json : JSON.stringify(item.json); } catch (e) { t2 = String(item.json); }\n  let extract = job.mcp_extract || '{\"urls\": []}';\n  try { const p = JSON.parse(extract); if (!p.urls || !p.urls.length) extract = JSON.stringify({ urls: ['https://example.com'], extract_depth: 'basic', format: 'text' }); } catch (e) {}\n  return { json: { company_id: job.company_id, name: job.name, search1_text: (first[idx] || {}).search1_text || '', search2_text: t2, mcp_input: extract } };\n});"
+   }
+  },
+  {
+   "id": "dcf33d93-a3ae-4d9a-ae0f-24a89612945f",
+   "name": "Tavily MCP - Extract Site",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    3120,
+    400
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_extract",
+     "cachedResultName": "tavily_extract"
+    },
+    "jsonInput": "={{ $json.mcp_input }}"
+   },
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "bdcda494-c31a-4bf5-a433-4da5aea572a1",
+   "name": "Pack Evidence",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3400,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Build Jobs').all().map(i => i.json);\nconst searches = $('Reattach 2').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  const s = searches[idx] || {};\n  let siteText = '', sitePages = 0;\n  try {\n    let ej = item.json;\n    if (typeof ej === 'string') ej = JSON.parse(ej);\n    const results = (ej && ej.results) || [];\n    sitePages = results.length;\n    siteText = results.map(r => (r.raw_content || r.content || '')).filter(Boolean).join('\\n');\n  } catch (e) { siteText = ''; sitePages = 0; }\n  let corpus = 'LINKEDIN SEARCH RESULTS:\\n' + (s.search1_text || '') + '\\n\\nWEBSITE AND TEAM SEARCH RESULTS:\\n' + (s.search2_text || '') + '\\n\\nCOMPANY SITE PAGES:\\n' + siteText;\n  if (corpus.length > 12000) corpus = corpus.slice(0, 12000);\n  const userMsg = 'Company: ' + job.name + '\\nCategory: ' + job.category + '\\nLocation: ' + job.location + '\\nWebsite: ' + job.website + '\\n\\nWEB EVIDENCE:\\n' + corpus;\n  return { json: { company_id: job.company_id, run_id: job.run_id, name: job.name, corpus, site_pages: sitePages,\n    extract_payload: { model: 'muse-spark-1.3', temperature: 0.1, messages: [ { role: 'system', content: \"You are a people finder for B2B sales research. You receive a company and raw web evidence. Find the people who own, founded, lead or work at THIS company. Return ONLY a JSON object: {\\\"people\\\": [{\\\"full_name\\\": string, \\\"title\\\": string, \\\"linkedin_url\\\": string, \\\"is_decision_maker\\\": boolean, \\\"evidence_url\\\": string, \\\"evidence_quote\\\": string}]}. Every person MUST have an evidence_url copied from the evidence and a short EXACT quote copied from the evidence that names the person together with this company or their role in it. A LinkedIn URL may only be included if it appears in the evidence. Never invent names, titles or URLs. If no person can be tied to this company by the evidence, return an empty list.\" }, { role: 'user', content: userMsg } ] } } };\n});"
+   }
+  },
+  {
+   "id": "adb467a7-bb4a-4710-b192-62995adc9906",
+   "name": "LLM - People Extractor",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    3680,
+    400
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json.extract_payload) }}",
+    "options": {
+     "timeout": 120000
+    }
+   },
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "c4nDlJtRtEyOzjmx",
+     "name": "Header Auth account"
+    }
+   }
+  },
+  {
+   "id": "54c482f6-58f1-458a-8def-97602c57c894",
+   "name": "Parse + Validate",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3960,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const packs = $('Pack Evidence').all().map(i => i.json);\nconst DM = /(owner|founder|co-founder|partner|director|ceo|managing|manager|president)/i;\nfunction norm(s) { return String(s || '').toLowerCase().replace(/\\s+/g, ' ').trim(); }\nreturn $input.all().map((item, idx) => {\n  const pack = packs[idx] || {};\n  const corpusN = norm(pack.corpus || '');\n  let content = '';\n  try { content = item.json.choices[0].message.content || ''; } catch (e) {}\n  content = content.replace(/```json/g, '').replace(/```/g, '').trim();\n  let parsed = {};\n  try { parsed = JSON.parse(content); } catch (e) { parsed = {}; }\n  const seen = {};\n  const people = [];\n  for (const p of (parsed.people || [])) {\n    if (!p || !p.full_name || !p.evidence_url || !p.evidence_quote) continue;\n    const quoteN = norm(p.evidence_quote);\n    if (!quoteN || corpusN.indexOf(quoteN) === -1) continue;\n    const key = norm(p.full_name);\n    if (seen[key]) continue;\n    seen[key] = 1;\n    const title = String(p.title || '');\n    let li = String(p.linkedin_url || '');\n    if (li.indexOf('linkedin.com') === -1) li = '';\n    people.push({ full_name: String(p.full_name), title, linkedin_url: li,\n      is_decision_maker: (p.is_decision_maker === true) || DM.test(title),\n      evidence_url: String(p.evidence_url), evidence_quote: String(p.evidence_quote) });\n  }\n  const payload = { company_id: pack.company_id, run_id: pack.run_id || '', corpus: (pack.corpus || '').slice(0, 4000), people, site_pages: pack.site_pages || 0 };\n  return { json: { payload: JSON.stringify(payload), company_id: pack.company_id, people_found: people.length, site_pages: pack.site_pages || 0 } };\n});"
+   }
+  },
+  {
+   "id": "0bce25d9-476a-4536-bbb4-17f560d81c0b",
+   "name": "DB - Save People",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    4240,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH p AS (SELECT $1::jsonb AS j),\npack AS (INSERT INTO research_artifacts (company_id, field_name, value, source_url, raw_content, critic_verdict)\n  SELECT (j->>'company_id')::uuid, 'people_search_pack', jsonb_build_object('people_found', jsonb_array_length(j->'people'), 'site_pages', COALESCE((j->>'site_pages')::int, 0)), NULL, j->>'corpus', 'deterministic_quote_check' FROM p RETURNING id),\npi AS (INSERT INTO people (company_id, full_name, title, linkedin_url, is_decision_maker, source, raw_payload, source_url, evidence_quote, fetched_at)\n  SELECT (j->>'company_id')::uuid, x->>'full_name', NULLIF(x->>'title',''), NULLIF(x->>'linkedin_url',''), COALESCE((x->>'is_decision_maker')::boolean, false), 'tavily_people_search', x, NULLIF(x->>'evidence_url',''), NULLIF(x->>'evidence_quote',''), now()\n  FROM p, jsonb_array_elements(j->'people') x\n  WHERE NOT EXISTS (SELECT 1 FROM people pp WHERE pp.company_id = (j->>'company_id')::uuid AND lower(pp.full_name) = lower(x->>'full_name'))\n  RETURNING id),\nsp AS (INSERT INTO spend_ledger (run_id, company_id, provider, action, credits)\n  SELECT NULLIF(j->>'run_id','')::uuid, (j->>'company_id')::uuid, 'tavily', 'people_search', 3 FROM p RETURNING id),\ncl1 AS (INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT NULLIF(j->>'run_id',''), 'SF3', 'tavily', 'charge', 3, 0.024, j->>'company_id', 'sf3:tavily:' || (j->>'run_id') || ':' || (j->>'company_id') FROM p\n  ON CONFLICT (idempotency_key) DO NOTHING RETURNING id),\ncl2 AS (INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT NULLIF(j->>'run_id',''), 'SF3', 'llm', 'charge', 1, NULL, j->>'company_id', 'sf3:llm:' || (j->>'run_id') || ':' || (j->>'company_id') FROM p\n  ON CONFLICT (idempotency_key) DO NOTHING RETURNING id),\nev1 AS (INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)\n  SELECT NULLIF(j->>'run_id',''), (j->>'company_id')::uuid, 'SF3', 'searched', jsonb_build_object('tavily_searches', 2, 'tavily_extract', true) FROM p RETURNING id),\nev2 AS (INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)\n  SELECT NULLIF(j->>'run_id',''), (j->>'company_id')::uuid, 'SF3', 'site_fetched', jsonb_build_object('pages', COALESCE((j->>'site_pages')::int, 0)) FROM p RETURNING id),\nev3 AS (INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)\n  SELECT NULLIF(j->>'run_id',''), (j->>'company_id')::uuid, 'SF3', 'people_saved', jsonb_build_object('count', (SELECT count(*) FROM pi)) FROM p RETURNING id)\nSELECT (SELECT count(*) FROM pi) AS people_saved",
+    "options": {
+     "queryReplacement": "={{ [ $json.payload ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "45befd5c-13b0-40aa-a4f7-c5e1799b96ce",
+   "name": "Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4520,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const saves = $input.all().map(i => i.json);\nconst packs = $('Parse + Validate').all().map(i => i.json);\nreturn [{ json: { success: true, companies_processed: saves.length,\n  people_extracted: packs.reduce((a, s) => a + (s.people_found || 0), 0),\n  people_saved: saves.reduce((a, s) => a + (Number(s.people_saved) || 0), 0),\n  site_pages_fetched: packs.reduce((a, s) => a + (s.site_pages || 0), 0) } }];"
+   }
+  },
+  {
+   "id": "51e5c4f7-b79a-4b41-aea8-01b508077d26",
+   "name": "Audit Alert Gate (D10)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4700,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const summary = ($('Return').first() && $('Return').first().json) || {};\nconst chk = ($('Audit Write Check (D10)').first() && $('Audit Write Check (D10)').first().json) || {};\nreturn [{ json: Object.assign({}, summary, { audit_failed: !!chk.audit_failed, sendTo: chk.sendTo || 'victor.job154@gmail.com', subject: chk.subject || '', body: chk.body || '' }) }];"
+   }
+  },
+  {
+   "id": "26ee3a53-b644-4e94-9c89-460d81437c87",
+   "name": "Audit Failed? (end)",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    4880,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.audit_failed }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "3b651019-0f42-4e32-8081-d0342a5db801",
+   "name": "Gmail - Audit Alert Draft (D10, NEVER SENDS)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    5060,
+    320
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "sendTo": "={{ $json.sendTo }}",
+    "subject": "={{ $json.subject }}",
+    "emailType": "text",
+    "message": "={{ $json.body }}",
+    "options": {}
+   },
+   "webhookId": "f5989a1b-e7f0-4609-b2ee-d271b4285615",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "3bd605d5-e3f7-4597-8772-80d06eac97af",
+   "name": "Return - Final (D10)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    5240,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "return [{ json: ($('Return').first() || {}).json || {} }];"
+   }
+  },
+  {
+   "id": "d46da782-cfa8-497a-8e78-0003448093c6",
+   "name": "Audit OK Pass (end)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    5060,
+    480
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "return $input.all();"
+   }
+  },
+  {
+   "id": "6416a4ab-abc1-4eb1-a568-3eea577dff9e",
+   "name": "Return - Empty Run Summary",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    2000,
+    560
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "a1",
+       "name": "success",
+       "value": true,
+       "type": "boolean"
+      },
+      {
+       "id": "a2",
+       "name": "companies_processed",
+       "value": 0,
+       "type": "number"
+      },
+      {
+       "id": "a3",
+       "name": "people_extracted",
+       "value": 0,
+       "type": "number"
+      },
+      {
+       "id": "a4",
+       "name": "people_saved",
+       "value": 0,
+       "type": "number"
+      },
+      {
+       "id": "a5",
+       "name": "site_pages_fetched",
+       "value": 0,
+       "type": "number"
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

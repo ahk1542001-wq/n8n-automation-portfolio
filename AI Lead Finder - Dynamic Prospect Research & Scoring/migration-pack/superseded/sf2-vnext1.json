@@ -1,0 +1,755 @@
+{
+ "id": "imW1Fn0pgBnTrWJF",
+ "name": "SF2 v-next.1 - Discovery Maps + Manual Import + Cache (F27+F29)",
+ "active": false,
+ "isArchived": false,
+ "versionId": "f8076466-e369-4452-ad93-bfe1aaa09a34",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 23,
+ "createdAt": "2026-11-15T18:24:35.406Z",
+ "updatedAt": "2026-11-15T18:24:43.510Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Import Source?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Import Source?": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Read Import Tab",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Load Search Profile",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Read Import Tab": {
+   "main": [
+    [
+     {
+      "node": "Validate + Normalise Import",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Validate + Normalise Import": {
+   "main": [
+    [
+     {
+      "node": "Import OK?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Import OK?": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Import Halt Draft (NEVER SENDS)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Collect Import + Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gmail - Import Halt Draft (NEVER SENDS)": {
+   "main": [
+    [
+     {
+      "node": "Return - Import Halted",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Load Search Profile": {
+   "main": [
+    [
+     {
+      "node": "Build Query List",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Query List": {
+   "main": [
+    [
+     {
+      "node": "Cache Key (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cache Key (F29)": {
+   "main": [
+    [
+     {
+      "node": "DB - Cache Lookup (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cache Lookup (F29)": {
+   "main": [
+    [
+     {
+      "node": "Cache Hit?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cache Hit?": {
+   "main": [
+    [
+     {
+      "node": "DB - Cache Hit Ledger (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Expand Pairs (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cache Hit Ledger (F29)": {
+   "main": [
+    [
+     {
+      "node": "Emit Cached (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Expand Pairs (F29)": {
+   "main": [
+    [
+     {
+      "node": "Apify - Maps Search",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Apify - Maps Search": {
+   "main": [
+    [
+     {
+      "node": "Map to Candidates",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Map to Candidates": {
+   "main": [
+    [
+     {
+      "node": "Collect + Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Collect + Return": {
+   "main": [
+    [
+     {
+      "node": "Prep Cache Store (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Cache Store (F29)": {
+   "main": [
+    [
+     {
+      "node": "DB - Cache Store (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cache Store (F29)": {
+   "main": [
+    [
+     {
+      "node": "Return - After Cache Store (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "73909197-0a65-41d1-b03e-a33cc1ed7aa6",
+   "name": "Sticky Note 5486bead",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF2 v-next - Discovery with two sources (F27). Places path = the original SF2 (profile-driven Apify Google Places). Manual-import path: reads an import Sheet with exact headers company_name, domain, location, source_url; a missing header halts the branch with a Gmail draft naming the header; rows are normalised (domain lowercased, www./scheme stripped, location trimmed) and emitted in the SAME candidate contract with source='manual_import' + source_url, merging into the same Collect return so SF4 dedupe handles both paths identically. Input adds discovery_source ('places' default | 'manual_import'), import_sheet_id, import_tab.",
+    "color": 5
+   }
+  },
+  {
+   "id": "67bbe67b-31d7-47cd-be25-cdbf75a2bd20",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "max_per_query",
+       "type": "number"
+      },
+      {
+       "name": "discovery_source",
+       "type": "string"
+      },
+      {
+       "name": "import_sheet_id",
+       "type": "string"
+      },
+      {
+       "name": "import_tab",
+       "type": "string"
+      },
+      {
+       "name": "discovery_cache_ttl_hours",
+       "type": "number"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "2b70ae3d-2d9e-4f85-93b3-8cc001f11884",
+   "name": "Import Source?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.discovery_source === \"manual_import\" }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "2d2d82e1-900d-4714-92e8-4b240f5de7be",
+   "name": "Sheet - Read Import Tab",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    600,
+    240
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "read",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "={{ $json.import_sheet_id }}"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "={{ $json.import_tab }}"
+    },
+    "options": {}
+   },
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "738c17b1-e071-4a0d-b36b-3f323eef314f",
+   "name": "Validate + Normalise Import",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    240
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const REQUIRED = ['company_name', 'domain', 'location', 'source_url'];\nconst rows = $input.all().map(i => i.json);\nif (!rows.length) {\n  return [{ json: { import_error: 'missing_header:company_name', missing_header: 'company_name', detail: 'import sheet returned no rows (headers not readable)' } }];\n}\nconst keys = Object.keys(rows[0]);\nconst missing = REQUIRED.filter(h => !keys.includes(h));\nif (missing.length) {\n  return [{ json: { import_error: 'missing_header:' + missing[0], missing_header: missing[0] } }];\n}\nreturn rows.filter(r => String(r.company_name || '').trim()).map(r => {\n  let d = String(r.domain || '').trim().toLowerCase().replace(/^https?:\\/\\//, '').replace(/^www\\./, '');\n  d = d.split('/')[0];\n  return { json: {\n    source: 'manual_import',\n    source_id: null,\n    name: String(r.company_name).trim(),\n    place_id: null,\n    category: null,\n    location: String(r.location || '').trim(),\n    website: d ? 'https://' + d : null,\n    domain: d || null,\n    phone: null,\n    rating: null,\n    review_count: null,\n    source_url: String(r.source_url || '').trim(),\n    raw: r\n  } };\n});"
+   }
+  },
+  {
+   "id": "218dbb61-0cea-4e0c-8337-ee35755f5205",
+   "name": "Import OK?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1160,
+    240
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ !!$json.import_error }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "8aacf42e-411d-45b2-9a9c-64e1e3d85cc1",
+   "name": "Gmail - Import Halt Draft (NEVER SENDS)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1440,
+    120
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "sendTo": "victor.job154@gmail.com",
+    "subject": "SF2 import halted - missing header",
+    "emailType": "text",
+    "message": "={{ \"The manual-import branch halted before reading any company rows. Missing required header: \" + $json.missing_header + \". Required headers (exact): company_name, domain, location, source_url. No discovery ran and nothing was spent.\" }}",
+    "options": {}
+   },
+   "webhookId": "047c1471-d69a-4d13-b1a6-9650c4cfb7c9",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "d6a415dd-4688-4e74-be8e-8d63753d2e5c",
+   "name": "Return - Import Halted",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    120
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const err = ($('Validate + Normalise Import').first().json || {}).import_error || 'unknown';\nreturn [{ json: { success: false, count: 0, candidates: [], import_error: err } }];"
+   }
+  },
+  {
+   "id": "1e4cda1f-0504-40a7-a921-ce001ff296d3",
+   "name": "Collect Import + Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1440,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const cands = $input.all().map(i => i.json);\nreturn { json: { success: true, count: cands.length, candidates: cands } };"
+   }
+  },
+  {
+   "id": "a5ef95f5-7396-4db3-8fd1-c20c08cbda09",
+   "name": "DB - Load Search Profile",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    600,
+    560
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT profile FROM search_profiles WHERE id = $1::uuid",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "79a4f495-881e-476e-9269-0b45c76fca29",
+   "name": "Build Query List",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json || {};\nconst profile = ($input.item.json.profile) || {};\nconst pairs = [];\nfor (const s of (profile.sources || [])) {\n  if (s.source !== 'apify_maps') continue;\n  const locs = (s.locations && s.locations.length) ? s.locations : [null];\n  for (const q of (s.queries || [])) for (const loc of locs) pairs.push({ search: q, location: loc });\n}\nconst maxPer = trig.max_per_query || 20;\nreturn pairs.map(p => ({ json: {\n  search_profile_id: trig.search_profile_id || null,\n  profile_version: trig.profile_version || 1,\n  run_id: trig.run_id || null,\n  search: p.search,\n  location: p.location,\n  max_per_query: maxPer,\n  apify_input: {\n    searchStringsArray: [p.search],\n    locationQuery: p.location || '',\n    maxCrawledPlacesPerSearch: maxPer,\n    language: 'en',\n    skipClosedPlaces: false,\n    scrapePlaceDetailPage: false\n  }\n} }));"
+   }
+  },
+  {
+   "id": "fef3493e-9630-4c09-9249-48949a4530bd",
+   "name": "Cache Key (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json || {};\nconst pairs = $input.all().map(i => i.json);\nconst pairKey = pairs.map(x => String(x.search || '').toLowerCase().trim() + '|' + String(x.location || '').toLowerCase().trim()).join(';');\nconst material = (trig.search_profile_id || '') + '@' + (trig.profile_version || 1) + '|' + pairKey + '|' + (trig.max_per_query || 20);\nreturn [{ json: {\n  cache_key_material: material,\n  profile_material: (trig.search_profile_id || '') + '@' + (trig.profile_version || 1),\n  query_norm: pairs.map(x => String(x.search || '').toLowerCase().trim()).join(';'),\n  location_norm: pairs.map(x => String(x.location || '').toLowerCase().trim()).join(';'),\n  pairs,\n  search_profile_id: trig.search_profile_id || null,\n  profile_version: trig.profile_version || 1,\n  run_id: trig.run_id || null,\n  max_per_query: trig.max_per_query || 20,\n  ttl_hours: (trig.discovery_cache_ttl_hours === undefined || trig.discovery_cache_ttl_hours === null || trig.discovery_cache_ttl_hours === '' ? 24 : Number(trig.discovery_cache_ttl_hours))\n} }];"
+   }
+  },
+  {
+   "id": "0087717b-2fba-4c6f-8505-d85a2e00a704",
+   "name": "DB - Cache Lookup (F29)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1440,
+    560
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT c.result_company_ids AS candidates, c.discovered_count AS count, true AS hit\nFROM discovery_cache c\nWHERE c.cache_key = encode(sha256($1::bytea), 'hex') AND c.expires_at > now()\nUNION ALL\nSELECT NULL, NULL, false\nWHERE NOT EXISTS (SELECT 1 FROM discovery_cache c WHERE c.cache_key = encode(sha256($1::bytea), 'hex') AND c.expires_at > now())",
+    "options": {
+     "queryReplacement": "={{ [ $json.cache_key_material ] }}"
+    }
+   },
+   "executeOnce": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "4407a62a-6111-49f5-9691-e1bf4665d18f",
+   "name": "Cache Hit?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1720,
+    560
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.hit }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "abd212aa-1fde-48e4-aa15-6014bd1ce950",
+   "name": "DB - Cache Hit Ledger (F29)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2000,
+    440
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nVALUES ($1, 'SF2 v-next.1', 'apify', 'cache_hit_zero', 0, 0, NULL, 'sf2:cachehit:' || $1 || ':' || $2)\nON CONFLICT (idempotency_key) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $('Cache Key (F29)').first().json.run_id, $('Cache Key (F29)').first().json.cache_key_material ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "0a242c7e-a623-46f1-9324-e32c623718cd",
+   "name": "Emit Cached (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2280,
+    440
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const row = ($('DB - Cache Lookup (F29)').first().json) || {};\nconst key = ($('Cache Key (F29)').first().json) || {};\nconst cands = row.candidates || [];\nreturn [{ json: { success: true, count: cands.length, candidates: cands, cache_hit: true, run_id: key.run_id || null } }];"
+   }
+  },
+  {
+   "id": "cb2958d3-3605-4ab1-b13f-849a1c5918fb",
+   "name": "Expand Pairs (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    680
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const key = ($('Cache Key (F29)').first().json) || {};\nreturn (key.pairs || []).map(x => ({ json: x }));"
+   }
+  },
+  {
+   "id": "095e98aa-7fbf-40ac-ba43-a165d7342a1d",
+   "name": "Apify - Maps Search",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1160,
+    560
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ $json.apify_input }}",
+    "options": {
+     "timeout": 300000,
+     "batching": {
+      "batch": {
+       "batchSize": 1,
+       "batchInterval": 5000
+      }
+     }
+    }
+   },
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "knrRqdSihRdH7fFq",
+     "name": "Header Auth account 2"
+    }
+   }
+  },
+  {
+   "id": "631f2d6d-7723-4c60-b6b3-7bb370edae68",
+   "name": "Map to Candidates",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1440,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForEachItem",
+    "jsCode": "const p = $input.item.json || {};\nreturn { json: {\n  source: 'apify_maps',\n  source_id: p.placeId || null,\n  name: p.title || '',\n  place_id: p.placeId || null,\n  category: p.categoryName || null,\n  location: p.city || p.address || null,\n  website: p.website || null,\n  phone: p.phone || null,\n  rating: (p.totalScore === undefined ? null : p.totalScore),\n  review_count: (p.reviewsCount === undefined ? null : p.reviewsCount),\n  raw: p\n} };"
+   }
+  },
+  {
+   "id": "eb75d2f3-69d4-42f7-9480-1ea775fe63a1",
+   "name": "Collect + Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const cands = $input.all().map(i => i.json);\nreturn { json: { success: true, count: cands.length, candidates: cands } };"
+   }
+  },
+  {
+   "id": "6a6b4e51-a8ab-4508-bb9b-f5f45611e316",
+   "name": "Prep Cache Store (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2280,
+    680
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const key = ($('Cache Key (F29)').first().json) || {};\nconst coll = $input.first().json || {};\nreturn [{ json: {\n  cache_key_material: key.cache_key_material, profile_material: key.profile_material,\n  query_norm: key.query_norm, location_norm: key.location_norm, max_per_query: key.max_per_query,\n  ttl_hours: key.ttl_hours, candidates: coll.candidates || [], count: coll.count || 0,\n  candidates_json: JSON.stringify(coll.candidates || [])\n} }];"
+   }
+  },
+  {
+   "id": "127fb76d-95df-4b67-a2af-0fad1356ef18",
+   "name": "DB - Cache Store (F29)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2560,
+    680
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO discovery_cache (cache_key, query_norm, location_norm, radius_m, profile_hash, result_company_ids, discovered_count, expires_at)\nVALUES (encode(sha256($1::bytea), 'hex'), $2, $3, $4, encode(sha256($5::bytea), 'hex'), $6::jsonb, $7, now() + ($8::text || ' hours')::interval)\nON CONFLICT (cache_key) DO UPDATE SET result_company_ids = EXCLUDED.result_company_ids, discovered_count = EXCLUDED.discovered_count, created_at = now(), expires_at = EXCLUDED.expires_at",
+    "options": {
+     "queryReplacement": "={{ [ $json.cache_key_material, $json.query_norm, $json.location_norm, $json.max_per_query, $json.profile_material, $json.candidates_json, $json.count, $json.ttl_hours ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "9de95e90-2b96-483b-afd2-04540f6e56ce",
+   "name": "Return - After Cache Store (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2840,
+    680
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const prep = ($('Prep Cache Store (F29)').first().json) || {};\nreturn [{ json: { success: true, count: prep.count || 0, candidates: prep.candidates || [], cache_hit: false } }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

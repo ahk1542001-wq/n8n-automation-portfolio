@@ -1,0 +1,2030 @@
+{
+ "id": "RoP282YqUHTLmEaX",
+ "name": "WF00 v-next.9 - Lead Finder Orchestrator",
+ "active": false,
+ "isArchived": false,
+ "versionId": "4561f469-99d0-46b7-9e75-a0568014b384",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 40,
+ "createdAt": "2026-11-17T16:44:22.359Z",
+ "updatedAt": "2026-11-17T16:44:50.101Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true,
+  "errorWorkflow": "CsGScTpPxfp9E8Un"
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "START - New Lead Run": {
+   "main": [
+    [
+     {
+      "node": "Business Context (edit me)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Business Context (edit me)": {
+   "main": [
+    [
+     {
+      "node": "Has Existing Profile?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Has Existing Profile?": {
+   "main": [
+    [
+     {
+      "node": "Use Existing Profile",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "SF1 - Generate Search Profile",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Use Existing Profile": {
+   "main": [
+    [
+     {
+      "node": "Stage Context",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Stage Context": {
+   "main": [
+    [
+     {
+      "node": "DB - Create Run Record",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Create Run Record": {
+   "main": [
+    [
+     {
+      "node": "Build Config Snapshot (F34)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Config Snapshot (F34)": {
+   "main": [
+    [
+     {
+      "node": "DB - Write Config Snapshot (F34)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Write Config Snapshot (F34)": {
+   "main": [
+    [
+     {
+      "node": "DB - Load Profile Status",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Load Profile Status": {
+   "main": [
+    [
+     {
+      "node": "Coverage Check",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Coverage Check": {
+   "main": [
+    [
+     {
+      "node": "Profile Approved?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Profile Approved?": {
+   "main": [
+    [
+     {
+      "node": "Max Achievable OK? (F22)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Mark Run Awaiting Approval",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Max Achievable OK? (F22)": {
+   "main": [
+    [
+     {
+      "node": "Coverage OK?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Mark Run Insufficient Coverage",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Coverage OK?": {
+   "main": [
+    [
+     {
+      "node": "SF2 v-next - Discover",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Mark Run Coverage Blocked",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF2 v-next - Discover": {
+   "main": [
+    [
+     {
+      "node": "Glue - To SF4",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Glue - To SF4": {
+   "main": [
+    [
+     {
+      "node": "SF4 - Dedupe + Exclusion",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF4 - Dedupe + Exclusion": {
+   "main": [
+    [
+     {
+      "node": "Glue - To SF7",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Glue - To SF7": {
+   "main": [
+    [
+     {
+      "node": "SF7 v-next - Score Leads",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF7 v-next - Score Leads": {
+   "main": [
+    [
+     {
+      "node": "DB - Coverage Ratio Counts (F27)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Coverage Ratio Counts (F27)": {
+   "main": [
+    [
+     {
+      "node": "Coverage Ratio Check (F27)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Coverage Ratio Check (F27)": {
+   "main": [
+    [
+     {
+      "node": "Coverage Ratio OK? (F27)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Coverage Ratio OK? (F27)": {
+   "main": [
+    [
+     {
+      "node": "SF5 v-next - Research Leads",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Mark Run Insufficient Coverage (F27)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF5 v-next - Research Leads": {
+   "main": [
+    [
+     {
+      "node": "SF3 v-next - Find People",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF3 v-next - Find People": {
+   "main": [
+    [
+     {
+      "node": "SF6 v-next - Contact Waterfall",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF6 v-next - Contact Waterfall": {
+   "main": [
+    [
+     {
+      "node": "SF6b v-next - LinkedIn People",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF6b v-next - LinkedIn People": {
+   "main": [
+    [
+     {
+      "node": "SF9 v-next - Timing Re-Score",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF9 v-next - Timing Re-Score": {
+   "main": [
+    [
+     {
+      "node": "SF8 v-next - Approval View Sync",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF8 v-next - Approval View Sync": {
+   "main": [
+    [
+     {
+      "node": "DB - Close Run Record",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Close Run Record": {
+   "main": [
+    [
+     {
+      "node": "Run Summary",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Mark Run Insufficient Coverage (F27)": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Coverage Alert Draft (NEVER SENDS)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gmail - Coverage Alert Draft (NEVER SENDS)": {
+   "main": [
+    [
+     {
+      "node": "Return - Insufficient Coverage (F27)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Mark Run Coverage Blocked": {
+   "main": [
+    [
+     {
+      "node": "Return - Coverage Blocked",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Mark Run Insufficient Coverage": {
+   "main": [
+    [
+     {
+      "node": "Return - Insufficient Coverage",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Mark Run Awaiting Approval": {
+   "main": [
+    [
+     {
+      "node": "Return - Awaiting Approval",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "SF1 - Generate Search Profile": {
+   "main": [
+    [
+     {
+      "node": "Stage Context",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "ce471cff-52c1-4fec-b6e9-4f9c0d1d5930",
+   "name": "Sticky Note 43838aae",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "WF00 v-next - Lead Finder Orchestrator (F22/F27/F28/F31/F34 assembly). Manual start -> business context -> SF1 profile (or resume an existing profile id) -> run record -> APPROVAL GATE (profile status must be approved in the database) -> SF2 Maps discovery -> SF4 dedupe -> SF7 scoring -> SF5 research -> SF3 v2 people finder (open route, 2 searches) -> SF9 timing re-score -> SF8 approval view sync -> run closed. v8: coverage gate after the approval gate (rubric deterministic coverage must be >= 35/70, from rubric.coverage or recomputed with the SF7 classifier); SF5 v2 and SF3 v3 return empty-pick summaries so a run always closes. v-next.9: SF3 v-next.3 (dynamic profile-titles DM classification, hardcoded regex removed, Wonder PROMOTE 2026-11-17). v-next.8: SF6b LinkedIn people stage (Apify, dynamic profile-titles matcher) runs between SF6 and SF9, gated by linkedin_people_enabled in the context (default off); SF6b returns a summary on every path so it never blocks the chain. Error workflow ERR marks stuck runs failed. Drafts only; nothing is ever sent.",
+    "color": 5
+   }
+  },
+  {
+   "id": "ed922d03-8df1-49b6-b87e-338d092ffd0f",
+   "name": "START - New Lead Run",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {}
+  },
+  {
+   "id": "d140859d-fccf-4d81-9579-86fafa09cf87",
+   "name": "Business Context (edit me)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    280,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "return { json: { business_context: {\"business_name\": \"FYF AI\", \"customer_in_users_words\": \"Myanmar SME owners who sell through a Facebook page and run the page themselves. They post when they have time, reply to customers late, and lose orders in Messenger. Myanmar-based and Thailand-based owners both count.\", \"decision_maker\": \"The business owner themselves (they run the page)\", \"exclusions\": [\"Businesses with no Facebook page at all\", \"Large companies with a marketing department\", \"Other AI/automation agencies\"], \"locations\": [\"Yangon\"], \"notes\": \"Local-business test context: these businesses mostly have no LinkedIn presence, so Maps/Places discovery and Facebook page checks matter more than Apollo.\", \"price_range\": \"Service packages exist but prices are never published - do not put any price in outreach\", \"what_they_sell\": \"AI automation and AI agent services for small businesses: page chatbots, lead follow-up systems, content pipelines, and monthly care after the build.\", \"ideal_size\": \"10-100 employees\"}, existing_profile_id: '96824851-cdeb-4922-945a-f90bf7d9c227', profile_version: 1, max_per_query: 5, spend_cap_usd: 1.0, contact_min_fit: 30, max_contact_companies: 10, contact_provider_enabled: true, discovery_cache_ttl_hours: 24, discovery_source: 'places', import_sheet_id: '', import_tab: 'Import', coverage_min_ratio: 0, approval_sheet_id_vnext: '1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM' } };"
+   }
+  },
+  {
+   "id": "c55ce359-b67b-471e-9750-d9903b6d8a84",
+   "name": "Has Existing Profile?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    520,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.existing_profile_id }}",
+       "operator": {
+        "type": "string",
+        "operation": "notEmpty",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "f35134b3-0798-4766-9f80-0b8601254853",
+   "name": "Use Existing Profile",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    760,
+    260
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "u1",
+       "name": "search_profile_id",
+       "value": "={{ $json.existing_profile_id }}",
+       "type": "string"
+      },
+      {
+       "id": "u2",
+       "name": "version",
+       "value": "={{ $json.profile_version }}",
+       "type": "number"
+      },
+      {
+       "id": "u3",
+       "name": "status",
+       "value": "existing",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "855befc8-aada-4328-a14c-a1b7a1fdece6",
+   "name": "Stage Context",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1020,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const inp = $input.first().json;\nconst ctx = $('Business Context (edit me)').item.json;\nreturn [{ json: { search_profile_id: inp.search_profile_id, profile_version: inp.version || ctx.profile_version || 1, max_per_query: ctx.max_per_query || 5, research_min_fit: ctx.research_min_fit || 30, max_research: ctx.max_research || 3, people_min_fit: ctx.people_min_fit || 30, max_people_companies: ctx.max_people_companies || 3, spend_cap_usd: (ctx.spend_cap_usd === undefined ? null : ctx.spend_cap_usd), discovery_cache_ttl_hours: ctx.discovery_cache_ttl_hours || 24, discovery_source: ctx.discovery_source || 'places', import_sheet_id: ctx.import_sheet_id || '', import_tab: ctx.import_tab || 'Import', coverage_min_ratio: ctx.coverage_min_ratio || 0, contact_min_fit: ctx.contact_min_fit || 30, max_contact_companies: ctx.max_contact_companies || 10, contact_provider_enabled: ctx.contact_provider_enabled === true, linkedin_people_enabled: ctx.linkedin_people_enabled === true, linkedin_min_fit: ctx.linkedin_min_fit || 30, max_linkedin_companies: ctx.max_linkedin_companies || 10, linkedin_max_employees: ctx.linkedin_max_employees || 10, publish_limit: ctx.publish_limit || 200, approval_sheet_id_vnext: ctx.approval_sheet_id_vnext || '' } }];"
+   }
+  },
+  {
+   "id": "def5ba24-7e45-47fa-a9b1-a775d7e82b12",
+   "name": "DB - Create Run Record",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1260,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO runs (search_profile_id, profile_version, status, notes) VALUES ($1::uuid, $2, 'started', 'WF00 orchestrated run') RETURNING id, search_profile_id, profile_version",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id, $json.profile_version ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "9dbbddbb-f5d9-4c42-a590-8093738f9a55",
+   "name": "Build Config Snapshot (F34)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1380,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const stage = $('Stage Context').item.json;\nconst run = $('DB - Create Run Record').item.json;\nconst cfg = { search_profile_id: stage.search_profile_id, profile_version: stage.profile_version, max_per_query: stage.max_per_query, research_min_fit: stage.research_min_fit, max_research: stage.max_research, people_min_fit: stage.people_min_fit, max_people_companies: stage.max_people_companies, spend_cap_usd: stage.spend_cap_usd, discovery_source: stage.discovery_source, discovery_cache_ttl_hours: stage.discovery_cache_ttl_hours, import_sheet_id: stage.import_sheet_id, import_tab: stage.import_tab, coverage_min_ratio: stage.coverage_min_ratio, publish_limit: stage.publish_limit, contact_min_fit: stage.contact_min_fit, max_contact_companies: stage.max_contact_companies, contact_provider_enabled: stage.contact_provider_enabled, linkedin_people_enabled: stage.linkedin_people_enabled, linkedin_min_fit: stage.linkedin_min_fit, max_linkedin_companies: stage.max_linkedin_companies, linkedin_max_employees: stage.linkedin_max_employees, approval_sheet_id_vnext: stage.approval_sheet_id_vnext, orchestrator: 'wf00-vnext' };\nreturn [{ json: { run_id: run.id, config_snapshot: JSON.stringify(cfg) } }];"
+   }
+  },
+  {
+   "id": "af3b088a-c68b-485c-8770-5494234e7838",
+   "name": "DB - Write Config Snapshot (F34)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1500,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE runs SET config_snapshot = $2::jsonb WHERE id = $1::uuid RETURNING id",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id, $json.config_snapshot ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "79a115fb-2827-48fe-9119-da4f588afc57",
+   "name": "DB - Load Profile Status",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1500,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT status, profile, rubric FROM search_profiles WHERE id = $1::uuid",
+    "options": {
+     "queryReplacement": "={{ [ $('Stage Context').item.json.search_profile_id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "af54fb30-d19a-4469-a0b8-2e35a99ec648",
+   "name": "Coverage Check",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1620,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const row = $input.first().json || {};\nconst rubric = row.rubric || {};\nconst profile = row.profile || {};\nlet det = (rubric.coverage && typeof rubric.coverage.deterministic_points === 'number') ? rubric.coverage.deterministic_points : null;\nif (det === null) {\n  function categoryTerms(howToVerify) {\n  const m = (howToVerify || '').match(/matches any of:\\s*(.+)/i);\n  if (!m) return null;\n  const text = m[1].toLowerCase();\n  const clauses = text\n    .split(/\\s+but\\s+|\\s+however\\s+/)\n    .flatMap(part => part.split(/[,;]/))\n    .map(s => s.trim())\n    .filter(Boolean);\n  const include = [], exclude = [];\n  for (const clause of clauses) {\n    const neg = clause.match(/\\b(not|no|never|without|isn't|isnt)\\b/);\n    if (neg) {\n      const after = clause.slice(neg.index + neg[0].length).slice(0, 40).trim().replace(/^(a|an|the)\\s+/, '').trim();\n      if (after) exclude.push(after);\n    } else {\n      include.push(clause);\n    }\n  }\n  return { include, exclude };\n}\nconst MATCHER_VERSION = 'synonyms_v1';\nconst MATCHER_SYNONYMS_V1 = {\n  'operates in target cities': 'location',\n  'local presence in target markets': 'location',\n  'target markets': 'location',\n  'operates in target markets': 'location'\n};\nconst KNOWN_FAMILIES = ['location', 'category', 'facebook', 'rating', 'review_volume', 'website', 'phone_contact'];\nfunction normPhrase(s) {\n  return String(s || '').toLowerCase().replace(/[^a-z0-9\\s]/g, ' ').replace(/\\s+/g, ' ').trim();\n}\nfunction synonymFamily(rawName) {\n  const v = MATCHER_SYNONYMS_V1[normPhrase(rawName)];\n  if (v === undefined) return null;\n  return KNOWN_FAMILIES.includes(v) ? v : 'unknown';\n}\nfunction classifyCriterion(crit, locTargets) {\n    const name = (crit.name || '').toLowerCase();\n    const verify = (crit.how_to_verify || '').toLowerCase();\n    const both = name + ' ' + verify;\n    if (name.includes('research-only')) return 'needs_research';\n  const syn = synonymFamily(crit.name);\n  if (syn === 'location') {\n    return (locTargets && locTargets.length) ? 'location' : 'needs_research';\n  }\n  if (syn && syn !== 'unknown') return syn;\n    if (/city|location|geograph|footprint|area|region/.test(name)) {\n      return (locTargets && locTargets.length) ? 'location' : 'needs_research';\n    }\n    if (/category|property type|business type|firm type/.test(name)) {\n      const parsed = categoryTerms(crit.how_to_verify);\n    if (!parsed) return 'needs_research';\n    return parsed.include.length ? 'category' : 'needs_research';\n    }\n    if (/facebook/.test(name)) return 'facebook';\n    if (/rating/.test(name)) return 'rating';\n    if (/review/.test(name) && /count|volume|number/.test(both)) return 'review_volume';\n    if (/website/.test(name)) return 'website';\n    if (/phone|contact/.test(name)) return 'phone_contact';\n    return 'needs_research';\n  }\n  const locTargets = [];\n  for (const s of (profile.sources || [])) for (const L of (s.locations || [])) locTargets.push(String(L).toLowerCase());\n  det = 0;\n  for (const c of (rubric.fit_criteria || [])) if (classifyCriterion(c, locTargets) !== 'needs_research') det += Number(c.max_points) || 0;\n}\nconst llmMax = Number(rubric.llm_judgement_max || 30);\nconst maxA = det + llmMax;\nreturn [{ json: { status: row.status || '', deterministic_points: det, coverage_ok: det >= 35, max_achievable: maxA, scaled_a: Math.ceil(75 * maxA / 100), scaled_b: Math.ceil(55 * maxA / 100), scaled_c: Math.ceil(36 * maxA / 100), a_unreachable: maxA < 75, maxa_ok: maxA > 0 } }];"
+   }
+  },
+  {
+   "id": "2d7f1fd0-8578-413e-8c67-6b300855f6e4",
+   "name": "Profile Approved?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1740,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.status }}",
+       "rightValue": "approved",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "71b887b6-0143-4993-b902-87f8048862ab",
+   "name": "Max Achievable OK? (F22)",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1860,
+    300
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.maxa_ok }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "c78d8785-9d42-4902-81a4-d522487cfd1e",
+   "name": "Coverage OK?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1860,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.coverage_ok }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "d0a41b33-5abf-400b-b73b-01bc4eb94134",
+   "name": "SF2 v-next - Discover",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    1980,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "imW1Fn0pgBnTrWJF",
+     "cachedResultName": "SF2 v-next - Discover"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $('Stage Context').item.json.search_profile_id }}",
+      "profile_version": "={{ $('Stage Context').item.json.profile_version }}",
+      "run_id": "={{ $('DB - Create Run Record').item.json.id }}",
+      "max_per_query": "={{ $('Stage Context').item.json.max_per_query }}",
+      "discovery_source": "={{ $('Stage Context').item.json.discovery_source }}",
+      "import_sheet_id": "={{ $('Stage Context').item.json.import_sheet_id }}",
+      "import_tab": "={{ $('Stage Context').item.json.import_tab }}",
+      "discovery_cache_ttl_hours": "={{ $('Stage Context').item.json.discovery_cache_ttl_hours }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "max_per_query",
+       "displayName": "max_per_query",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "discovery_source",
+       "displayName": "discovery_source",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "import_sheet_id",
+       "displayName": "import_sheet_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "import_tab",
+       "displayName": "import_tab",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "discovery_cache_ttl_hours",
+       "displayName": "discovery_cache_ttl_hours",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "52fb2ae9-dcd9-457e-b0b0-95783291795f",
+   "name": "Glue - To SF4",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2220,
+    260
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const inp = $input.first().json;\nconst stage = $('Stage Context').item.json;\nconst run = $('DB - Create Run Record').item.json;\nreturn [{ json: { search_profile_id: stage.search_profile_id, profile_version: stage.profile_version, run_id: run.id, candidates: inp.candidates || [], discovered: inp.count || 0 } }];"
+   }
+  },
+  {
+   "id": "531484d6-cb06-40db-9187-0273faf6611a",
+   "name": "SF4 - Dedupe + Exclusion",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    2460,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "pJIqH7PlZ83VBWbX",
+     "cachedResultName": "SF4 - Dedupe + Exclusion"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $json.search_profile_id }}",
+      "profile_version": "={{ $json.profile_version }}",
+      "run_id": "={{ $json.run_id }}",
+      "candidates": "={{ $json.candidates }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "candidates",
+       "displayName": "candidates",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "array",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "1c42bf37-98db-4772-a4a7-ba2a17f71f6b",
+   "name": "Glue - To SF7",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2700,
+    260
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const inp = $input.first().json;\nconst g = $('Glue - To SF4').item.json;\nreturn [{ json: { search_profile_id: g.search_profile_id, profile_version: g.profile_version, run_id: g.run_id, dedupe: inp } }];"
+   }
+  },
+  {
+   "id": "db01d2c2-9f8a-4d21-bc53-37ce89328f06",
+   "name": "SF7 v-next - Score Leads",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    2940,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "IKnu5IRC4NGu35Lc",
+     "cachedResultName": "SF7 v-next - Score Leads"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $json.search_profile_id }}",
+      "profile_version": "={{ $json.profile_version }}",
+      "run_id": "={{ $json.run_id }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "6b7ffe78-9587-4b1b-96e5-6452f67096bf",
+   "name": "DB - Coverage Ratio Counts (F27)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    3060,
+    260
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT (SELECT count(*) FROM companies WHERE search_profile_id = $1::uuid) AS discovered, (SELECT count(*) FROM scores WHERE search_profile_id = $1::uuid AND profile_version = $2) AS scored, (SELECT count(*) FROM scores s WHERE s.search_profile_id = $1::uuid AND s.profile_version = $2 AND EXISTS (SELECT 1 FROM jsonb_array_elements(s.fit_components) c WHERE (c->>'awarded')::numeric > 0)) AS det_matched",
+    "options": {
+     "queryReplacement": "={{ [ $('Stage Context').item.json.search_profile_id, $('Stage Context').item.json.profile_version ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "a724d875-4ca0-47b3-a3db-70d4e0db074c",
+   "name": "Coverage Ratio Check (F27)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3180,
+    260
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const row = $input.first().json || {};\nconst stage = $('Stage Context').item.json;\nconst discovered = Number(row.discovered || 0), scored = Number(row.scored || 0), matched = Number(row.det_matched || 0);\nconst minRatio = Number(stage.coverage_min_ratio || 0);\nconst ratio = discovered > 0 ? matched / discovered : 0;\nconst ok = discovered > 0 && ratio >= minRatio;\nconst run = $('DB - Create Run Record').item.json;\nconst body = 'WF00 v-next run ' + run.id + ' closed as insufficient_coverage (F27 post-discovery gate).\\nDiscovered: ' + discovered + '\\nScored: ' + scored + '\\nDeterministic-matched: ' + matched + '\\nCoverage ratio: ' + ratio.toFixed(3) + ' (minimum ' + minRatio + ')\\nProfile: ' + stage.search_profile_id + ' v' + stage.profile_version;\nreturn [{ json: { ratio_ok: ok, ratio, discovered, scored, det_matched: matched, sendTo: 'victor.job154@gmail.com', subject: 'WF00 v-next - insufficient_coverage ' + run.id, body } }];"
+   }
+  },
+  {
+   "id": "430917c2-464b-4f93-b9d4-0b26618dbffb",
+   "name": "Coverage Ratio OK? (F27)",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    3300,
+    260
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.ratio_ok }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "ab2541c8-cc0c-4ac2-9b59-309325c2ee80",
+   "name": "SF5 v-next - Research Leads",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    3180,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "aAIfiQ9fSWcG6zPr",
+     "cachedResultName": "SF5 v-next - Research Leads"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $('Stage Context').item.json.search_profile_id }}",
+      "profile_version": "={{ $('Stage Context').item.json.profile_version }}",
+      "run_id": "={{ $('DB - Create Run Record').item.json.id }}",
+      "max_research": "={{ $('Stage Context').item.json.max_research }}",
+      "min_fit": "={{ $('Stage Context').item.json.research_min_fit }}",
+      "spend_cap_usd": "={{ $('Stage Context').item.json.spend_cap_usd }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "max_research",
+       "displayName": "max_research",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "min_fit",
+       "displayName": "min_fit",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "spend_cap_usd",
+       "displayName": "spend_cap_usd",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "e1ee8a06-b1a1-4704-8c63-3e425c671611",
+   "name": "SF3 v-next - Find People",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    3420,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "Knq7dcvwcAzLeZ1B",
+     "cachedResultName": "SF3 v-next - Find People"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $('Stage Context').item.json.search_profile_id }}",
+      "profile_version": "={{ $('Stage Context').item.json.profile_version }}",
+      "run_id": "={{ $('DB - Create Run Record').item.json.id }}",
+      "max_companies": "={{ $('Stage Context').item.json.max_people_companies }}",
+      "min_fit": "={{ $('Stage Context').item.json.people_min_fit }}",
+      "spend_cap_usd": "={{ $('Stage Context').item.json.spend_cap_usd }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "max_companies",
+       "displayName": "max_companies",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "min_fit",
+       "displayName": "min_fit",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "spend_cap_usd",
+       "displayName": "spend_cap_usd",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "04ce33ad-62cb-4118-9abe-cb6433f46b8c",
+   "name": "SF6 v-next - Contact Waterfall",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    3660,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "Zsyn7ll08Pwnlev4",
+     "cachedResultName": "SF6 v-next - Contact Waterfall"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $('Stage Context').item.json.search_profile_id }}",
+      "profile_version": "={{ $('Stage Context').item.json.profile_version }}",
+      "run_id": "={{ $('DB - Create Run Record').item.json.id }}",
+      "contact_min_fit": "={{ $('Stage Context').item.json.contact_min_fit }}",
+      "max_contact_companies": "={{ $('Stage Context').item.json.max_contact_companies }}",
+      "spend_cap_usd": "={{ $('Stage Context').item.json.spend_cap_usd }}",
+      "provider_enabled": "={{ $('Stage Context').item.json.contact_provider_enabled }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "contact_min_fit",
+       "displayName": "contact_min_fit",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "max_contact_companies",
+       "displayName": "max_contact_companies",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "spend_cap_usd",
+       "displayName": "spend_cap_usd",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "provider_enabled",
+       "displayName": "provider_enabled",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "boolean",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "ef252464-a3eb-4b94-9d60-5072755fe25c",
+   "name": "SF6b v-next - LinkedIn People",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    3780,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "dKd9XfRdTAZ5kfNs",
+     "cachedResultName": "SF6b v-next - LinkedIn People"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $('Stage Context').item.json.search_profile_id }}",
+      "profile_version": "={{ $('Stage Context').item.json.profile_version }}",
+      "run_id": "={{ $('DB - Create Run Record').item.json.id }}",
+      "linkedin_min_fit": "={{ $('Stage Context').item.json.linkedin_min_fit }}",
+      "max_linkedin_companies": "={{ $('Stage Context').item.json.max_linkedin_companies }}",
+      "spend_cap_usd": "={{ $('Stage Context').item.json.spend_cap_usd }}",
+      "max_employees": "={{ $('Stage Context').item.json.linkedin_max_employees }}",
+      "linkedin_people_enabled": "={{ $('Stage Context').item.json.linkedin_people_enabled }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "linkedin_min_fit",
+       "displayName": "linkedin_min_fit",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "max_linkedin_companies",
+       "displayName": "max_linkedin_companies",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "spend_cap_usd",
+       "displayName": "spend_cap_usd",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "max_employees",
+       "displayName": "max_employees",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "linkedin_people_enabled",
+       "displayName": "linkedin_people_enabled",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "boolean",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   },
+   "alwaysOutputData": true
+  },
+  {
+   "id": "23807444-5b55-4bfa-9012-bdb02a591fc4",
+   "name": "SF9 v-next - Timing Re-Score",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    3900,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "UJvLDTNetRBUk6PX",
+     "cachedResultName": "SF9 v-next - Timing Re-Score"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $('Stage Context').item.json.search_profile_id }}",
+      "profile_version": "={{ $('Stage Context').item.json.profile_version }}",
+      "run_id": "={{ $('DB - Create Run Record').item.json.id }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   },
+   "alwaysOutputData": true
+  },
+  {
+   "id": "cadc4815-7b92-4858-8a67-c6efd18a6aac",
+   "name": "SF8 v-next - Approval View Sync",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    4140,
+    260
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "jmDI2TplXbxfqHNl",
+     "cachedResultName": "SF8 v-next - Approval View Sync"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "search_profile_id": "={{ $('Stage Context').item.json.search_profile_id }}",
+      "profile_version": "={{ $('Stage Context').item.json.profile_version }}",
+      "run_id": "={{ $('DB - Create Run Record').item.json.id }}",
+      "approval_sheet_id_vnext": "={{ $('Stage Context').item.json.approval_sheet_id_vnext }}",
+      "publish_limit": "={{ $('Stage Context').item.json.publish_limit }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "search_profile_id",
+       "displayName": "search_profile_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "profile_version",
+       "displayName": "profile_version",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "approval_sheet_id_vnext",
+       "displayName": "approval_sheet_id_vnext",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "publish_limit",
+       "displayName": "publish_limit",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   },
+   "alwaysOutputData": true
+  },
+  {
+   "id": "79d220dc-94d7-46bc-a5c9-162e4fe68c0d",
+   "name": "DB - Close Run Record",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    4140,
+    260
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE runs SET status = 'done', finished_at = now(), notes = $2 WHERE id = $1::uuid RETURNING id, status",
+    "options": {
+     "queryReplacement": "={{ [ $('Glue - To SF7').item.json.run_id, 'SF2 found ' + $('Glue - To SF4').item.json.discovered + '; SF4 inserted ' + $('Glue - To SF7').item.json.dedupe.inserted + ' (dup ' + $('Glue - To SF7').item.json.dedupe.duplicates + ', suppressed ' + $('Glue - To SF7').item.json.dedupe.suppressed + '); SF7 scored ' + $('SF7 v-next - Score Leads').item.json.scored + '; SF5 researched ' + $('SF5 v-next - Research Leads').item.json.researched + ' ; SF3 people searched ' + $('SF3 v-next - Find People').item.json.companies_processed + ' companies, saved ' + $('SF3 v-next - Find People').item.json.people_saved + ' people; SF9 timing rescored ' + $('SF9 v-next - Timing Re-Score').item.json.rescored + ' (' + $('SF9 v-next - Timing Re-Score').item.json.with_timing + ' with timing); SF8 approval view published ' + $('SF8 v-next - Approval View Sync').item.json.published + ' rows' ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "2b3a8eff-7ce5-43c2-8e0f-3cddbae36ce0",
+   "name": "Run Summary",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4380,
+    260
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const sf7 = $('SF7 v-next - Score Leads').item.json;\nconst sf5 = $('SF5 v-next - Research Leads').item.json;\nconst sf3 = $('SF3 v-next - Find People').item.json;\nconst sf6 = $('SF6 v-next - Contact Waterfall').item.json || {};\nconst sf6b = $('SF6b v-next - LinkedIn People').item.json || {};\nconst sf9 = $('SF9 v-next - Timing Re-Score').item.json;\nconst sf8 = $('SF8 v-next - Approval View Sync').item.json;\nconst g4 = $('Glue - To SF4').item.json;\nconst g7 = $('Glue - To SF7').item.json;\nconst run = $('DB - Create Run Record').item.json;\nreturn [{ json: { success: true, run_id: run.id, search_profile_id: g4.search_profile_id, profile_version: g4.profile_version,\n  discovery: { found: g4.discovered },\n  dedupe: { inserted: g7.dedupe.inserted, duplicates: g7.dedupe.duplicates, suppressed: g7.dedupe.suppressed },\n  scoring: { scored: sf7.scored, skipped_already_scored: sf7.skipped_already_scored, insufficient_data: (sf7.results || []).filter(r => r.band === 'insufficient_data').length, results: sf7.results },\n  profile: { max_achievable: $('Coverage Check').item.json.max_achievable, a_unreachable: $('Coverage Check').item.json.a_unreachable, scaled_a: $('Coverage Check').item.json.scaled_a },\n  research: { researched: sf5.researched, facts_saved: sf5.facts_saved, signals_saved: sf5.signals_saved, people_saved: sf5.people_saved },\n  contacts: { picked: sf6.picked || 0, fb_found: sf6.fb_found || 0, emails_found: sf6.emails_found || 0, size_found: sf6.size_found || 0, provider_used: sf6.provider_used || 0 },\n  linkedin_people: { picked: sf6b.picked || 0, people_returned: sf6b.people_returned || 0, decision_makers_saved: sf6b.decision_makers_saved || 0, non_dm_dropped: sf6b.non_dm_dropped || 0, association_dropped: sf6b.association_dropped || 0, apify_run_cost_usd: sf6b.apify_run_cost_usd || 0, slug_search_cost_usd: sf6b.slug_search_cost_usd || 0, total_stage_cost_usd: sf6b.total_stage_cost_usd || 0, linkedin_disabled: !!sf6b.linkedin_disabled, apify_failed: !!sf6b.apify_failed },\n  people: { companies_processed: sf3.companies_processed, people_extracted: sf3.people_extracted, people_saved: sf3.people_saved, site_pages_fetched: sf3.site_pages_fetched || 0 },\n  timing: { rescored: sf9.rescored, with_timing: sf9.with_timing },\n  approval_view: { published: sf8.published } } }];"
+   }
+  },
+  {
+   "id": "7fa54802-459b-46b7-8c6f-af4d76052407",
+   "name": "DB - Mark Run Insufficient Coverage (F27)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    3420,
+    420
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE runs SET status = 'insufficient_coverage', finished_at = now(), notes = 'Stopped at the F27 post-discovery coverage gate - too few discovered companies match the rubric deterministically. See the Gmail draft alert for the ratio.' WHERE id = $1::uuid RETURNING id, status",
+    "options": {
+     "queryReplacement": "={{ [ $('DB - Create Run Record').item.json.id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "468b1d0e-e599-4ec6-9ced-ecb26e6d18e1",
+   "name": "Gmail - Coverage Alert Draft (NEVER SENDS)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    3540,
+    420
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "sendTo": "={{ $('Coverage Ratio Check (F27)').item.json.sendTo }}",
+    "subject": "={{ $('Coverage Ratio Check (F27)').item.json.subject }}",
+    "emailType": "text",
+    "message": "={{ $('Coverage Ratio Check (F27)').item.json.body }}",
+    "options": {}
+   },
+   "webhookId": "0602cf97-357a-45ec-a3e2-5c84f903ad1d",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "57847079-7f2a-45e0-b697-451f54355547",
+   "name": "Return - Insufficient Coverage (F27)",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    3660,
+    420
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "j1",
+       "name": "success",
+       "value": false,
+       "type": "boolean"
+      },
+      {
+       "id": "j2",
+       "name": "stage",
+       "value": "insufficient_coverage",
+       "type": "string"
+      },
+      {
+       "id": "j3",
+       "name": "search_profile_id",
+       "value": "={{ $('Stage Context').item.json.search_profile_id }}",
+       "type": "string"
+      },
+      {
+       "id": "j4",
+       "name": "run_id",
+       "value": "={{ $('DB - Create Run Record').item.json.id }}",
+       "type": "string"
+      },
+      {
+       "id": "j5",
+       "name": "message",
+       "value": "Post-discovery coverage below the configured minimum (or nothing discovered). Run closed before research spend; see the Gmail draft alert.",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bd0958d2-eeee-488f-90f0-b1699c5ac957",
+   "name": "DB - Mark Run Coverage Blocked",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2100,
+    640
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE runs SET status = 'blocked_coverage', notes = 'Stopped at the coverage gate - rubric deterministic coverage below 35/70. Regenerate the profile with SF1 (deterministic scoring contract), approve the new version, then re-run.' WHERE id = $1::uuid RETURNING id, status",
+    "options": {
+     "queryReplacement": "={{ [ $('DB - Create Run Record').item.json.id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "3afa66b5-c45b-460c-87a1-3e668b674d64",
+   "name": "Return - Coverage Blocked",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    2340,
+    640
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "c1",
+       "name": "success",
+       "value": false,
+       "type": "boolean"
+      },
+      {
+       "id": "c2",
+       "name": "stage",
+       "value": "blocked_coverage_below_floor",
+       "type": "string"
+      },
+      {
+       "id": "c3",
+       "name": "search_profile_id",
+       "value": "={{ $('Stage Context').item.json.search_profile_id }}",
+       "type": "string"
+      },
+      {
+       "id": "c4",
+       "name": "run_id",
+       "value": "={{ $('DB - Create Run Record').item.json.id }}",
+       "type": "string"
+      },
+      {
+       "id": "c5",
+       "name": "deterministic_points",
+       "value": "={{ $('Coverage Check').item.json.deterministic_points }}",
+       "type": "number"
+      },
+      {
+       "id": "c6",
+       "name": "message",
+       "value": "Rubric deterministic coverage is below the 35/70 floor. Regenerate the profile with SF1 so the rubric follows the deterministic scoring contract, approve the new version, then re-run.",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "fef4b2e7-1486-48ec-90f5-e947c43ccaa0",
+   "name": "DB - Mark Run Insufficient Coverage",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2100,
+    760
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE runs SET status = 'insufficient_coverage', finished_at = now(), notes = 'Stopped at the F27 preflight gate - profile max_achievable is 0: no deterministic or judge-scored path to any band. Rework the rubric or the discovery source.' WHERE id = $1::uuid RETURNING id, status",
+    "options": {
+     "queryReplacement": "={{ [ $('DB - Create Run Record').item.json.id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "42ce7cf1-eb7f-4e6d-8bc3-a82b391a065f",
+   "name": "Return - Insufficient Coverage",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    2340,
+    760
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "i1",
+       "name": "success",
+       "value": false,
+       "type": "boolean"
+      },
+      {
+       "id": "i2",
+       "name": "stage",
+       "value": "insufficient_coverage",
+       "type": "string"
+      },
+      {
+       "id": "i3",
+       "name": "search_profile_id",
+       "value": "={{ $('Stage Context').item.json.search_profile_id }}",
+       "type": "string"
+      },
+      {
+       "id": "i4",
+       "name": "run_id",
+       "value": "={{ $('DB - Create Run Record').item.json.id }}",
+       "type": "string"
+      },
+      {
+       "id": "i5",
+       "name": "message",
+       "value": "Profile max_achievable is 0 - nothing in this rubric can be scored. Rework the profile before spending on discovery.",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "6dbfbecd-95f5-4cca-aea9-e3000a07e67c",
+   "name": "DB - Mark Run Awaiting Approval",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1860,
+    560
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE runs SET status = 'awaiting_profile_approval', notes = 'Stopped at the approval gate - profile is still draft' WHERE id = $1::uuid RETURNING id, status",
+    "options": {
+     "queryReplacement": "={{ [ $('DB - Create Run Record').item.json.id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "46ec6c70-a851-47d8-ae00-7ff9ec90c59e",
+   "name": "Return - Awaiting Approval",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    1980,
+    560
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "w1",
+       "name": "success",
+       "value": false,
+       "type": "boolean"
+      },
+      {
+       "id": "w2",
+       "name": "stage",
+       "value": "awaiting_profile_approval",
+       "type": "string"
+      },
+      {
+       "id": "w3",
+       "name": "search_profile_id",
+       "value": "={{ $('Stage Context').item.json.search_profile_id }}",
+       "type": "string"
+      },
+      {
+       "id": "w4",
+       "name": "run_id",
+       "value": "={{ $('DB - Create Run Record').item.json.id }}",
+       "type": "string"
+      },
+      {
+       "id": "w5",
+       "name": "message",
+       "value": "Profile is still draft. Approve it in the database (status = approved), then re-run WF00 with existing_profile_id set to this profile.",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "16db818f-7dc8-4e20-bfe4-1a136b420cfb",
+   "name": "SF1 - Generate Search Profile",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    760,
+    540
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "ayTqyqiZIQ1dwLhW",
+     "cachedResultName": "SF1 - Generate Search Profile"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "business_context": "={{ $json.business_context }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "business_context",
+       "displayName": "business_context",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "object",
+       "canBeUsedToMatch": true
+      }
+     ]
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

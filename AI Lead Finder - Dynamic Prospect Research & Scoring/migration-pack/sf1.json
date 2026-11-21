@@ -1,0 +1,376 @@
+{
+ "id": "ayTqyqiZIQ1dwLhW",
+ "name": "SF1 - Search-Profile Generator",
+ "active": false,
+ "isArchived": false,
+ "versionId": "366c0da7-ce10-4e05-bf5b-d8e762816c0f",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 9,
+ "createdAt": "2026-11-15T03:07:28.102Z",
+ "updatedAt": "2026-11-15T16:06:31.415Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [
+  {
+   "id": "APE8iVajkm9oWJWF",
+   "name": "subworkflow"
+  },
+  {
+   "id": "XkdkjauQtmyEFA9U",
+   "name": "tool"
+  },
+  {
+   "id": "Zi1qkk1viRz3W9gX",
+   "name": "lead-finder"
+  }
+ ],
+ "parentFolderId": null,
+ "description": "SF1 Search-Profile Generator. Input: business_context (object). Output: {success, search_profile_id, version, status, target_summary} or {success:false, error}. Stores validated profile+rubric in Supabase search_profiles as draft.",
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Build Prompt",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Prompt": {
+   "main": [
+    [
+     {
+      "node": "LLM - Generate Profile",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "LLM - Generate Profile": {
+   "main": [
+    [
+     {
+      "node": "Validate + Shape",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Validate + Shape": {
+   "main": [
+    [
+     {
+      "node": "Profile OK?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Profile OK?": {
+   "main": [
+    [
+     {
+      "node": "DB - Insert Search Profile",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Return Error",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Insert Search Profile": {
+   "main": [
+    [
+     {
+      "node": "Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "0e1af6a3-371d-430a-aed5-342613346308",
+   "name": "Sticky Note 06878739",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF1 - Search-Profile Generator. Input: business_context (object). Turns a free-form business context into a versioned search profile + scoring rubric (SF1-SPEC contract), validates it deterministically, and stores it in Supabase Postgres search_profiles as status=draft for human approval. Returns { success, search_profile_id, version, status, target_summary } or { success:false, error }. NO discovery runs here.",
+    "color": 5
+   }
+  },
+  {
+   "id": "666ce16c-45c9-40f3-b896-56f03c4d24be",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "business_context",
+       "type": "object"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "3344ac82-7dab-44bd-9937-5f2df7501efa",
+   "name": "Build Prompt",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const ctx = $input.item.json.business_context || {};\nconst system = `You are SF1, the search-profile generator for a dynamic lead-finding system. From the business context you receive, produce a machine-executable search profile and a scoring rubric as ONE JSON object with exactly these keys:\n{\n  \"target_summary\": \"one sentence: who exactly we are looking for\",\n  \"lead_unit\": \"company | person | company_with_person\",\n  \"sources\": [{\"source\": \"apify_maps | apollo | registry | tavily_research\", \"queries\": [\"...\"], \"locations\": [\"...\"]}],\n  \"hard_filters\": [\"verifiable yes/no criteria; failing any one = excluded\"],\n  \"exclusions\": [\"business types or situations to never return\"],\n  \"decision_maker_titles\": [\"...\"],\n  \"rubric\": {\n    \"fit_criteria\": [{\"name\": \"...\", \"max_points\": 0, \"how_to_verify\": \"which public evidence proves this\"}],\n    \"timing_triggers\": [{\"name\": \"...\", \"max_points\": 0, \"signal\": \"observable dated event\", \"decay_days\": 14}],\n    \"llm_judgement_max\": 30,\n    \"bands\": {\"A\": 75, \"B\": 55, \"C\": 36}\n  },\n  \"research_fields\": [\"fields a researcher must fill later, each provable with evidence or left null\"],\n  \"outreach_angles\": [\"2-4 angles grounded only in verified fields\"]\n}\nRules:\n- fit_criteria max_points MUST sum to exactly 70.\n- Every fit criterion must be checkable from public evidence; how_to_verify must say how. A criterion that cannot be checked is not allowed.\n- Sources must match the lead type: local / SMB targets get apify_maps first; B2B company targets get apollo and/or registry; tavily_research is research support only and must never be the only source.\n- Copy the user's exclusions into \"exclusions\" verbatim - never drop or soften them.\n- Never invent a price range, a location, or a customer fact that is not in the context.\n- If the context is too vague to build verifiable criteria, return {\"error\": \"insufficient_context\", \"missing\": [\"what is missing\"]} instead of inventing a profile.\nDETERMINISTIC SCORING CONTRACT: SF7 scores deterministically BEFORE any research, using only Google Maps fields (category, location, website, phone, rating, review_count, facebook.com in website URL). (1) One fact per criterion; split combined facts into separate criteria. (2) A criterion is deterministic only if its NAME contains a matcher keyword and how_to_verify states the exact check: location/city \u2014 \"Maps location matches target location(s): <the same locations listed in sources>\"; category / property type / business type / firm type \u2014 \"Category/name matches any of: <comma-separated target terms>\"; facebook \u2014 \"Website URL contains facebook.com\"; rating \u2014 \"Maps rating >=4.0 full points, >=3.5 half\"; review + count/volume/number \u2014 \"Maps review_count >=50 full points, >=10 half\"; website \u2014 \"A website URL exists\"; phone/contact \u2014 \"A phone number exists\". (3) Facts only research can establish (room count, employee size, ownership or chain affiliation, workload, reply behaviour, decision-maker) MUST end with \"(research-only)\" in the name and must not use matcher keywords. (4) At least 35 of 70 points deterministic; at most 35 research-only; website + phone/contact combined at most 10 points. (5) Never rename a research fact into a proxy: review_count is not a room or employee count, rating is not workload, category is not ownership. If a critical fact is research-only, keep it research-only and cut its points to fit rule (4).\nReturn ONLY the JSON object. No markdown fences, no commentary.`;\nconst user = 'Business context (JSON):\\n' + JSON.stringify(ctx, null, 2);\nreturn { json: {\n  business_context: ctx,\n  llm_payload: {\n    model: 'muse-spark-1.3',\n    temperature: 0.1,\n    messages: [\n      { role: 'system', content: system },\n      { role: 'user', content: user }\n    ]\n  }\n} };"
+   }
+  },
+  {
+   "id": "128d8940-2a2c-4986-8053-ca4c2884206b",
+   "name": "LLM - Generate Profile",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "Content-Type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json.llm_payload) }}",
+    "options": {
+     "timeout": 90000
+    },
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth"
+   },
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 3000,
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "c4nDlJtRtEyOzjmx",
+     "name": "Header Auth account"
+    }
+   }
+  },
+  {
+   "id": "dad7f7e6-c99c-41ae-b84f-58ce91ed8828",
+   "name": "Validate + Shape",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const raw = $input.item.json.choices?.[0]?.message?.content ?? '';\nconst ctx = $('Build Prompt').first().json.business_context || {};\nlet p = null;\ntry { p = JSON.parse(String(raw).replace(/```json|```/g, '').trim()); } catch (e) { p = null; }\nif (!p) return { json: { success: false, error: 'unparseable_llm_output' } };\nif (p.error === 'insufficient_context') return { json: { success: false, error: 'insufficient_context', missing: p.missing || [] } };\nconst req = ['target_summary','lead_unit','sources','hard_filters','exclusions','decision_maker_titles','rubric','research_fields','outreach_angles'];\nfor (const k of req) { if (!(k in p)) return { json: { success: false, error: 'missing_key_' + k } }; }\nconst fit = (p.rubric && p.rubric.fit_criteria) || [];\nconst sum = fit.reduce((a, c) => a + (Number(c.max_points) || 0), 0);\nif (sum !== 70) return { json: { success: false, error: 'fit_points_sum_' + sum } };\nif (!Array.isArray(p.sources) || p.sources.length === 0) return { json: { success: false, error: 'no_sources' } };\nfunction classifyCriterion(crit, locTargets) {\n  const name = (crit.name || '').toLowerCase();\n  const verify = (crit.how_to_verify || '').toLowerCase();\n  const both = name + ' ' + verify;\n  if (name.includes('research-only')) return 'needs_research';\n  if (/city|location|geograph|footprint|area|region/.test(name)) {\n    return (locTargets && locTargets.length) ? 'location' : 'needs_research';\n  }\n  if (/category|property type|business type|firm type/.test(name)) {\n    const m = (crit.how_to_verify || '').match(/matches any of:\\s*(.+)/i);\n    if (!m) return 'needs_research';\n    const terms = m[1].split(',').map(s => s.trim().toLowerCase()).filter(Boolean);\n    return terms.length ? 'category' : 'needs_research';\n  }\n  if (/facebook/.test(name)) return 'facebook';\n  if (/rating/.test(name)) return 'rating';\n  if (/review/.test(name) && /count|volume|number/.test(both)) return 'review_volume';\n  if (/website/.test(name)) return 'website';\n  if (/phone|contact/.test(name)) return 'phone_contact';\n  return 'needs_research';\n}\nconst locTargets = [];\nfor (const s of (p.sources || [])) for (const L of (s.locations || [])) locTargets.push(String(L).toLowerCase());\nlet detPts = 0, resPts = 0, contactPts = 0; const families = {};\nfor (const c of fit) {\n  const f = classifyCriterion(c, locTargets);\n  families[c.name] = f;\n  const pts = Number(c.max_points) || 0;\n  if (f === 'needs_research') resPts += pts; else detPts += pts;\n  if (f === 'website' || f === 'phone_contact') contactPts += pts;\n}\nconst coverage = { deterministic_points: detPts, research_points: resPts, contact_points: contactPts, families };\nconst COVERAGE_BLOCKING = true;\nif (COVERAGE_BLOCKING && (detPts < 35 || resPts > 35 || contactPts > 10)) return { json: { success: false, error: 'coverage_below_floor', coverage } };\nconst rubricOut = Object.assign({}, p.rubric, { coverage });\nconst profile = {\n  target_summary: p.target_summary,\n  lead_unit: p.lead_unit,\n  sources: p.sources,\n  hard_filters: p.hard_filters,\n  exclusions: p.exclusions,\n  decision_maker_titles: p.decision_maker_titles,\n  research_fields: p.research_fields,\n  outreach_angles: p.outreach_angles\n};\nreturn { json: {\n  success: true,\n  target_summary: p.target_summary,\n  business_context_json: JSON.stringify(ctx),\n  profile_json: JSON.stringify(profile),\n  rubric_json: JSON.stringify(rubricOut),\n  deterministic_points: detPts,\n  research_points: resPts,\n  contact_points: contactPts\n} };"
+   }
+  },
+  {
+   "id": "d374d5bd-bd6d-41d5-a560-26275f3b81a0",
+   "name": "Profile OK?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.success }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "c9b6f6c4-30fc-40d1-a9c7-000a3af424df",
+   "name": "DB - Insert Search Profile",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1440,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO search_profiles (business_context, profile, rubric, status) VALUES ($1::jsonb, $2::jsonb, $3::jsonb, 'draft') RETURNING id, version, status",
+    "options": {
+     "queryReplacement": "={{ [ $json.business_context_json, $json.profile_json, $json.rubric_json ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "9720be2b-f0ea-4cb7-ba7a-fbbe6f03cb5b",
+   "name": "Return",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    1720,
+    320
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "a1",
+       "name": "success",
+       "value": true,
+       "type": "boolean"
+      },
+      {
+       "id": "a2",
+       "name": "search_profile_id",
+       "value": "={{ $json.id }}",
+       "type": "string"
+      },
+      {
+       "id": "a3",
+       "name": "version",
+       "value": "={{ $json.version }}",
+       "type": "number"
+      },
+      {
+       "id": "a4",
+       "name": "status",
+       "value": "={{ $json.status }}",
+       "type": "string"
+      },
+      {
+       "id": "a5",
+       "name": "target_summary",
+       "value": "={{ $('Validate + Shape').first().json.target_summary }}",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "d6612512-65c7-4ce5-8da5-b6efe1362cbc",
+   "name": "Return Error",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    1440,
+    520
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "e1",
+       "name": "success",
+       "value": false,
+       "type": "boolean"
+      },
+      {
+       "id": "e2",
+       "name": "error",
+       "value": "={{ $json.error }}",
+       "type": "string"
+      },
+      {
+       "id": "e3",
+       "name": "missing",
+       "value": "={{ $json.missing }}",
+       "type": "array"
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

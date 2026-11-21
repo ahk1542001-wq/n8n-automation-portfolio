@@ -1,0 +1,1339 @@
+{
+ "id": "YktL78L2l3AaeV5H",
+ "name": "SF2 v-next.5 - Discovery Maps + Tavily Web + Social + Manual Import + Cache",
+ "active": false,
+ "isArchived": false,
+ "versionId": "443d5347-2d3d-4757-ae8a-896d5a07d8c3",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 42,
+ "createdAt": "2026-11-19T09:23:22.969Z",
+ "updatedAt": "2026-11-19T09:23:48.274Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Import Source?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Import Source?": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Read Import Tab",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Load Search Profile",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Read Import Tab": {
+   "main": [
+    [
+     {
+      "node": "Validate + Normalise Import",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Validate + Normalise Import": {
+   "main": [
+    [
+     {
+      "node": "Import OK?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Import OK?": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Import Halt Draft (NEVER SENDS)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Collect Import + Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gmail - Import Halt Draft (NEVER SENDS)": {
+   "main": [
+    [
+     {
+      "node": "Return - Import Halted",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Load Search Profile": {
+   "main": [
+    [
+     {
+      "node": "Tavily Engine?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily Engine?": {
+   "main": [
+    [
+     {
+      "node": "Build Tavily Pairs",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Build Query List",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Tavily Pairs": {
+   "main": [
+    [
+     {
+      "node": "Tavily Cache Key",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily Cache Key": {
+   "main": [
+    [
+     {
+      "node": "DB - Tavily Cache Lookup",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Tavily Cache Lookup": {
+   "main": [
+    [
+     {
+      "node": "Tavily Cache Hit?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily Cache Hit?": {
+   "main": [
+    [
+     {
+      "node": "DB - Tavily Cache Hit Ledger",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Tavily Claim",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Tavily Cache Hit Ledger": {
+   "main": [
+    [
+     {
+      "node": "Emit Tavily Cached",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Tavily Claim": {
+   "main": [
+    [
+     {
+      "node": "Tavily Claim Won?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily Claim Won?": {
+   "main": [
+    [
+     {
+      "node": "Expand Tavily Pairs",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Count Run Companies",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Expand Tavily Pairs": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Discovery Search",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Discovery Search": {
+   "main": [
+    [
+     {
+      "node": "Map Tavily Results",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Map Tavily Results": {
+   "main": [
+    [
+     {
+      "node": "Prep Tavily Cache Store",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Tavily Cache Store": {
+   "main": [
+    [
+     {
+      "node": "DB - Tavily Cache Store",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Tavily Cache Store": {
+   "main": [
+    [
+     {
+      "node": "Prep Tavily Ledger",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Tavily Ledger": {
+   "main": [
+    [
+     {
+      "node": "DB - Tavily Ledger",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Tavily Ledger": {
+   "main": [
+    [
+     {
+      "node": "Collect Tavily + Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Count Run Companies": {
+   "main": [
+    [
+     {
+      "node": "Return Already Discovered",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Query List": {
+   "main": [
+    [
+     {
+      "node": "Cache Key (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cache Key (F29)": {
+   "main": [
+    [
+     {
+      "node": "DB - Cache Lookup (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cache Lookup (F29)": {
+   "main": [
+    [
+     {
+      "node": "Cache Hit?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cache Hit?": {
+   "main": [
+    [
+     {
+      "node": "DB - Cache Hit Ledger (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Expand Pairs (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cache Hit Ledger (F29)": {
+   "main": [
+    [
+     {
+      "node": "Emit Cached (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Expand Pairs (F29)": {
+   "main": [
+    [
+     {
+      "node": "Apify - Maps Search",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Apify - Maps Search": {
+   "main": [
+    [
+     {
+      "node": "Map to Candidates",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Map to Candidates": {
+   "main": [
+    [
+     {
+      "node": "Collect + Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Collect + Return": {
+   "main": [
+    [
+     {
+      "node": "Prep Cache Store (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Cache Store (F29)": {
+   "main": [
+    [
+     {
+      "node": "DB - Cache Store (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cache Store (F29)": {
+   "main": [
+    [
+     {
+      "node": "Return - After Cache Store (F29)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "85c097f4-398e-4895-906c-18f123226284",
+   "name": "Sticky Note 81851292",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF2 v-next.5 - v-next.4 + SOCIAL discovery (tavily_social: FB/TikTok account-level candidates; Wonder grill REV 1422; spike SPIKE.md all thresholds passed). Discovery with THREE engines (F27 + Tavily web). v-next.4 (Wonder DO-NOT-PROMOTE fixes on v-next.3): (1) the Tavily branch now uses the SAME F29 discovery cache as the Apify branch (key material prefixed 'tavily|', 24h TTL default; a hit returns the cached candidates with a cache_hit_zero ledger row - a WF00 rerun with a new run_id no longer re-spends within the TTL); (2) the same-run guard is now an ATOMIC claim (one CTE insert ... on conflict do nothing returning, claimed boolean) taken after a cache miss and before any search - losing the claim returns already_discovered WITH the count of companies already saved for that run_id (existing_companies), never a silent zero; (3) the listicle filter is DYNAMIC: a best/top title is skipped only when it also contains a keyword from that result's OWN search query (location tokens and stopwords excluded, singular/plural tolerant) - no hardcoded category list anywhere. Engine gate: discovery_source='tavily' routes to the Tavily branch (profile-driven: apify_maps queries become web searches, tavily_research queries used as-is; candidates in the SAME contract with source='tavily_web', no place_id/rating/phone; per-run Tavily spend ledgered once, idempotent; Tavily results are cached in discovery_cache under a 'tavily|' key prefix with the run's TTL). Default/'places' keeps the original Apify path with its F29 cache, byte-identical to v-next.1. Places path = the original SF2 (profile-driven Apify Google Places). Manual-import path: reads an import Sheet with exact headers company_name, domain, location, source_url; a missing header halts the branch with a Gmail draft naming the header; rows are normalised (domain lowercased, www./scheme stripped, location trimmed) and emitted in the SAME candidate contract with source='manual_import' + source_url, merging into the same Collect return so SF4 dedupe handles both paths identically. Input adds discovery_source ('places' default | 'manual_import'), import_sheet_id, import_tab.",
+    "color": 5
+   }
+  },
+  {
+   "id": "65f7658e-e122-46f6-bf5e-5a0dac3d3d95",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "max_per_query",
+       "type": "number"
+      },
+      {
+       "name": "discovery_source",
+       "type": "string"
+      },
+      {
+       "name": "import_sheet_id",
+       "type": "string"
+      },
+      {
+       "name": "import_tab",
+       "type": "string"
+      },
+      {
+       "name": "discovery_cache_ttl_hours",
+       "type": "number"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "98c9a7f7-56c9-42c5-a6ad-1e18ef7963d0",
+   "name": "Import Source?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.discovery_source === \"manual_import\" }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "b906ac73-f4a1-404c-9441-f7d288cb3d50",
+   "name": "Sheet - Read Import Tab",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    600,
+    240
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "read",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "={{ $json.import_sheet_id }}"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "={{ $json.import_tab }}"
+    },
+    "options": {}
+   },
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "5fa4d8fa-66ab-49ff-bb0c-10fb0eac18d8",
+   "name": "Validate + Normalise Import",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    240
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const REQUIRED = ['company_name', 'domain', 'location', 'source_url'];\nconst rows = $input.all().map(i => i.json);\nif (!rows.length) {\n  return [{ json: { import_error: 'missing_header:company_name', missing_header: 'company_name', detail: 'import sheet returned no rows (headers not readable)' } }];\n}\nconst keys = Object.keys(rows[0]);\nconst missing = REQUIRED.filter(h => !keys.includes(h));\nif (missing.length) {\n  return [{ json: { import_error: 'missing_header:' + missing[0], missing_header: missing[0] } }];\n}\nreturn rows.filter(r => String(r.company_name || '').trim()).map(r => {\n  let d = String(r.domain || '').trim().toLowerCase().replace(/^https?:\\/\\//, '').replace(/^www\\./, '');\n  d = d.split('/')[0];\n  return { json: {\n    source: 'manual_import',\n    source_id: null,\n    name: String(r.company_name).trim(),\n    place_id: null,\n    category: null,\n    location: String(r.location || '').trim(),\n    website: d ? 'https://' + d : null,\n    domain: d || null,\n    phone: null,\n    rating: null,\n    review_count: null,\n    source_url: String(r.source_url || '').trim(),\n    raw: r\n  } };\n});"
+   }
+  },
+  {
+   "id": "2b4b46c6-3c23-4e19-92b0-c4ba05feab5e",
+   "name": "Import OK?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1160,
+    240
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ !!$json.import_error }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "a44a924e-3d0b-421c-b3e8-06d90d9fa014",
+   "name": "Gmail - Import Halt Draft (NEVER SENDS)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1440,
+    120
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "sendTo": "victor.job154@gmail.com",
+    "subject": "SF2 import halted - missing header",
+    "emailType": "text",
+    "message": "={{ \"The manual-import branch halted before reading any company rows. Missing required header: \" + $json.missing_header + \". Required headers (exact): company_name, domain, location, source_url. No discovery ran and nothing was spent.\" }}",
+    "options": {}
+   },
+   "webhookId": "275364a6-9b58-413c-82cb-97934e4cfc2f",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "e3bd3a41-289c-4c25-88b4-7b33a143eb00",
+   "name": "Return - Import Halted",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    120
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const err = ($('Validate + Normalise Import').first().json || {}).import_error || 'unknown';\nreturn [{ json: { success: false, count: 0, candidates: [], import_error: err } }];"
+   }
+  },
+  {
+   "id": "65c02e79-54e1-482a-8669-559be19fb57e",
+   "name": "Collect Import + Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1440,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const cands = $input.all().map(i => i.json);\nreturn { json: { success: true, count: cands.length, candidates: cands } };"
+   }
+  },
+  {
+   "id": "338bda97-b622-41e1-8dec-149dd13dc68d",
+   "name": "DB - Load Search Profile",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    600,
+    560
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT profile FROM search_profiles WHERE id = $1::uuid",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "d0ab70ed-8b67-45de-aedd-0cf5c64124aa",
+   "name": "Tavily Engine?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    880,
+    480
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $(\"When Executed by Another Workflow\").item.json.discovery_source === \"tavily\" }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "2f8dffff-e795-44c4-a136-2e187d493e07",
+   "name": "Build Tavily Pairs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    760
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json || {};\nconst profile = (($('DB - Load Search Profile').item.json || {}).profile) || {};\nconst pairs = [];\nfor (const s of (profile.sources || [])) {\n  const locs = (s.locations && s.locations.length) ? s.locations : [null];\n  if (s.source === 'apify_maps') {\n    for (const q of (s.queries || [])) for (const loc of locs) pairs.push({ query: (q + ' ' + (loc || '')).trim(), category: q, location: loc });\n  } else if (s.source === 'tavily_research') {\n    for (const q of (s.queries || [])) for (const loc of locs) pairs.push({ query: q, category: null, location: loc });\n  } else if (s.source === 'tavily_social' && s.enabled === true) {\n    for (const q of (s.queries || [])) for (const loc of locs) for (const pf of (s.platforms || [])) {\n      if (pf !== 'facebook' && pf !== 'tiktok') continue;\n      pairs.push({ query: (((loc || '') + ' ' + q).trim()) + ' site:' + (pf === 'facebook' ? 'facebook.com' : 'tiktok.com'), category: q, location: loc, social_platform: pf });\n    }\n  }\n}\nconst maxRes = Math.min(trig.max_per_query || 20, 20);\nreturn pairs.map(p => ({ json: {\n  search_profile_id: trig.search_profile_id || null,\n  profile_version: trig.profile_version || 1,\n  run_id: trig.run_id || null,\n  query: p.query, category: p.category, location: p.location, social_platform: p.social_platform || null,\n  mcp_input: JSON.stringify({ query: p.query, search_depth: 'basic', max_results: maxRes })\n} }));"
+   }
+  },
+  {
+   "id": "0ab4d406-a3dd-43c6-af0e-cc99c4069a4f",
+   "name": "Tavily Cache Key",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1440,
+    760
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json || {};\nconst pairs = $input.all().map(i => i.json);\nconst pairKey = pairs.map(x => String(x.query || '').toLowerCase().trim() + '|' + String(x.location || '').toLowerCase().trim()).join(';');\nconst maxRes = Math.min(trig.max_per_query || 20, 20);\nconst material = 'tavily|' + (trig.search_profile_id || '') + '@' + (trig.profile_version || 1) + '|' + pairKey + '|' + maxRes;\nreturn [{ json: {\n  cache_key_material: material,\n  profile_material: (trig.search_profile_id || '') + '@' + (trig.profile_version || 1),\n  query_norm: pairs.map(x => String(x.query || '').toLowerCase().trim()).join(';'),\n  location_norm: pairs.map(x => String(x.location || '').toLowerCase().trim()).join(';'),\n  pairs,\n  search_profile_id: trig.search_profile_id || null,\n  profile_version: trig.profile_version || 1,\n  run_id: trig.run_id || null,\n  max_per_query: maxRes,\n  ttl_hours: (trig.discovery_cache_ttl_hours === undefined || trig.discovery_cache_ttl_hours === null || trig.discovery_cache_ttl_hours === '' ? 24 : Number(trig.discovery_cache_ttl_hours))\n} }];"
+   }
+  },
+  {
+   "id": "418ff04c-a233-44a5-b5d0-2e863772e2d3",
+   "name": "DB - Tavily Cache Lookup",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1720,
+    760
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT c.result_company_ids AS candidates, c.discovered_count AS count, true AS hit\nFROM discovery_cache c\nWHERE c.cache_key = encode(sha256($1::bytea), 'hex') AND c.expires_at > now()\nUNION ALL\nSELECT NULL, NULL, false\nWHERE NOT EXISTS (SELECT 1 FROM discovery_cache c WHERE c.cache_key = encode(sha256($1::bytea), 'hex') AND c.expires_at > now())",
+    "options": {
+     "queryReplacement": "={{ [ $json.cache_key_material ] }}"
+    }
+   },
+   "executeOnce": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "2fa52d2e-b704-4533-958e-560714a033e0",
+   "name": "Tavily Cache Hit?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    2000,
+    760
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.hit === true }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "c946c40f-b9ff-4b6f-9c90-408afac601f5",
+   "name": "DB - Tavily Cache Hit Ledger",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2280,
+    640
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nVALUES ($1, 'SF2 v-next.4', 'tavily', 'cache_hit_zero', 0, 0, NULL, 'sf2:tavily:cachehit:' || $1 || ':' || $2)\nON CONFLICT (idempotency_key) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $('Tavily Cache Key').first().json.run_id, $('Tavily Cache Key').first().json.cache_key_material ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "61589036-d787-41e9-a084-0f99b10b2069",
+   "name": "Emit Tavily Cached",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2560,
+    640
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const row = ($('DB - Tavily Cache Lookup').first().json) || {};\nconst key = ($('Tavily Cache Key').first().json) || {};\nconst cands = row.candidates || [];\nreturn [{ json: { success: true, count: cands.length, candidates: cands, engine: 'tavily', cache_hit: true, run_id: key.run_id || null } }];"
+   }
+  },
+  {
+   "id": "ad83d57a-4731-4c09-a35b-80b4eb6d0339",
+   "name": "DB - Tavily Claim",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2280,
+    880
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH ins AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $1, 'SF2 v-next.4', 'tavily', 'estimate', 0, 0, NULL, 'sf2:tavily:guard:' || $1\n  WHERE $1 IS NOT NULL AND $1 <> ''\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING 1\n)\nSELECT (EXISTS (SELECT 1 FROM ins)) AS claimed",
+    "options": {
+     "queryReplacement": "={{ [ $(\"When Executed by Another Workflow\").item.json.run_id || \"\" ] }}"
+    }
+   },
+   "alwaysOutputData": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "13794550-0970-4ebd-8f02-77fb1b26a89d",
+   "name": "Tavily Claim Won?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    2560,
+    880
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.claimed === true }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "942f74bf-d6c7-4058-b9e3-337fa5818ecc",
+   "name": "Expand Tavily Pairs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2840,
+    880
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const key = ($('Tavily Cache Key').first().json) || {};\nreturn (key.pairs || []).map(x => ({ json: x }));"
+   }
+  },
+  {
+   "id": "69784175-e135-4265-918e-304011a1f2fa",
+   "name": "Tavily MCP - Discovery Search",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    3120,
+    880
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_search",
+     "cachedResultName": "tavily_search"
+    },
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "jsonInput": "={{ $json.mcp_input }}"
+   },
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "01da7f9c-93ee-4ceb-bb62-42bde5c31fb3",
+   "name": "Map Tavily Results",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3400,
+    880
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const pairs = $('Build Tavily Pairs').all().map(i => i.json);\nfunction extractResults(j) {\n  let obj = j;\n  if (typeof obj === 'string') { try { obj = JSON.parse(obj); } catch (e) { return []; } }\n  if (!obj || typeof obj !== 'object') return [];\n  if (obj.structuredContent && Array.isArray(obj.structuredContent.results)) return obj.structuredContent.results;\n  if (Array.isArray(obj.results)) return obj.results;\n  if (typeof obj.result === 'string') { try { const p = JSON.parse(obj.result); return p.results || []; } catch (e) { return []; } }\n  if (Array.isArray(obj.content)) {\n    for (const c of obj.content) { if (c && typeof c.text === 'string') { try { const p = JSON.parse(c.text); if (p.results) return p.results; } catch (e) {} } }\n  }\n  return [];\n}\nfunction clean(x) {\n  return String(x == null ? '' : x).replace(/[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]/g, '');\n}\nfunction domainOf(u) {\n  let d = String(u || '').trim().toLowerCase().replace(/^https?:\\/\\//, '').replace(/^www\\./, '');\n  return d.split('/')[0].split('?')[0];\n}\nfunction pathOf(u) {\n  const str = String(u || '').replace(/^https?:\\/\\/[^/]+/i, '');\n  return str || '/';\n}\nconst SKIP = ['tripadvisor.', 'yelp.', 'zomato.', 'foursquare.', 'yellowpages.', 'hotfrog.', 'trustpilot.', 'reddit.com', 'cbinsights.com', 'rocketreach.co', 'crunchbase.com', 'linkedin.com', 'wanderlog.com', 'quora.com', 'medium.com'];\nconst out = [];\nconst seen = {};\nconst allLocToks = {};\nfor (const pp of pairs) { for (const w of String(pp.location || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)) allLocToks[w] = 1; }\nconst profToks = {};\nfor (const pp of pairs) { for (const w of String(pp.query || '').toLowerCase().split(/[^a-z0-9]+/)) { if (w.length > 2 && !allLocToks[w] && ['best', 'top', 'near', 'with', 'from', 'that', 'this'].indexOf(w) === -1) profToks[w.replace(/s$/, '')] = 1; } }\nconst RESERVED_FB = { groups: 1, events: 1, marketplace: 1, watch: 1, people: 1, search: 1, sharer: 1, share: 1, login: 1, help: 1, pages: 1, gaming: 1, stories: 1, reels: 1, 'home.php': 1, 'l.php': 1 };\nfunction fbAccount(u) {\n  if (/profile\\.php/i.test(u)) { const pr = u.match(/[?&]id=(\\d+)/); return pr ? { url: 'https://www.facebook.com/profile.php?id=' + pr[1], personal_risk: true } : null; }\n  const m = String(u).match(/^https?:\\/\\/(?:www\\.|m\\.)?facebook\\.com\\/(.+)$/i);\n  if (!m) return null;\n  const parts = m[1].split('?')[0].replace(/\\/+$/, '').split('/').filter(Boolean);\n  if (!parts.length) return null;\n  const first = parts[0];\n  if (RESERVED_FB[first.toLowerCase()]) return null;\n  if (first === 'p' && parts.length >= 2) return { url: 'https://www.facebook.com/p/' + parts[1], personal_risk: false, collapsed: true };\n  if (/^\\d{6,}$/.test(first)) return { url: 'https://www.facebook.com/' + first, personal_risk: false, collapsed: parts.length > 1 };\n  if (/^[A-Za-z0-9.\\-_]+$/.test(first)) return { url: 'https://www.facebook.com/' + first, personal_risk: false, collapsed: parts.length > 1 };\n  return null;\n}\nfunction ttAccount(u) {\n  const m = String(u).match(/^https?:\\/\\/www\\.tiktok\\.com\\/@([A-Za-z0-9._\\-]+)/i);\n  return m ? { url: 'https://www.tiktok.com/@' + m[1].toLowerCase(), handle: m[1].toLowerCase(), personal_risk: false } : null;\n}\nfunction socialName(platform, acc, titleRaw) {\n  let name = titleRaw;\n  if (name.includes(' | ')) name = name.split(' | ')[0].trim();\n  name = name.replace(/\\s*[-\\u2013\\u2014]\\s*(Home|Facebook|Instagram|TikTok)\\s*$/i, '').trim();\n  if (platform === 'tiktok') {\n    const mm = titleRaw.match(/^(.+?)\\s*\\(@[A-Za-z0-9._\\-]+\\)/);\n    if (mm) name = mm[1].trim();\n    else if (/^(tiktok|log in|make your day)/i.test(name) || name.length < 2) name = acc.handle || name;\n  }\n  if (name.length > 120) name = name.slice(0, 120);\n  return name;\n}\nconst socialAcc = {};\n$input.all().forEach((item, idx) => {\n  const pair = pairs[idx] || {};\n  const locToks = String(pair.location || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);\n  const qToks = String(pair.query || '').toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length > 2 && locToks.indexOf(w) === -1 && ['best', 'top', 'near', 'with', 'from', 'that', 'this'].indexOf(w) === -1);\n  for (const r of extractResults(item.json)) {\n    const url = clean((r && r.url) || '').trim();\n    const titleRaw = clean((r && r.title) || '').trim();\n    if (!url || !titleRaw) continue;\n    if (/\\b(top|best)\\s+\\d+\\b/i.test(titleRaw)) continue;\n    if (/\\b(best|top)\\b/i.test(titleRaw)) {\n      const tw = titleRaw.toLowerCase().split(/[^a-z0-9]+/).map(w => w.replace(/s$/, ''));\n      if (tw.some(w => profToks[w])) continue;\n    }\n    if (pair.social_platform) {\n      const acc = pair.social_platform === 'facebook' ? fbAccount(url) : ttAccount(url);\n      if (!acc) continue;\n      if (!socialAcc[acc.url]) {\n        socialAcc[acc.url] = { json: {\n          source: 'tavily_social', source_id: acc.url, name: socialName(pair.social_platform, acc, titleRaw), place_id: null,\n          category: pair.category || null, location: pair.location || null,\n          website: null, domain: null, phone: null, rating: null, review_count: null,\n          source_url: acc.url,\n          raw: { social_platform: pair.social_platform, social_url: acc.url, result_urls: [], name_provisional: pair.social_platform === 'tiktok' || !!acc.collapsed, personal_risk: !!acc.personal_risk, title: titleRaw, snippet: clean((r && r.content) || '').slice(0, 300), query: pair.query || '' }\n        } };\n        out.push(socialAcc[acc.url]);\n      }\n      socialAcc[acc.url].json.raw.result_urls.push(url);\n      continue;\n    }\n    const dom = domainOf(url);\n    if (!dom) continue;\n    if (SKIP.some(x => dom.includes(x))) continue;\n    const path = pathOf(url);\n    if (path.includes('/search') || path.includes('/groups/') || path.includes('/watch')) continue;\n    const segs = path.split('/').filter(Boolean);\n    if ((dom === 'facebook.com' || dom === 'instagram.com') && segs.length !== 1) continue;\n    const seg = segs[0] || '';\n    const key = (dom === 'facebook.com' || dom === 'instagram.com') ? dom + '|' + seg.toLowerCase() : dom;\n    if (seen[key]) continue;\n    seen[key] = 1;\n    let name = titleRaw;\n    if (name.includes(' | ')) name = name.split(' | ')[0].trim();\n    name = name.replace(/\\s*[-\u2013\u2014]\\s*(Home|Facebook|Instagram)\\s*$/i, '').trim();\n    if (!name || name.length < 2) continue;\n    if (name.length > 120) name = name.slice(0, 120);\n    out.push({ json: {\n      source: 'tavily_web', source_id: null, name: name, place_id: null,\n      category: pair.category || null, location: pair.location || null,\n      website: url, domain: dom, phone: null, rating: null, review_count: null,\n      source_url: url,\n      raw: { title: titleRaw, url: url, snippet: clean((r && r.content) || '').slice(0, 300), score: (r && r.score) || null, query: pair.query || '' }\n    } });\n  }\n});\nreturn out;"
+   }
+  },
+  {
+   "id": "6d10e19f-6176-48f1-9fb9-757ded6e8257",
+   "name": "Prep Tavily Cache Store",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3680,
+    880
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const key = ($('Tavily Cache Key').first().json) || {};\nconst cands = $('Map Tavily Results').all().map(i => i.json);\nreturn [{ json: {\n  cache_key_material: key.cache_key_material, profile_material: key.profile_material,\n  query_norm: key.query_norm, location_norm: key.location_norm, max_per_query: key.max_per_query,\n  ttl_hours: key.ttl_hours, candidates: cands, count: cands.length,\n  candidates_json: JSON.stringify(cands)\n} }];"
+   }
+  },
+  {
+   "id": "947f7262-e6b8-46ef-9021-ad180213c589",
+   "name": "DB - Tavily Cache Store",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    3960,
+    880
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO discovery_cache (cache_key, query_norm, location_norm, radius_m, profile_hash, result_company_ids, discovered_count, expires_at)\nVALUES (encode(sha256($1::bytea), 'hex'), $2, $3, $4, encode(sha256($5::bytea), 'hex'), $6::jsonb, $7, now() + ($8::text || ' hours')::interval)\nON CONFLICT (cache_key) DO UPDATE SET result_company_ids = EXCLUDED.result_company_ids, discovered_count = EXCLUDED.discovered_count, created_at = now(), expires_at = EXCLUDED.expires_at",
+    "options": {
+     "queryReplacement": "={{ [ $json.cache_key_material, $json.query_norm, $json.location_norm, $json.max_per_query, $json.profile_material, $json.candidates_json, $json.count, $json.ttl_hours ] }}"
+    }
+   },
+   "alwaysOutputData": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "99f83934-528c-4823-a065-82e107188a12",
+   "name": "Prep Tavily Ledger",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4240,
+    880
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const pairs = $('Build Tavily Pairs').all().map(i => i.json);\nconst first = pairs[0] || {};\nconst units = pairs.length;\nreturn [{ json: { run_id: first.run_id || '', units: units, cost_usd: Math.round(units * 0.006 * 10000) / 10000 } }];"
+   },
+   "executeOnce": true
+  },
+  {
+   "id": "88fe6d82-04df-48e6-8f40-3926b3342bdc",
+   "name": "DB - Tavily Ledger",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    4520,
+    880
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nSELECT $1, 'SF2 v-next.2', 'tavily', 'charge', $2::int, $3::numeric, NULL, 'sf2:tavily:' || $1\nWHERE $1 IS NOT NULL AND $1 <> ''\nON CONFLICT (idempotency_key) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id, $json.units, $json.cost_usd ] }}"
+    }
+   },
+   "alwaysOutputData": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "613367d3-07fe-4c55-afb8-feea9aa57121",
+   "name": "Collect Tavily + Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4800,
+    880
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const cands = $('Map Tavily Results').all().map(i => i.json);\nconst social = cands.filter(c => c.source === 'tavily_social');\nconst byPlat = {};\nfor (const c of social) { const p = (c.raw && c.raw.social_platform) || '?'; byPlat[p] = (byPlat[p] || 0) + 1; }\nreturn { json: { success: true, count: cands.length, candidates: cands, engine: 'tavily', social_candidates: social.length, social_by_platform: byPlat } };"
+   }
+  },
+  {
+   "id": "aad2afdc-b60b-4247-a795-a6e7530685d0",
+   "name": "DB - Count Run Companies",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2840,
+    1000
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT count(*)::int AS existing_companies FROM companies WHERE run_id::text = $1",
+    "options": {
+     "queryReplacement": "={{ [ $(\"When Executed by Another Workflow\").item.json.run_id || \"\" ] }}"
+    }
+   },
+   "alwaysOutputData": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "42e46fc8-dbf8-436e-b498-0ee2c9bd4dc3",
+   "name": "Return Already Discovered",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3120,
+    1000
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const cnt = ($('DB - Count Run Companies').first().json) || {};\nreturn [{ json: { success: true, count: 0, candidates: [], engine: 'tavily', already_discovered: true, existing_companies: cnt.existing_companies || 0 } }];"
+   }
+  },
+  {
+   "id": "382fc0e4-2dcb-46f5-b112-2b44b406cea0",
+   "name": "Build Query List",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json || {};\nconst profile = ($input.item.json.profile) || {};\nconst pairs = [];\nfor (const s of (profile.sources || [])) {\n  if (s.source !== 'apify_maps') continue;\n  const locs = (s.locations && s.locations.length) ? s.locations : [null];\n  for (const q of (s.queries || [])) for (const loc of locs) pairs.push({ search: q, location: loc });\n}\nconst maxPer = trig.max_per_query || 20;\nreturn pairs.map(p => ({ json: {\n  search_profile_id: trig.search_profile_id || null,\n  profile_version: trig.profile_version || 1,\n  run_id: trig.run_id || null,\n  search: p.search,\n  location: p.location,\n  max_per_query: maxPer,\n  apify_input: {\n    searchStringsArray: [p.search],\n    locationQuery: p.location || '',\n    maxCrawledPlacesPerSearch: maxPer,\n    language: 'en',\n    skipClosedPlaces: false,\n    scrapePlaceDetailPage: false\n  }\n} }));"
+   }
+  },
+  {
+   "id": "5633d457-e935-40f6-98f0-f3415aba811e",
+   "name": "Cache Key (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json || {};\nconst pairs = $input.all().map(i => i.json);\nconst pairKey = pairs.map(x => String(x.search || '').toLowerCase().trim() + '|' + String(x.location || '').toLowerCase().trim()).join(';');\nconst material = (trig.search_profile_id || '') + '@' + (trig.profile_version || 1) + '|' + pairKey + '|' + (trig.max_per_query || 20);\nreturn [{ json: {\n  cache_key_material: material,\n  profile_material: (trig.search_profile_id || '') + '@' + (trig.profile_version || 1),\n  query_norm: pairs.map(x => String(x.search || '').toLowerCase().trim()).join(';'),\n  location_norm: pairs.map(x => String(x.location || '').toLowerCase().trim()).join(';'),\n  pairs,\n  search_profile_id: trig.search_profile_id || null,\n  profile_version: trig.profile_version || 1,\n  run_id: trig.run_id || null,\n  max_per_query: trig.max_per_query || 20,\n  ttl_hours: (trig.discovery_cache_ttl_hours === undefined || trig.discovery_cache_ttl_hours === null || trig.discovery_cache_ttl_hours === '' ? 24 : Number(trig.discovery_cache_ttl_hours))\n} }];"
+   }
+  },
+  {
+   "id": "f25b2510-47df-46f6-8d4d-aad647248a5e",
+   "name": "DB - Cache Lookup (F29)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1440,
+    560
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT c.result_company_ids AS candidates, c.discovered_count AS count, true AS hit\nFROM discovery_cache c\nWHERE c.cache_key = encode(sha256($1::bytea), 'hex') AND c.expires_at > now()\nUNION ALL\nSELECT NULL, NULL, false\nWHERE NOT EXISTS (SELECT 1 FROM discovery_cache c WHERE c.cache_key = encode(sha256($1::bytea), 'hex') AND c.expires_at > now())",
+    "options": {
+     "queryReplacement": "={{ [ $json.cache_key_material ] }}"
+    }
+   },
+   "executeOnce": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "0ba204fd-2faa-42cb-8f18-c85a93aeee87",
+   "name": "Cache Hit?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1720,
+    560
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.hit }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "12a9c42e-26e3-4da8-992b-ff7b0255abd1",
+   "name": "DB - Cache Hit Ledger (F29)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2000,
+    440
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nVALUES ($1, 'SF2 v-next.1', 'apify', 'cache_hit_zero', 0, 0, NULL, 'sf2:cachehit:' || $1 || ':' || $2)\nON CONFLICT (idempotency_key) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $('Cache Key (F29)').first().json.run_id, $('Cache Key (F29)').first().json.cache_key_material ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "d62a6ce2-c751-4807-8698-4ff27bd53968",
+   "name": "Emit Cached (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2280,
+    440
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const row = ($('DB - Cache Lookup (F29)').first().json) || {};\nconst key = ($('Cache Key (F29)').first().json) || {};\nconst cands = row.candidates || [];\nreturn [{ json: { success: true, count: cands.length, candidates: cands, cache_hit: true, run_id: key.run_id || null } }];"
+   }
+  },
+  {
+   "id": "aa6a27e5-020f-471c-b5d5-44ff1e4b5d26",
+   "name": "Expand Pairs (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    680
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const key = ($('Cache Key (F29)').first().json) || {};\nreturn (key.pairs || []).map(x => ({ json: x }));"
+   }
+  },
+  {
+   "id": "7e88d170-be8a-4636-824e-283d705dd7bc",
+   "name": "Apify - Maps Search",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1160,
+    560
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ $json.apify_input }}",
+    "options": {
+     "timeout": 300000,
+     "batching": {
+      "batch": {
+       "batchSize": 1,
+       "batchInterval": 5000
+      }
+     }
+    }
+   },
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "knrRqdSihRdH7fFq",
+     "name": "Header Auth account 2"
+    }
+   }
+  },
+  {
+   "id": "a841ce9a-fcf7-4b58-8885-5f62184a7bbd",
+   "name": "Map to Candidates",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1440,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForEachItem",
+    "jsCode": "const p = $input.item.json || {};\nreturn { json: {\n  source: 'apify_maps',\n  source_id: p.placeId || null,\n  name: p.title || '',\n  place_id: p.placeId || null,\n  category: p.categoryName || null,\n  location: p.city || p.address || null,\n  website: p.website || null,\n  phone: p.phone || null,\n  rating: (p.totalScore === undefined ? null : p.totalScore),\n  review_count: (p.reviewsCount === undefined ? null : p.reviewsCount),\n  raw: p\n} };"
+   }
+  },
+  {
+   "id": "2705aad4-c5d5-4df4-bcb3-200933998ff7",
+   "name": "Collect + Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const cands = $input.all().map(i => i.json);\nreturn { json: { success: true, count: cands.length, candidates: cands } };"
+   }
+  },
+  {
+   "id": "c104b431-768e-4266-badf-b82a783ee306",
+   "name": "Prep Cache Store (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2280,
+    680
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const key = ($('Cache Key (F29)').first().json) || {};\nconst coll = $input.first().json || {};\nreturn [{ json: {\n  cache_key_material: key.cache_key_material, profile_material: key.profile_material,\n  query_norm: key.query_norm, location_norm: key.location_norm, max_per_query: key.max_per_query,\n  ttl_hours: key.ttl_hours, candidates: coll.candidates || [], count: coll.count || 0,\n  candidates_json: JSON.stringify(coll.candidates || [])\n} }];"
+   }
+  },
+  {
+   "id": "b95fc84b-4752-4d76-8929-0a1364f9b4a1",
+   "name": "DB - Cache Store (F29)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2560,
+    680
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO discovery_cache (cache_key, query_norm, location_norm, radius_m, profile_hash, result_company_ids, discovered_count, expires_at)\nVALUES (encode(sha256($1::bytea), 'hex'), $2, $3, $4, encode(sha256($5::bytea), 'hex'), $6::jsonb, $7, now() + ($8::text || ' hours')::interval)\nON CONFLICT (cache_key) DO UPDATE SET result_company_ids = EXCLUDED.result_company_ids, discovered_count = EXCLUDED.discovered_count, created_at = now(), expires_at = EXCLUDED.expires_at",
+    "options": {
+     "queryReplacement": "={{ [ $json.cache_key_material, $json.query_norm, $json.location_norm, $json.max_per_query, $json.profile_material, $json.candidates_json, $json.count, $json.ttl_hours ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "c7655220-a792-445c-b540-e92d904d6c81",
+   "name": "Return - After Cache Store (F29)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2840,
+    680
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const prep = ($('Prep Cache Store (F29)').first().json) || {};\nreturn [{ json: { success: true, count: prep.count || 0, candidates: prep.candidates || [], cache_hit: false } }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

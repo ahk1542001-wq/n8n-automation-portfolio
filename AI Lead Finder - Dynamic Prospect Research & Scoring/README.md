@@ -92,3 +92,15 @@ planner passed a 30-case golden campaign (27 of 30 valid on the first pass)
 with zero unsafe outputs across 12 adversarial cases. Outreach is SF10:
 drafts only, written to a review sheet, never sent. Design and stage gates
 were reviewed by a second model (Muse Wonder) throughout the build.
+
+**Update, 21 November 2026:** the planner is now SF0 v-next.13, promoted to
+planner head after a full review cycle. This version adds a deterministic
+clarify gate (when the business context is too thin to score safely, the
+system asks the owner short structured questions before spending anything)
+and makes company-size fit and exclusion handling deterministic in code
+rather than trusting the model's draft. It passed a frozen 50-case
+evaluation (30 realistic, 20 adversarial) at 28 of 30 with zero unsafe
+drafts saved; every saved draft was re-validated and every model call was
+provenance-checked. The complete current workflow set, exactly as exported
+from the live system with a hashed manifest, is in the `migration-pack/`
+folder of this case.

@@ -1,0 +1,414 @@
+{
+ "id": "NiEtMVkvLJFO3kG6",
+ "name": "SF8b v-next - Approval Write-Back (F32)",
+ "active": false,
+ "isArchived": false,
+ "versionId": "9cddd1c4-7b30-48d4-af2e-ee230db5d8d5",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 12,
+ "createdAt": "2026-11-15T18:51:50.180Z",
+ "updatedAt": "2026-11-15T18:52:01.455Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Sheet - Read Decisions",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Sheet - Read Decisions": {
+   "main": [
+    [
+     {
+      "node": "DB - Existing Approvals",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Existing Approvals": {
+   "main": [
+    [
+     {
+      "node": "Collect Decisions (F32)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Collect Decisions (F32)": {
+   "main": [
+    [
+     {
+      "node": "Header OK?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Header OK?": {
+   "main": [
+    [
+     {
+      "node": "DB - Record Approvals",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Prep Header Error",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Record Approvals": {
+   "main": [
+    [
+     {
+      "node": "DB - Apply Status",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Apply Status": {
+   "main": [
+    [
+     {
+      "node": "Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Header Error": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Header Error Draft (F32)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gmail - Header Error Draft (F32)": {
+   "main": [
+    [
+     {
+      "node": "Return - Header Error",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "64082c19-7aa1-4b8d-b9bd-874ca9b40832",
+   "name": "Sticky Note db480bce",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF8b v-next - Approval Write-Back (F32). Reads the v-next Sheet COPY, validates the run_id/company_id/Decision/Note headers (missing header = zero writes + Gmail draft naming it), applies only rows whose run_id matches the expected run, keys decisions by run_id|company_id, and skips decisions already recorded with the same note (skipped_duplicate).",
+    "color": 5
+   }
+  },
+  {
+   "id": "98dacc9b-9f2f-46db-acf6-7e42ebdf8bcc",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "decided_by",
+       "type": "string"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "approval_sheet_id_vnext",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "08a57f6c-b29c-4509-8814-190971e28045",
+   "name": "Sheet - Read Decisions",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.2,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "resource": "sheet",
+    "operation": "read",
+    "documentId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM",
+     "cachedResultName": "Lead Finder - Approval View (v-next F32)"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "name",
+     "value": "Lead Review",
+     "cachedResultName": "Lead Review"
+    },
+    "options": {}
+   },
+   "alwaysOutputData": true,
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "wvhan6bLKL00ty7F",
+     "name": "Google Sheets account"
+    }
+   }
+  },
+  {
+   "id": "ed18054b-a531-40a0-96d1-a888807ef300",
+   "name": "DB - Existing Approvals",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT company_id::text AS company_id, decision, COALESCE(note, '') AS note FROM approvals",
+    "options": {}
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "572656b3-673e-447b-a9eb-0d87f1067647",
+   "name": "Collect Decisions (F32)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const REQUIRED = ['run_id', 'company_id', 'Decision', 'Note'];\nconst rows = $('Sheet - Read Decisions').all().map(i => i.json);\nconst headerSet = new Set();\nfor (const r of rows) for (const k of Object.keys(r)) headerSet.add(k);\nconst missing = headerSet.size ? REQUIRED.filter(h => !headerSet.has(h)) : [];\nconst trig = $('When Executed by Another Workflow').item.json;\nif (missing.length) {\n  return [{ json: { header_error: missing[0], missing_headers: missing, payload: '[]', count: 0, skipped_duplicate: 0, stale_ignored: 0, decided_by: trig.decided_by || 'sheet:Lead Review (v-next)' } }];\n}\nconst ok = { approved: 1, rejected: 1, hold: 1 };\nconst existing = new Set($('DB - Existing Approvals').all().map(i => {\n  const j = i.json; return String(j.company_id) + '|' + String(j.decision) + '|' + String(j.note || '');\n}));\nconst byKey = new Map();\nlet stale = 0;\nfor (const r of rows) {\n  const d = String(r.Decision || '').trim().toLowerCase();\n  if (!r.company_id || !ok[d]) continue;\n  if (trig.run_id && String(r.run_id || '') !== String(trig.run_id)) { stale++; continue; }\n  byKey.set(String(r.run_id || '') + '|' + String(r.company_id), { company_id: String(r.company_id), decision: d, note: String(r.Note || '') });\n}\nconst fresh = [];\nlet skippedDup = 0;\nfor (const dec of byKey.values()) {\n  if (existing.has(dec.company_id + '|' + dec.decision + '|' + dec.note)) skippedDup++;\n  else fresh.push(dec);\n}\nreturn [{ json: { header_error: '', payload: JSON.stringify(fresh), count: fresh.length, skipped_duplicate: skippedDup, stale_ignored: stale, decided_by: trig.decided_by || 'sheet:Lead Review (v-next)' } }];"
+   }
+  },
+  {
+   "id": "b758dbb6-b45a-49dc-8b56-ff9f547f4e9f",
+   "name": "Header OK?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "id": "herr",
+       "leftValue": "={{ $json.header_error }}",
+       "rightValue": "",
+       "operator": {
+        "type": "string",
+        "operation": "empty",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   }
+  },
+  {
+   "id": "a036753d-b3aa-408d-aa6b-0dbede6cc652",
+   "name": "DB - Record Approvals",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1440,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH items AS (SELECT x FROM jsonb_array_elements($1::jsonb) AS x)\nINSERT INTO approvals (company_id, decision, decided_by, note)\nSELECT (x->>'company_id')::uuid, x->>'decision', $2, NULLIF(x->>'note','')\nFROM items x\nWHERE NOT EXISTS (SELECT 1 FROM approvals a WHERE a.company_id = (x->>'company_id')::uuid AND a.decision = x->>'decision')\nRETURNING company_id",
+    "options": {
+     "queryReplacement": "={{ [ $('Collect Decisions (F32)').item.json.payload, $('Collect Decisions (F32)').item.json.decided_by ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "11d95013-d1a7-4146-84fe-7676c3e38ed4",
+   "name": "DB - Apply Status",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1720,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH items AS (SELECT x FROM jsonb_array_elements($1::jsonb) AS x)\nUPDATE companies c\nSET status = CASE WHEN x->>'decision' = 'approved' THEN 'approved' WHEN x->>'decision' = 'rejected' THEN 'rejected' ELSE c.status END\nFROM items x\nWHERE c.id = (x->>'company_id')::uuid AND x->>'decision' IN ('approved','rejected')\nRETURNING c.id",
+    "options": {
+     "queryReplacement": "={{ [ $('Collect Decisions (F32)').item.json.payload, $('Collect Decisions (F32)').item.json.decided_by ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "5c2d4ecf-2aaf-42c3-a859-c564381f4d12",
+   "name": "Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const c = $('Collect Decisions (F32)').item.json;\nconst recorded = $('DB - Record Approvals').all().length;\nreturn [{ json: { success: true, recorded, skipped_duplicate: c.skipped_duplicate || 0, stale_ignored: c.stale_ignored || 0, decisions_seen: (c.count || 0) + (c.skipped_duplicate || 0) } }];"
+   }
+  },
+  {
+   "id": "30c90457-df42-46a1-bd42-d6b177e6b337",
+   "name": "Prep Header Error",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1300,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const c = $('Collect Decisions (F32)').first().json;\nreturn [{ json: { subject: 'SF8b v-next header error - missing header: ' + (c.header_error || ''), text: 'SF8b v-next (F32) refused to write back any decisions.\\nMissing/renamed header: ' + (c.header_error || '') + '\\nAll missing: ' + JSON.stringify(c.missing_headers || []) + '\\nZero approvals were recorded. Rename the header back to continue.' } }];"
+   }
+  },
+  {
+   "id": "68d7a332-9a24-4bf6-98f1-4680e3c31cd6",
+   "name": "Gmail - Header Error Draft (F32)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1580,
+    560
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "subject": "={{ $json.subject }}",
+    "emailType": "text",
+    "message": "={{ $json.text }}",
+    "options": {}
+   },
+   "webhookId": "b1900989-dcd3-4f37-8cb7-f236d7e4e881",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "aa41f00d-0d14-4eb5-b950-9bfeb12399e8",
+   "name": "Return - Header Error",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1860,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const c = $('Collect Decisions (F32)').first().json; return [{ json: { success: false, header_error: c.header_error || '', recorded: 0 } }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

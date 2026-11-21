@@ -1,0 +1,177 @@
+{
+ "id": "UJvLDTNetRBUk6PX",
+ "name": "SF9 v-next - Timing Re-Score",
+ "active": false,
+ "isArchived": false,
+ "versionId": "9c725492-1229-4b99-abba-e44ba986893d",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 5,
+ "createdAt": "2026-11-15T17:41:44.051Z",
+ "updatedAt": "2026-11-15T17:41:55.652Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Prep Params",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Params": {
+   "main": [
+    [
+     {
+      "node": "DB - Recompute Timing (v-next)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Recompute Timing (v-next)": {
+   "main": [
+    [
+     {
+      "node": "Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "cca7404b-573e-4325-b930-72aaf883e133",
+   "name": "Sticky Note e6768a4d",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF9 v-next - Timing Re-Score (F30). Weights normalised to sum exactly 100 (funding 23.08, hiring 19.23, job_change 19.23, expansion 19.23, new_post 7.69, review_activity 7.69, other 3.85 \u2014 from the legacy 30/25/25/25/10/10/5 set, sum 130) and profile-configurable via profile.timing_weights (validated: must sum to 100 +/- 0.01, else defaults + timing_weights_invalid flag). Score = min(100, sum of live-signal counts x weights), rounded. Every output carries timing_weights_status=unvalidated_default \u2014 the weights are NOT validated against outcomes. Legacy SF9 untouched.",
+    "color": 5
+   }
+  },
+  {
+   "id": "01057ac4-caa3-4c77-842d-a572f029ef01",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "53df85a1-33c8-40bf-987f-eb4ad746ead1",
+   "name": "Prep Params",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const j = $input.first().json; return [{ json: { search_profile_id: j.search_profile_id, profile_version: j.profile_version || 1, default_weights: \"{\\\"funding\\\": 23.08, \\\"hiring\\\": 19.23, \\\"job_change\\\": 19.23, \\\"expansion\\\": 19.23, \\\"new_post\\\": 7.69, \\\"review_activity\\\": 7.69, \\\"other\\\": 3.85}\" } }];"
+   }
+  },
+  {
+   "id": "64c968bd-5d9d-4cc4-8203-5e115be07560",
+   "name": "DB - Recompute Timing (v-next)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH cfg AS (\n  SELECT profile->'timing_weights' AS w\n  FROM search_profiles WHERE id = $1::uuid AND version = $2\n),\nwchk AS (\n  SELECT\n    CASE WHEN w IS NOT NULL AND jsonb_typeof(w) = 'object'\n      AND ABS(COALESCE((SELECT sum(v::numeric) FROM jsonb_each_text(w) e(k, v) WHERE k IN ('funding','hiring','job_change','expansion','new_post','review_activity','other') AND v ~ '^-?[0-9]+(\\.[0-9]+)?$'), -1) - 100) <= 0.01\n    THEN w ELSE $3::jsonb END AS w,\n    CASE WHEN w IS NOT NULL AND jsonb_typeof(w) = 'object'\n      AND ABS(COALESCE((SELECT sum(v::numeric) FROM jsonb_each_text(w) e(k, v) WHERE k IN ('funding','hiring','job_change','expansion','new_post','review_activity','other') AND v ~ '^-?[0-9]+(\\.[0-9]+)?$'), -1) - 100) <= 0.01\n    THEN false ELSE (w IS NOT NULL) END AS invalid\n  FROM cfg\n),\nsig AS (\n  SELECT s.company_id,\n         count(*) FILTER (WHERE s.signal_type = 'funding') AS n_funding,\n         count(*) FILTER (WHERE s.signal_type = 'hiring') AS n_hiring,\n         count(*) FILTER (WHERE s.signal_type = 'job_change') AS n_job_change,\n         count(*) FILTER (WHERE s.signal_type = 'expansion') AS n_expansion,\n         count(*) FILTER (WHERE s.signal_type = 'new_post') AS n_new_post,\n         count(*) FILTER (WHERE s.signal_type = 'review_activity') AS n_review_activity,\n         count(*) FILTER (WHERE s.signal_type NOT IN ('funding','hiring','job_change','expansion','new_post','review_activity')) AS n_other,\n         count(*) AS n,\n         jsonb_agg(jsonb_build_object('type', s.signal_type, 'detail', s.detail, 'observed_at', s.observed_at) ORDER BY s.observed_at DESC) AS items\n  FROM signals s\n  WHERE s.observed_at > now() - (s.decay_days || ' days')::interval\n  GROUP BY s.company_id\n),\nbase AS (\n  SELECT sc.id, sc.company_id FROM scores sc\n  WHERE sc.search_profile_id = $1::uuid AND sc.profile_version = $2\n),\ncalc AS (\n  SELECT base.id,\n         ROUND(LEAST(100, COALESCE(\n             sig.n_funding * (wchk.w->>'funding')::numeric\n           + sig.n_hiring * (wchk.w->>'hiring')::numeric\n           + sig.n_job_change * (wchk.w->>'job_change')::numeric\n           + sig.n_expansion * (wchk.w->>'expansion')::numeric\n           + sig.n_new_post * (wchk.w->>'new_post')::numeric\n           + sig.n_review_activity * (wchk.w->>'review_activity')::numeric\n           + sig.n_other * (wchk.w->>'other')::numeric, 0)))::int AS t,\n         jsonb_build_object(\n           'signals_live', COALESCE(sig.n, 0),\n           'weights', wchk.w,\n           'weights_status', 'unvalidated_default',\n           'timing_weights_invalid', wchk.invalid,\n           'signals', COALESCE(sig.items, '[]'::jsonb),\n           'computed_at', now()) AS comp\n  FROM base CROSS JOIN wchk LEFT JOIN sig ON sig.company_id = base.company_id\n),\nupd AS (\n  UPDATE scores sc SET timing_score = calc.t, timing_components = calc.comp\n  FROM calc WHERE sc.id = calc.id\n  RETURNING sc.timing_score\n)\nSELECT (SELECT count(*) FROM upd) AS rescored,\n       (SELECT count(*) FROM upd WHERE timing_score > 0) AS with_timing,\n       (SELECT invalid FROM wchk) AS timing_weights_invalid,\n       'unvalidated_default' AS timing_weights_status",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id, $json.profile_version || 1, $json.default_weights ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "568b5f73-9440-4e1e-9fb6-dd7a0a8b8465",
+   "name": "Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const r = $input.first().json || {};\nreturn [{ json: { success: true, rescored: Number(r.rescored) || 0, with_timing: Number(r.with_timing) || 0, timing_weights_status: r.timing_weights_status || 'unvalidated_default', timing_weights_invalid: !!r.timing_weights_invalid } }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

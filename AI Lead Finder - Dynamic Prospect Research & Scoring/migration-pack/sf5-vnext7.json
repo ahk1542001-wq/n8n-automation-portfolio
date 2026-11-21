@@ -1,0 +1,1023 @@
+{
+ "id": "BFrw36yKZHN1en2p",
+ "name": "SF5 v-next.7 - Research + Critic + Cap + Audit + Claim + Isolation + Social Lane + Size Fact",
+ "active": false,
+ "isArchived": false,
+ "versionId": "de03f807-ebe5-470d-b6b6-afb54094c73e",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 30,
+ "createdAt": "2026-11-19T12:45:52.665Z",
+ "updatedAt": "2026-11-19T12:56:56.890Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "DB - Pick Companies",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Pick Companies": {
+   "main": [
+    [
+     {
+      "node": "Rank + Audit (F34)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Rank + Audit (F34)": {
+   "main": [
+    [
+     {
+      "node": "DB - Write Selection Audit (F34)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Write Selection Audit (F34)": {
+   "main": [
+    [
+     {
+      "node": "Audit Write Check (D4)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit Write Check (D4)": {
+   "main": [
+    [
+     {
+      "node": "Build Jobs",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Jobs": {
+   "main": [
+    [
+     {
+      "node": "DB - Cap Check (F28)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cap Check (F28)": {
+   "main": [
+    [
+     {
+      "node": "Cap Gate (F28)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cap Gate (F28)": {
+   "main": [
+    [
+     {
+      "node": "Cap OK? (D4)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cap OK? (D4)": {
+   "main": [
+    [
+     {
+      "node": "Has Jobs?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Has Jobs?": {
+   "main": [
+    [
+     {
+      "node": "DB - Atomic Claim (F33)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Insert Cap Blocked (F28)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Atomic Claim (F33)": {
+   "main": [
+    [
+     {
+      "node": "Filter Claimed (F33)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Filter Claimed (F33)": {
+   "main": [
+    [
+     {
+      "node": "Claimed Any?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claimed Any?": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Search",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Return - Empty Run Summary",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Search": {
+   "main": [
+    [
+     {
+      "node": "Pack Evidence",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pack Evidence": {
+   "main": [
+    [
+     {
+      "node": "LLM - Researcher",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "LLM - Researcher": {
+   "main": [
+    [
+     {
+      "node": "Parse Extract",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Parse Extract": {
+   "main": [
+    [
+     {
+      "node": "Verify Gate (F24)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Verify Gate (F24)": {
+   "main": [
+    [
+     {
+      "node": "LLM - Critic",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "LLM - Critic": {
+   "main": [
+    [
+     {
+      "node": "Build Save Payload",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Save Payload": {
+   "main": [
+    [
+     {
+      "node": "DB - Save Research",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Save Research": {
+   "main": [
+    [
+     {
+      "node": "Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Return": {
+   "main": [
+    [
+     {
+      "node": "Audit Alert Gate (D4)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit Alert Gate (D4)": {
+   "main": [
+    [
+     {
+      "node": "Audit Failed? (end)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit Failed? (end)": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Audit Alert Draft (D4, NEVER SENDS)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Audit OK Pass (end)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gmail - Audit Alert Draft (D4, NEVER SENDS)": {
+   "main": [
+    [
+     {
+      "node": "Return - Final (D4)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Audit OK Pass (end)": {
+   "main": [
+    [
+     {
+      "node": "Return - Final (D4)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "73d89343-a93d-445a-af46-b32cbda9520c",
+   "name": "Sticky Note fc44a94e",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF5 - Research + Critic (Tavily). Picks the highest-fit scored companies not yet researched, searches each via the Tavily MCP server (standalone MCP Client node, generic MCP OAuth2 credential), extracts ONLY evidence-bound facts with an LLM, drops anything a strict critic cannot verify against the evidence, and saves artifacts/signals/people + a spend-ledger row. Marks the company researched. No outreach is created here.",
+    "color": 5
+   }
+  },
+  {
+   "id": "50e1e840-f24b-4325-8ae3-de78b3dadbe3",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "max_research",
+       "type": "number"
+      },
+      {
+       "name": "min_fit",
+       "type": "number"
+      },
+      {
+       "name": "spend_cap_usd",
+       "type": "number"
+      },
+      {
+       "name": "max_social_research",
+       "type": "number"
+      },
+      {
+       "name": "model_extract",
+       "type": "string"
+      },
+      {
+       "name": "model_critic",
+       "type": "string"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "e6a02ed5-0d8e-4683-a842-37e22f30d092",
+   "name": "DB - Pick Companies",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT COALESCE(jsonb_agg(cand ORDER BY fit_score DESC NULLS LAST, company_id ASC), '[]'::jsonb) AS candidates\nFROM (\n  SELECT c.id::text AS company_id, c.name, c.category, c.location, c.website, s.fit_score,\n         EXISTS (SELECT 1 FROM research_artifacts ra WHERE ra.company_id = c.id) AS has_research,\n         false AS social_lane, NULL::text AS social_url\n  FROM companies c\n  JOIN scores s ON s.company_id = c.id AND s.search_profile_id = $1::uuid AND s.profile_version = $2\n  WHERE c.status NOT IN ('approved','rejected')\n  UNION ALL\n  SELECT c.id::text AS company_id, c.name, c.category, c.location, c.website, NULL::numeric AS fit_score,\n         EXISTS (SELECT 1 FROM research_artifacts ra WHERE ra.company_id = c.id) AS has_research,\n         true AS social_lane, c.raw_payload->>'social_url' AS social_url\n  FROM companies c\n  WHERE c.search_profile_id = $1::uuid AND c.profile_version = $2\n    AND c.source = 'tavily_social' AND c.quarantine_reason = 'social_unverified'\n    AND c.status NOT IN ('approved','rejected')\n) cand",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id, $json.profile_version || 1 ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "fbf8beee-3672-44cf-a60b-3679d2787e15",
+   "name": "Rank + Audit (F34)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json;\nconst minFit = Number(trig.min_fit || 36), maxR = Number(trig.max_research || 3), runId = trig.run_id || '';\nconst cands = ($input.first().json.candidates || []);\nconst researchable = cands.filter(c => !c.social_lane && !c.has_research && Number(c.fit_score) >= minFit);\nconst maxSocial = Number(trig.max_social_research === undefined || trig.max_social_research === null || trig.max_social_research === '' ? 15 : trig.max_social_research);\nconst socialCands = cands.filter(c => c.social_lane);\nconst socialPicksRaw = socialCands.filter(c => !c.has_research).slice(0, maxSocial);\nconst cutoff = researchable.length > maxR ? Number(researchable[maxR - 1].fit_score) : minFit;\nlet rank = 0;\nconst audit = cands.map(c => {\n  let reason, r = null, first = false;\n  if (c.social_lane) {\n    if (c.has_research) reason = 'research_once_skip';\n    else if (socialPicksRaw.some(x => x.company_id === c.company_id)) reason = 'selected';\n    else reason = 'cap_reached';\n    return { run_id: runId, workflow: 'SF5 v-next.4', company_id: c.company_id, rank: null, fit_score: null, cutoff, selection_reason: reason, is_first_skipped: false };\n  }\n  if (c.has_research) reason = 'research_once_skip';\n  else if (Number(c.fit_score) < minFit) reason = 'below_cutoff';\n  else { rank++; r = rank; if (rank <= maxR) reason = 'selected'; else { reason = 'cap_reached'; if (rank === maxR + 1) first = true; } }\n  return { run_id: runId, workflow: 'SF5 v-next.4', company_id: c.company_id, rank: r, fit_score: Number(c.fit_score), cutoff, selection_reason: reason, is_first_skipped: first };\n});\nconst picks = researchable.slice(0, maxR).map(c => ({ company_id: c.company_id, name: c.name, category: c.category, location: c.location, website: c.website, fit_score: c.fit_score }))\n  .concat(socialPicksRaw.map(c => ({ company_id: c.company_id, name: c.name, category: c.category, location: c.location, website: c.website, fit_score: null, social_lane: true, social_url: c.social_url || '' })));\nreturn [{ json: { picks, audit_payload: JSON.stringify(audit), audit_count: audit.length } }];"
+   }
+  },
+  {
+   "id": "977683f1-a582-4388-beb6-502c1899991f",
+   "name": "DB - Write Selection Audit (F34)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    740,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO selection_audit (run_id, workflow, company_id, rank, fit_score, cutoff, selection_reason, is_first_skipped)\nSELECT x->>'run_id', x->>'workflow', x->>'company_id', NULLIF(x->>'rank', '')::int, (x->>'fit_score')::numeric, (x->>'cutoff')::numeric, x->>'selection_reason', (x->>'is_first_skipped')::boolean\nFROM jsonb_array_elements($1::jsonb) x\nON CONFLICT (run_id, workflow, company_id) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $json.audit_payload ] }}"
+    }
+   },
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "e53def31-517c-4c95-b27c-cd8c8a3fc198",
+   "name": "Audit Write Check (D4)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    860,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const first = ($input.first() && $input.first().json) || {};\nconst failed = !!first.error;\nconst trig = $('When Executed by Another Workflow').item.json || {};\nconst body = 'SF5 v-next.5 (D4 isolation): the F34 selection-audit write FAILED for run ' + (trig.run_id || '') + '. Research continues - the audit write is isolated so its failure cannot block the pick - but this run has no selection audit trail until the write is repaired.\\nError: ' + String(first.message || first.error || 'unknown').slice(0, 400);\nreturn [{ json: { audit_failed: failed, sendTo: 'victor.job154@gmail.com', subject: 'SF5 audit write failed - run ' + (trig.run_id || ''), body: body } }];"
+   }
+  },
+  {
+   "id": "f586d6b0-0f1f-4327-9994-0243799f61a6",
+   "name": "Build Jobs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const trig = $('When Executed by Another Workflow').item.json;\nconst picks = ($('Rank + Audit (F34)').first().json.picks || []);\nif (!picks.length) {\n  return [{ json: { empty_run: true, stage: 'SF5', reason: 'no_companies_met_fit_threshold', fit_threshold: trig.min_fit || 36, search_profile_id: trig.search_profile_id || '', profile_version: trig.profile_version || 1, run_id: trig.run_id || '' } }];\n}\nreturn picks.map(c => {\n  let q = (c.name + ' ' + (c.category || '') + ' ' + (c.location || '')).trim();\n  if (c.social_lane && c.social_url) { const seg = String(c.social_url).split('/').filter(Boolean).pop() || ''; if (seg) q = (q + ' ' + seg.replace(/^@/, '')).trim(); }\n  return { json: { company_id: c.company_id, name: c.name, category: c.category || '', location: c.location || '', website: c.website || '', run_id: trig.run_id || '', social_lane: !!c.social_lane, spend_cap_usd: (trig.spend_cap_usd === undefined || trig.spend_cap_usd === null || trig.spend_cap_usd === '' ? null : Number(trig.spend_cap_usd)), mcp_input: JSON.stringify({ query: q, search_depth: 'basic', max_results: 5 }) } };\n});"
+   }
+  },
+  {
+   "id": "32ee5ecd-2aa2-4be5-9847-b5f2290c9267",
+   "name": "DB - Cap Check (F28)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    740,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT COALESCE(SUM(cost_usd), 0)::float AS spent_usd FROM cost_ledger WHERE run_id = $1",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id ] }}"
+    }
+   },
+   "executeOnce": true,
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "fd884de3-4d49-45ca-b8a0-b7b66edba334",
+   "name": "Cap Gate (F28)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "// COST_RATES_V1 (from F15 cost reconstruction, 2026-11-16):\n// tavily: $25 face / 3,125 credits = $0.008 per credit (credits were a free claim; face value used).\n// llm (Meta Model API muse-spark-1.3): rate UNKNOWN -> excluded from estimates, ledgered with cost_usd NULL (rate_missing).\n// apify: free plan, unmetered -> rate unknown (ledgered in SF2 v-next when built).\nconst TAVILY_CREDIT_USD = 0.008;\nconst EST_NEXT_USD = TAVILY_CREDIT_USD; // one basic Tavily search per company\nconst spent = Number(($('DB - Cap Check (F28)').first().json || {}).spent_usd || 0);\n// NOTE: the Cap Check Postgres node REPLACES the item stream with its result row,\n// so the job items are reattached from 'Build Jobs' here (order + count preserved).\nconst jobItems = $('Build Jobs').all().map(i => i.json);\nreturn jobItems.map(j => {\n  if (j.empty_run) return { json: Object.assign({}, j, { cap_blocked: false, spent_usd: spent }) };\n  const cap = (j.spend_cap_usd === undefined ? null : j.spend_cap_usd);\n  const blocked = cap !== null && (spent + EST_NEXT_USD) > cap;\n  return { json: Object.assign({}, j, { cap_blocked: blocked, spent_usd: spent, est_next_usd: EST_NEXT_USD }) };\n});"
+   }
+  },
+  {
+   "id": "2123c1a4-af43-40ef-9193-4ed56f54e3e2",
+   "name": "Cap OK? (D4)",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1020,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ !$json.cap_blocked }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "5f87bdaa-7e41-4c32-ae53-2f25a02d6cdd",
+   "name": "Has Jobs?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    740,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ !$json.empty_run }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "59d083c4-6c5f-46bc-8203-456fade3fe31",
+   "name": "DB - Atomic Claim (F33)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1020,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE companies SET research_claimed_at = now(), research_claim_run_id = $1 WHERE id = $2::uuid AND research_claimed_at IS NULL RETURNING id::text AS claimed_company_id",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id, $json.company_id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "af982906-4fa1-4882-8a9e-626dfc773958",
+   "name": "Filter Claimed (F33)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const claimed = new Set($input.all().map(i => String(i.json.claimed_company_id || '')).filter(Boolean));\nconst jobs = $('Cap Gate (F28)').all().map(i => i.json).filter(j => !j.empty_run && !j.cap_blocked && claimed.has(String(j.company_id)));\nif (!jobs.length) return [{ json: { _claim_none: true, empty_run: true, stage: 'SF5', researched: 0, facts_saved: 0, signals_saved: 0, people_saved: 0 } }];\nreturn jobs.map(j => ({ json: { ...j, _claim_none: false } }));"
+   }
+  },
+  {
+   "id": "621cc193-f9ff-4894-aa8f-a1dc1a8fa3f6",
+   "name": "Claimed Any?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1300,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ !$json._claim_none }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "f0c59281-e2b5-4518-aa11-8b41c44994a5",
+   "name": "Tavily MCP - Search",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_search",
+     "cachedResultName": "tavily_search"
+    },
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "jsonInput": "={{ $json.mcp_input }}"
+   },
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "5738a8bc-6377-4ce6-abec-ab2ab876c8db",
+   "name": "Pack Evidence",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Build Jobs').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  let results = null;\n  try {\n    const root = typeof item.json === 'string' ? JSON.parse(item.json) : item.json;\n    const sc = (root && root.structuredContent) || root;\n    if (sc && Array.isArray(sc.results)) results = sc.results;\n    else if (root && Array.isArray(root.results)) results = root.results;\n    else if (root && Array.isArray(root.content)) { const t = root.content.find(c => c && c.type === 'text'); if (t) { const inner = JSON.parse(t.text); const isc = (inner && inner.structuredContent) || inner; if (isc && Array.isArray(isc.results)) results = isc.results; } }\n  } catch (e) {}\n  const cutSafe = (t, n) => { let x = String(t).slice(0, n); x = x.replace(/[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])/g, '').replace(/(?<![\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]/g, ''); return x; };\n  let text = '';\n  if (results) {\n    const parts = [];\n    for (const r of results) { if (r && r.url) parts.push('[' + r.url + ']\\n' + cutSafe(r.content || r.raw_content || '', 2200)); }\n    text = cutSafe(parts.join('\\n\\n'), 7000);\n  } else {\n    try { text = typeof item.json === 'string' ? item.json : JSON.stringify(item.json); } catch (e) { text = String(item.json); }\n    if (text.length > 7000) text = cutSafe(text, 7000);\n  }\n  const userMsg = 'Company: ' + job.name + '\\nCategory: ' + job.category + '\\nLocation: ' + job.location + '\\nWebsite: ' + job.website + '\\n\\nWEB EVIDENCE:\\n' + text;\n  return { json: { company_id: job.company_id, run_id: job.run_id, name: job.name, corpus: text,\n    research_payload: { model: ($('When Executed by Another Workflow').first().json.model_extract), temperature: 0.1, messages: [ { role: 'system', content: \"You are a research extractor. You receive a company and raw web evidence. Extract ONLY facts the evidence explicitly supports. Return ONLY a JSON object: {\\\"summary\\\": string, \\\"facts\\\": [{\\\"field\\\": string, \\\"value\\\": string, \\\"evidence_url\\\": string, \\\"evidence_quote\\\": string, \\\"confidence\\\": number}], \\\"signals\\\": [{\\\"signal_type\\\": \\\"hiring|expansion|new_post|review_activity|other\\\", \\\"detail\\\": string, \\\"evidence_url\\\": string}], \\\"people\\\": [{\\\"full_name\\\": string, \\\"title\\\": string, \\\"evidence_url\\\": string}]}. Every fact, signal and person MUST include an evidence_url copied from the evidence; every fact MUST include a short exact evidence_quote. ADDITIONALLY: if the evidence contains an EXPLICIT statement of how many people work at the business (the owner, staff, team or employees - a number, or a clear statement that the owner runs it alone), include a fact with field \\\"company_size\\\", value = exactly one of solo, micro_2_5, small_6_20, medium_21_50, large_50p (TOTAL people including the owner), and evidence_quote = the exact sentence stating it. Follower counts, like counts, posting frequency, review counts and vague phrases like \\\"small business\\\" do NOT count as headcount - omit company_size unless an explicit headcount statement exists. If the evidence does not support something, leave it out. Never guess or invent contact details, names or numbers.\" }, { role: 'user', content: userMsg } ] } } };\n});"
+   }
+  },
+  {
+   "id": "fc422ce6-6cd4-4393-af6c-dbf7b6a42c01",
+   "name": "LLM - Researcher",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1440,
+    400
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json.research_payload) }}",
+    "options": {
+     "timeout": 120000
+    }
+   },
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "c4nDlJtRtEyOzjmx",
+     "name": "Header Auth account"
+    }
+   }
+  },
+  {
+   "id": "76ba45ad-4c7a-435d-bed7-ef65a6569ae7",
+   "name": "Parse Extract",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const packs = $('Pack Evidence').all().map(i => i.json);\nconst TYPES = { hiring: 1, job_change: 1, funding: 1, expansion: 1, new_post: 1, review_activity: 1, other: 1 };\nreturn $input.all().map((item, idx) => {\n  const pack = packs[idx] || {};\n  let content = '';\n  try { content = item.json.choices[0].message.content || ''; } catch (e) {}\n  content = content.replace(/```json/g, '').replace(/```/g, '').trim();\n  let parsed = {};\n  try { parsed = JSON.parse(content); } catch (e) { parsed = {}; }\n  const facts = (parsed.facts || []).filter(f => f && f.field && f.value && f.evidence_url && f.evidence_quote)\n    .map(f => ({ field: String(f.field), value: String(f.value), evidence_url: String(f.evidence_url), evidence_quote: String(f.evidence_quote), confidence: Number(f.confidence) || 0.5 }));\n  const signals = (parsed.signals || []).filter(s => s && s.detail && s.evidence_url)\n    .map(s => ({ signal_type: TYPES[s.signal_type] ? s.signal_type : 'other', detail: String(s.detail), evidence_url: String(s.evidence_url) }));\n  const people = (parsed.people || []).filter(p => p && p.full_name && p.evidence_url)\n    .map(p => ({ full_name: String(p.full_name), title: String(p.title || ''), evidence_url: String(p.evidence_url) }));\n  const criticMsg = 'EVIDENCE:\\n' + (pack.corpus || '') + '\\n\\nFACTS TO CHECK:\\n' + JSON.stringify(facts.map(f => ({ field: f.field, value: f.value, evidence_quote: f.evidence_quote })), null, 1);\n  return { json: { company_id: pack.company_id, run_id: pack.run_id, summary: String(parsed.summary || ''), facts, signals, people, corpus: pack.corpus || '',\n    critic_payload: { model: ($('When Executed by Another Workflow').first().json.model_critic), temperature: 0, messages: [ { role: 'system', content: \"You are a strict fact-checker. You receive raw evidence and extracted facts. For each fact, decide whether the evidence text directly supports it. Return ONLY JSON: {\\\"verdicts\\\": [{\\\"field\\\": string, \\\"supported\\\": true}]}. If the evidence_quote is not present in, or clearly supported by, the evidence text, supported must be false.\" }, { role: 'user', content: criticMsg } ] } } };\n});"
+   }
+  },
+  {
+   "id": "cc434b31-99c8-42c6-a328-a3837bcd4e8f",
+   "name": "Verify Gate (F24)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "function normText(s) {\n  return String(s || '').normalize('NFKC')\n    .replace(/[\\u2018\\u2019]/g, \"'\").replace(/[\\u201C\\u201D]/g, '\"')\n    .replace(/\\s+/g, ' ').trim();\n}\nfunction sectionsOf(corpus) {\n  const map = {};\n  let parsed = null;\n  try { parsed = JSON.parse(corpus); } catch (e) {}\n  const results = parsed && ((parsed.structuredContent && parsed.structuredContent.results) || parsed.results);\n  if (Array.isArray(results)) {\n    for (const r of results) if (r && r.url) map[r.url] = String(r.content || r.raw_content || '');\n    return map;\n  }\n  const re = /\\[([^\\]]+)\\]\\s*\\n/g; let m; const idx = [];\n  while ((m = re.exec(corpus)) !== null) idx.push({ url: m[1], at: m.index, from: re.lastIndex });\n  if (idx.length) {\n    idx.forEach((s, i) => { map[s.url] = corpus.slice(s.from, i + 1 < idx.length ? idx[i + 1].at : corpus.length); });\n    return map;\n  }\n  return { '': corpus };\n}\nfunction findSection(map, url) {\n  if (map[url] !== undefined) return map[url];\n  const alt = url.endsWith('/') ? url.slice(0, -1) : url + '/';\n  if (map[alt] !== undefined) return map[alt];\n  return undefined;\n}\nreturn $input.all().map(item => {\n  const j = item.json;\n  const map = sectionsOf(j.corpus || '');\n  const verified = [], failures = [];\n  for (const f of (j.facts || [])) {\n    let sec = findSection(map, f.evidence_url);\n    let reanchoredFrom = null;\n    if (sec === undefined) {\n      // Re-anchor: the cited URL is not a corpus source, but the quote itself may still be\n      // verbatim in another fetched source. The anti-hallucination substance is the verbatim\n      // quote in fetched content; the URL is a pointer. If the quote is found verbatim in\n      // exactly one other section, re-anchor the fact to that true source and record it.\n      const nq = normText(f.evidence_quote);\n      const hits = Object.keys(map).filter(u => u.startsWith('http') && nq && normText(map[u]).includes(nq));\n      if (hits.length === 1) { reanchoredFrom = f.evidence_url; f.evidence_url = hits[0]; sec = map[hits[0]]; }\n    }\n    if (sec === undefined) { failures.push(Object.assign({}, f, { verification_failure: 'url_unresolved' })); continue; }\n    if (!normText(sec).includes(normText(f.evidence_quote))) { failures.push(Object.assign({}, f, { verification_failure: 'quote_not_verbatim' })); continue; }\n    if (reanchoredFrom) { f.reanchored_from = reanchoredFrom; }\n    if (f.field === 'company_size') {\n      const BANDS = { solo: 1, micro_2_5: 1, small_6_20: 1, medium_21_50: 1, large_50p: 1 };\n      if (!BANDS[String(f.value)]) { failures.push(Object.assign({}, f, { verification_failure: 'size_band_invalid' })); continue; }\n      verified.push(Object.assign({}, f, { quote_verified: true, confidence_level: Number(f.confidence) >= 0.8 ? 'high' : 'low' }));\n      continue;\n    }\n    verified.push(Object.assign({}, f, { quote_verified: true }));\n  }\n  const criticMsg = 'EVIDENCE:\\n' + (j.corpus || '') + '\\n\\nFACTS TO CHECK:\\n' + JSON.stringify(verified.map(f => ({ field: f.field, value: f.value, evidence_quote: f.evidence_quote })), null, 1);\n  return { json: Object.assign({}, j, { facts: verified, gate_failures: failures,\n    critic_payload: { model: ($('When Executed by Another Workflow').first().json.model_critic), temperature: 0, messages: [ { role: 'system', content: \"You are a strict fact-checker. You receive raw evidence and extracted facts. For each fact, decide whether the evidence text directly supports it. Return ONLY JSON: {\\\"verdicts\\\": [{\\\"field\\\": string, \\\"supported\\\": true}]}. If the evidence_quote is not present in, or clearly supported by, the evidence text, supported must be false.\" }, { role: 'user', content: criticMsg } ] } }) };\n});"
+   }
+  },
+  {
+   "id": "3b2ac6d4-318f-4689-aef9-4a8f7eda3a28",
+   "name": "LLM - Critic",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    2280,
+    400
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json.critic_payload) }}",
+    "options": {
+     "timeout": 120000
+    }
+   },
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "c4nDlJtRtEyOzjmx",
+     "name": "Header Auth account"
+    }
+   }
+  },
+  {
+   "id": "78ad9a11-2bd8-4c5e-bdae-ba4198121a99",
+   "name": "Build Save Payload",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2280,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const extracts = $('Verify Gate (F24)').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const ex = extracts[idx] || { facts: [], signals: [], people: [], corpus: '', summary: '' };\n  let content = '';\n  try { content = item.json.choices[0].message.content || ''; } catch (e) {}\n  content = content.replace(/```json/g, '').replace(/```/g, '').trim();\n  let verdicts = [];\n  try { verdicts = JSON.parse(content).verdicts || []; } catch (e) {}\n  const ok = {};\n  for (const v of verdicts) if (v && v.field) ok[v.field] = v.supported === true;\n  const facts = (ex.facts || []).filter(f => ok[f.field]);\n  const payload = { company_id: ex.company_id, run_id: ex.run_id || '', summary: ex.summary || '', corpus: (ex.corpus || '').slice(0, 4000), facts, gate_failures: ex.gate_failures || [], signals: ex.signals || [], people: ex.people || [] };\n  return { json: { payload: JSON.stringify(payload), company_id: ex.company_id, facts_kept: facts.length, facts_dropped: (ex.facts || []).length - facts.length } };\n});"
+   }
+  },
+  {
+   "id": "62d0d87a-b183-44f4-98c6-5ac03e3ae01c",
+   "name": "DB - Save Research",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2560,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH p AS (SELECT $1::jsonb AS j),\npack AS (INSERT INTO research_artifacts (company_id, field_name, value, source_url, raw_content, critic_verdict)\n  SELECT (j->>'company_id')::uuid, 'research_pack', jsonb_build_object('summary', j->>'summary'), NULL, j->>'corpus', 'unchecked' FROM p RETURNING id),\nfi AS (INSERT INTO research_artifacts (company_id, field_name, value, source_url, critic_verdict, quote_verified, quote_verified_at)\n  SELECT (j->>'company_id')::uuid, x->>'field', x, x->>'evidence_url', 'supported', true, now() FROM p, jsonb_array_elements(j->'facts') x RETURNING id),\ngf AS (INSERT INTO research_artifacts (company_id, field_name, value, source_url, critic_verdict, quote_verified, verification_failure)\n  SELECT (j->>'company_id')::uuid, x->>'field', x, x->>'evidence_url', 'dropped_gate', false, x->>'verification_failure' FROM p, jsonb_array_elements(COALESCE(j->'gate_failures', '[]'::jsonb)) x RETURNING id),\nsi AS (INSERT INTO signals (company_id, signal_type, detail, evidence_url)\n  SELECT (j->>'company_id')::uuid, COALESCE(x->>'signal_type','other'), x->>'detail', x->>'evidence_url' FROM p, jsonb_array_elements(j->'signals') x RETURNING id),\npi AS (INSERT INTO people (company_id, full_name, title, source, raw_payload)\n  SELECT (j->>'company_id')::uuid, x->>'full_name', x->>'title', 'tavily_research', x FROM p, jsonb_array_elements(j->'people') x RETURNING id),\nsp AS (INSERT INTO spend_ledger (run_id, company_id, provider, action, credits)\n  SELECT NULLIF(j->>'run_id','')::uuid, (j->>'company_id')::uuid, 'tavily', 'research_call', 1 FROM p RETURNING id),\npre AS (SELECT id, quarantine_reason AS was_reason FROM companies WHERE id = (SELECT (j->>'company_id')::uuid FROM p)),\nup AS (UPDATE companies c SET status = 'researched',\n  quarantined_at = CASE WHEN c.quarantine_reason = 'social_unverified' AND EXISTS (SELECT 1 FROM jsonb_array_elements((SELECT j->'facts' FROM p)) f WHERE f->>'field' IN ('business_type','company_type','industry','category','business_description','description'))\n       AND EXISTS (SELECT 1 FROM jsonb_array_elements((SELECT j->'facts' FROM p)) f WHERE f->>'field' IN ('address','headquarters','location')\n                     AND EXISTS (SELECT 1 FROM search_profiles sp, jsonb_array_elements_text(sp.business_context->'locations') loc\n                                 WHERE sp.id = c.search_profile_id AND sp.version = c.profile_version AND ((f->>'value') ILIKE '%' || loc || '%' OR (loc = 'Yangon' AND (f->>'value') ILIKE '%\u101b\u1014\u103a\u1000\u102f\u1014\u103a%') OR (loc = 'Mandalay' AND (f->>'value') ILIKE '%\u1019\u1014\u1039\u1010\u101c\u1031\u1038%') OR (loc = 'Bangkok' AND (f->>'value') ILIKE '%\u1018\u1014\u103a\u1000\u1031\u102c\u1000\u103a%')))) THEN NULL ELSE c.quarantined_at END,\n  quarantine_reason = CASE WHEN c.quarantine_reason = 'social_unverified' AND EXISTS (SELECT 1 FROM jsonb_array_elements((SELECT j->'facts' FROM p)) f WHERE f->>'field' IN ('business_type','company_type','industry','category','business_description','description'))\n       AND EXISTS (SELECT 1 FROM jsonb_array_elements((SELECT j->'facts' FROM p)) f WHERE f->>'field' IN ('address','headquarters','location')\n                     AND EXISTS (SELECT 1 FROM search_profiles sp, jsonb_array_elements_text(sp.business_context->'locations') loc\n                                 WHERE sp.id = c.search_profile_id AND sp.version = c.profile_version AND ((f->>'value') ILIKE '%' || loc || '%' OR (loc = 'Yangon' AND (f->>'value') ILIKE '%\u101b\u1014\u103a\u1000\u102f\u1014\u103a%') OR (loc = 'Mandalay' AND (f->>'value') ILIKE '%\u1019\u1014\u1039\u1010\u101c\u1031\u1038%') OR (loc = 'Bangkok' AND (f->>'value') ILIKE '%\u1018\u1014\u103a\u1000\u1031\u102c\u1000\u103a%')))) THEN NULL ELSE c.quarantine_reason END\n  WHERE c.id = (SELECT (j->>'company_id')::uuid FROM p) RETURNING id, quarantine_reason),\nclt AS (INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT NULLIF(j->>'run_id', ''), 'SF5 v-next.4', 'tavily', 'charge', 1, 0.008, (j->>'company_id')::uuid::text, 'sf5:tavily:' || COALESCE(NULLIF(j->>'run_id', ''), 'norun') || ':' || (j->>'company_id') FROM p ON CONFLICT (idempotency_key) DO NOTHING RETURNING id),\ncll AS (INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT NULLIF(j->>'run_id', ''), 'SF5 v-next.4', 'llm', 'charge', 2, NULL, (j->>'company_id')::uuid::text, 'sf5:llm:' || COALESCE(NULLIF(j->>'run_id', ''), 'norun') || ':' || (j->>'company_id') FROM p ON CONFLICT (idempotency_key) DO NOTHING RETURNING id)\nSELECT (SELECT count(*) FROM fi) AS facts_saved, (SELECT count(*) FROM si) AS signals_saved, (SELECT count(*) FROM pi) AS people_saved, (SELECT count(*) FROM gf) AS gate_dropped, (SELECT count(*) FROM clt) + (SELECT count(*) FROM cll) AS ledger_rows, (SELECT count(*) FROM up u JOIN pre ON pre.id = u.id WHERE pre.was_reason = 'social_unverified' AND u.quarantine_reason IS NULL) AS released, (SELECT count(*) FROM companies pc WHERE pc.search_profile_id = (SELECT search_profile_id FROM companies WHERE id = (SELECT (j->>'company_id')::uuid FROM p)) AND pc.quarantine_reason = 'social_unverified' AND pc.status = 'researched') AS quarantined_parked",
+    "options": {
+     "queryReplacement": "={{ [ $json.payload ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "77a4c753-536d-486c-b2ae-50e632879faf",
+   "name": "Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2840,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const saves = $input.all().map(i => i.json);\nreturn [{ json: { success: true, researched: saves.length,\n  facts_saved: saves.reduce((a, s) => a + (s.facts_saved || 0), 0),\n  signals_saved: saves.reduce((a, s) => a + (s.signals_saved || 0), 0),\n  people_saved: saves.reduce((a, s) => a + (s.people_saved || 0), 0),\n  released: saves.reduce((a, s) => a + (s.released || 0), 0), quarantined_parked: saves.length ? (saves[saves.length - 1].quarantined_parked || 0) : 0 } }];"
+   }
+  },
+  {
+   "id": "9dd56b5b-5f55-42bf-bd79-c2fb3bd7ddde",
+   "name": "Audit Alert Gate (D4)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2960,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const summary = ($input.first() && $input.first().json) || {};\nconst chk = ($('Audit Write Check (D4)').first() || {}).json || {};\nconst failed = !!chk.audit_failed;\nreturn [{ json: Object.assign({}, summary, { audit_failed: failed, sendTo: 'victor.job154@gmail.com', subject: chk.subject || '', body: chk.body || '' }) }];"
+   }
+  },
+  {
+   "id": "561e4e58-c98e-4084-a865-414c6bc45173",
+   "name": "Audit Failed? (end)",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    3080,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.audit_failed }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "298c48a4-de9f-418a-a8d7-f7f040ff2563",
+   "name": "Gmail - Audit Alert Draft (D4, NEVER SENDS)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1100,
+    300
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "sendTo": "={{ $json.sendTo }}",
+    "subject": "={{ $json.subject }}",
+    "emailType": "text",
+    "message": "={{ $json.body }}",
+    "options": {}
+   },
+   "webhookId": "df0d117a-0f00-4cee-ae75-44c5d580dda5",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "b83db845-02cb-4a0c-9539-7a2d4d735ef5",
+   "name": "Return - Final (D4)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3340,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const s = ($('Return').first() || {}).json || {}; return [{ json: s }];"
+   }
+  },
+  {
+   "id": "afeba2fc-3109-4450-9ba4-c676c4b25f4d",
+   "name": "Audit OK Pass (end)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3200,
+    460
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "return $input.all();"
+   }
+  },
+  {
+   "id": "0f8532eb-d796-4077-aaa3-df803f4987bf",
+   "name": "Return - Empty Run Summary",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    880,
+    560
+   ],
+   "parameters": {
+    "mode": "manual",
+    "includeOtherFields": false,
+    "assignments": {
+     "assignments": [
+      {
+       "id": "a1",
+       "name": "success",
+       "value": true,
+       "type": "boolean"
+      },
+      {
+       "id": "a2",
+       "name": "researched",
+       "value": 0,
+       "type": "number"
+      },
+      {
+       "id": "a3",
+       "name": "facts_saved",
+       "value": 0,
+       "type": "number"
+      },
+      {
+       "id": "a4",
+       "name": "signals_saved",
+       "value": 0,
+       "type": "number"
+      },
+      {
+       "id": "a5",
+       "name": "people_saved",
+       "value": 0,
+       "type": "number"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "c01e20eb-4f63-4edf-9b91-938dcf672b30",
+   "name": "DB - Insert Cap Blocked (F28)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1160,
+    240
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nVALUES ($1, 'SF5 v-next.4', 'tavily', 'cap_blocked', 1, 0.008, $2, 'sf5:cap:' || $1 || ':' || $2)\nON CONFLICT (idempotency_key) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id, $json.company_id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

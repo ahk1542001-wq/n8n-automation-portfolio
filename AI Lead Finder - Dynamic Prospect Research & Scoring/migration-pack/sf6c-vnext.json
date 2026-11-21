@@ -1,0 +1,628 @@
+{
+ "id": "97PalXcd45nGnNTO",
+ "name": "SF6c v-next - People Fetch (poll + save)",
+ "active": false,
+ "isArchived": false,
+ "versionId": "09d69ea7-90da-4292-b14a-e9e387f93bc5",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 19,
+ "createdAt": "2026-11-17T09:48:56.934Z",
+ "updatedAt": "2026-11-17T11:21:50.568Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true,
+  "errorWorkflow": "CsGScTpPxfp9E8Un"
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Stage Context",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Stage Context": {
+   "main": [
+    [
+     {
+      "node": "Build Run URL",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Run URL": {
+   "main": [
+    [
+     {
+      "node": "Apify - Get Run",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Apify - Get Run": {
+   "main": [
+    [
+     {
+      "node": "Poll Check",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Poll Check": {
+   "main": [
+    [
+     {
+      "node": "Run Finished?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Run Finished?": {
+   "main": [
+    [
+     {
+      "node": "Run Succeeded?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Wait 15s",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Run Succeeded?": {
+   "main": [
+    [
+     {
+      "node": "Build Dataset URL",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Build Failure Items",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Dataset URL": {
+   "main": [
+    [
+     {
+      "node": "Apify - Get Dataset",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Apify - Get Dataset": {
+   "main": [
+    [
+     {
+      "node": "Parse People",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Parse People": {
+   "main": [
+    [
+     {
+      "node": "DB - Save Person",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Save Person": {
+   "main": [
+    [
+     {
+      "node": "Company Rollup",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Company Rollup": {
+   "main": [
+    [
+     {
+      "node": "DB - Mark Checked + Events",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Mark Checked + Events": {
+   "main": [
+    [
+     {
+      "node": "Return - Summary",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Failure Items": {
+   "main": [
+    [
+     {
+      "node": "DB - Release Claims + Failure Events",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Release Claims + Failure Events": {
+   "main": [
+    [
+     {
+      "node": "Return - Summary (Run Failed)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Wait 15s": {
+   "main": [
+    [
+     {
+      "node": "Apify - Get Run",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "1c1cebb2-5f32-445c-b76f-3e92d0c40dbc",
+   "name": "Sticky Note b41af644",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF6c v-next - People Fetch (2026-11-17). Second half of SF6b: polls the persisted Apify run (started by SF6b), fetches the dataset by id, classifies people against the profile decision_maker_titles (deterministic phrase match, verbatim headline as evidence), saves ONLY decision-makers passing the SF6 association gate, writes per-company events + checked marks, releases claims on failure. Flat top-level chain by design (deep ifElse nesting inside branch arguments mis-wires in the SDK - proven 2026-11-17). No send node.",
+    "color": 5
+   }
+  },
+  {
+   "id": "1ad8e329-37f4-4aac-8023-acd4f7c675ff",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "apify_run_id",
+       "type": "string"
+      },
+      {
+       "name": "dataset_id",
+       "type": "string"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "batch_json",
+       "type": "string"
+      },
+      {
+       "name": "dm_titles_json",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "mtd_apify_usd",
+       "type": "number"
+      },
+      {
+       "name": "picked_count",
+       "type": "number"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "4aba1f00-3811-4a3a-8287-caece3e461ef",
+   "name": "Stage Context",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const t = $('When Executed by Another Workflow').first().json;\nlet batch = [];\nlet titles = [];\ntry { batch = JSON.parse(t.batch_json || '[]'); } catch (e) { batch = []; }\ntry { titles = JSON.parse(t.dm_titles_json || '[]'); } catch (e) { titles = []; }\nreturn [{ json: {\n  apify_run_id: t.apify_run_id || '',\n  dataset_id: t.dataset_id || '',\n  run_id: t.run_id || '',\n  batch: Array.isArray(batch) ? batch : [],\n  dm_titles: Array.isArray(titles) ? titles : [],\n  profile_version: Number(t.profile_version || 1),\n  mtd_apify_usd: Number(t.mtd_apify_usd || 0),\n  picked_count: Number(t.picked_count || 0)\n} }];"
+   }
+  },
+  {
+   "id": "38f55c48-d7a8-48de-b05e-283936d92ef2",
+   "name": "Build Run URL",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const j = $input.first().json;\nreturn [{ json: Object.assign({}, j, { run_url: 'https://api.apify.com/v2/actor-runs/' + j.apify_run_id, poll_started_at: Date.now() }) }];"
+   }
+  },
+  {
+   "id": "320e17cb-6705-45da-b95e-f6588c641253",
+   "name": "Apify - Get Run",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "method": "GET",
+    "url": "={{ $json.run_url }}",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "options": {
+     "timeout": 60000
+    }
+   },
+   "alwaysOutputData": true,
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "knrRqdSihRdH7fFq",
+     "name": "Header Auth account 2"
+    }
+   }
+  },
+  {
+   "id": "6788d01c-2b50-4cd8-b989-0e70cb8d6210",
+   "name": "Poll Check",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const stage = $('Stage Context').first().json;\nif (!stage.apify_run_id) {\n  return [{ json: { apify_run_id: '', dataset_id: '', status: 'NO_RUN', finished: true, succeeded: false, usage_usd: 0, run_id: stage.run_id, run_url: '' } }];\n}\nconst j = $input.first().json || {};\nconst data = j.data || {};\nconst status = String(data.status || '');\nconst startedAt = data.startedAt ? Date.parse(data.startedAt) : 0;\nlet t0 = 0;\ntry { t0 = Number($('Build Run URL').first().json.poll_started_at || 0); } catch (e) {}\nconst elapsedMin = t0 ? (Date.now() - t0) / 60000 : (startedAt ? (Date.now() - startedAt) / 60000 : 0);\nconst finished = ['SUCCEEDED', 'FAILED', 'ABORTED', 'TIMED-OUT'].includes(status);\nconst giveUp = !finished && elapsedMin > 8;\nreturn [{ json: {\n  apify_run_id: stage.apify_run_id,\n  dataset_id: stage.dataset_id || String(data.defaultDatasetId || ''),\n  status: status,\n  finished: finished || giveUp,\n  succeeded: status === 'SUCCEEDED',\n  usage_usd: Number(data.usageTotalUsd || 0),\n  run_id: stage.run_id,\n  run_url: 'https://api.apify.com/v2/actor-runs/' + stage.apify_run_id\n} }];"
+   }
+  },
+  {
+   "id": "9fb35b20-5b69-46a1-80ff-1dac1c1a6c44",
+   "name": "Run Finished?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1440,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.finished }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "6fca14a0-021c-4a0e-971b-96e333504d4f",
+   "name": "Run Succeeded?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1720,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.succeeded }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "4deace95-9139-4139-976e-1a3954f35123",
+   "name": "Build Dataset URL",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const j = $input.first().json;\nreturn [{ json: Object.assign({}, j, { dataset_url: 'https://api.apify.com/v2/datasets/' + j.dataset_id + '/items?clean=true&limit=1000' }) }];"
+   }
+  },
+  {
+   "id": "5234a09a-2ae7-433e-9c1e-bc86f239eaf9",
+   "name": "Apify - Get Dataset",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    2280,
+    400
+   ],
+   "parameters": {
+    "method": "GET",
+    "url": "={{ $json.dataset_url }}",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "options": {
+     "timeout": 120000,
+     "response": {
+      "response": {
+       "responseFormat": "json"
+      }
+     }
+    }
+   },
+   "alwaysOutputData": true,
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "knrRqdSihRdH7fFq",
+     "name": "Header Auth account 2"
+    }
+   }
+  },
+  {
+   "id": "c1f658de-364e-4523-b64f-5b0ea44d4f72",
+   "name": "Parse People",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2560,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const STOPWORDS = new Set(['the', 'and', 'co', 'ltd', 'company', 'store', 'shop', 'hotel', 'resort', 'bangkok', 'yangon', 'thailand', 'myanmar', 'facebook', 'page', 'official']);\nconst GENERIC = new Set(['training', 'service', 'services', 'mobile', 'phone', 'computer', 'electronics', 'hardware', 'fashion', 'trading', 'enterprise', 'enterprises', 'solution', 'solutions', 'technology', 'technologies', 'digital', 'media', 'express', 'global', 'international', 'modern', 'center', 'centre', 'group', 'beauty', 'star', 'king', 'best', 'top', 'world', 'accessories', 'garment', 'textile', 'food', 'travel', 'tour', 'tours', 'clinic', 'school', 'academy', 'studio', 'salon', 'cafe', 'restaurant', 'bakery', 'pharmacy', 'mart', 'market', 'online']);\nfunction normTokens(s) {\n  return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}\\s]/gu, ' ').split(/\\s+/).filter(w => w.length >= 3 && !STOPWORDS.has(w));\n}\nfunction normPhrase(s) {\n  return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}]+/gu, ' ').replace(/\\s+/g, ' ').trim();\n}\nfunction hashId(s) { let h = 5381; const str = String(s || ''); for (let i = 0; i < str.length; i++) { h = ((h * 33) ^ str.charCodeAt(i)) >>> 0; } return h.toString(16); }const stage = $('Stage Context').first().json;\nconst titles = (stage.dm_titles || []).map(t => ({ raw: t, norm: normPhrase(t) })).filter(t => t.norm);\nconst meta = stage.batch || [];\nconst bySlug = {};\nfor (const m of meta) bySlug[m.slug] = m;\nlet droppedSchema = 0;\nconst out = [];\nfor (const item of $input.all()) {\n  const p = item.json || {};\n  if (!p.fullName || !p.profileUrl || !p.publicIdentifier || !p.company) { droppedSchema++; continue; }\n  const m = bySlug[String(p.company)];\n  if (!m) { droppedSchema++; continue; }\n  const headline = String(p.headline || '');\n  const hNorm = ' ' + normPhrase(headline) + ' ';\n  let matchedTitle = '';\n  for (const t of titles) { if (hNorm.includes(' ' + t.norm + ' ')) { matchedTitle = t.raw; break; } }\n  const hToks = new Set(normTokens(headline));\n  const assoc = (m.distinctive_tokens || []).some(t => hToks.has(t)) || normPhrase(headline).replace(/ /g, '').includes(String(m.slug || '').toLowerCase().replace(/[^a-z0-9]/g, ''));\n  const dm = !!matchedTitle;\n  const save = dm && assoc;\n  const canonical = 'https://www.linkedin.com/in/' + String(p.publicIdentifier).toLowerCase();\n  const raw = Object.assign({}, p, { dm_matched_title: matchedTitle || null, dm_profile_version: stage.profile_version });\n  out.push({ json: {\n    company_id: m.company_id, full_name: String(p.fullName), title: headline,\n    linkedin_url: canonical, save_flag: save ? 1 : 0,\n    is_dm_match: dm, assoc_ok: assoc,\n    drop_reason: save ? '' : (dm ? 'association_unverified' : 'non_dm'),\n    raw_json: JSON.stringify(raw), source_url: canonical, evidence_quote: headline,\n    run_id: stage.run_id, id_hash: hashId(p.publicIdentifier),\n    charged: p.charged === true ? 1 : 0,\n    run_counts: null\n  } });\n}\nconst rawTotal = out.length + droppedSchema;\nconst counts = { returned: out.length, dropped_schema: droppedSchema, raw_total: rawTotal, schema_total_failure: (rawTotal > 0 && out.length === 0) ? 1 : 0 };\nfor (const o of out) o.json.run_counts = counts;\nif (!out.length) {\n  out.push({ json: { company_id: '00000000-0000-0000-0000-000000000000', full_name: '', title: '', linkedin_url: '', save_flag: 0, is_dm_match: false, assoc_ok: false, drop_reason: 'none', raw_json: '{}', source_url: '', evidence_quote: '', run_id: stage.run_id, id_hash: '', charged: 0, run_counts: counts, sentinel: true } });\n}\nreturn out;"
+   }
+  },
+  {
+   "id": "833e9aa6-68ba-4a03-9b39-6988349a3e12",
+   "name": "DB - Save Person",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2840,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH exist AS (SELECT company_id FROM people WHERE linkedin_url = $4 LIMIT 1),\nins AS (\n  INSERT INTO people (company_id, full_name, title, linkedin_url, is_decision_maker, source, raw_payload, source_url, evidence_quote, fetched_at, retention_until, retention_basis)\n  SELECT $1::uuid, $2, $3, $4, true, 'apify_linkedin', $6::jsonb, $7, $8, now(), now() + interval '12 months', 'legitimate_interest_b2b_public'\n  WHERE $5 = 1 AND NOT EXISTS (SELECT 1 FROM exist)\n  RETURNING id\n),\nled AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $9, 'SF6b', 'apify', 'charge', 1, 0.01, $1::text, 'sf6b:apify:' || $9 || ':' || $1::text || ':' || $10\n  WHERE $11 = 1\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING id\n)\nSELECT CASE\n  WHEN EXISTS (SELECT 1 FROM ins) THEN 'inserted'\n  WHEN $5 = 1 AND EXISTS (SELECT 1 FROM exist) AND (SELECT company_id FROM exist) = $1::uuid THEN 'dup_same'\n  WHEN $5 = 1 AND EXISTS (SELECT 1 FROM exist) THEN 'dup_cross'\n  WHEN $5 = 1 THEN 'save_failed'\n  ELSE 'dropped'\nEND AS outcome",
+    "options": {
+     "queryReplacement": "={{ [ $json.company_id, $json.full_name, $json.title, $json.linkedin_url, $json.save_flag, $json.raw_json, $json.source_url, $json.evidence_quote, $json.run_id, $json.id_hash, $json.charged ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "00d905df-d8e7-4d61-8c00-c678a18fc50c",
+   "name": "Company Rollup",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3120,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const stage = $('Stage Context').first().json;\nconst people = $('Parse People').all().map(i => i.json).filter(p => !p.sentinel);\nconst saves = $('DB - Save Person').all().map(i => i.json);\nconst byCompany = {};\nfor (const m of (stage.batch || [])) byCompany[m.company_id] = { returned: 0, charged: 0, dm_saved: 0, dup_same: 0, dup_cross: 0, non_dm_dropped: 0, association_dropped: 0 };\npeople.forEach((p, idx) => {\n  const c = byCompany[p.company_id]; if (!c) return;\n  c.returned++; c.charged += Number(p.charged || 0);\n  const outcome = (saves[idx] || {}).outcome || '';\n  if (p.save_flag === 1) {\n    if (outcome === 'inserted') c.dm_saved++;\n    else if (outcome === 'dup_same') c.dup_same++;\n    else if (outcome === 'dup_cross') c.dup_cross++;\n  } else if (p.drop_reason === 'non_dm') c.non_dm_dropped++;\n  else if (p.drop_reason === 'association_unverified') c.association_dropped++;\n});\nconst batch = stage.batch || [];\nif (!batch.length) return [{ json: { company_id: '00000000-0000-0000-0000-000000000000', run_id: stage.run_id, detail_json: '{}', is_first: 0, act: 0, drift: 0 } }];\nlet schemaFail = 0; let droppedSchema = 0;\ntry { const pc = $('Parse People').all().map(i => i.json).find(p => p.run_counts); if (pc) { schemaFail = Number(pc.run_counts.schema_total_failure || 0); droppedSchema = Number(pc.run_counts.dropped_schema || 0); } } catch (e) {}\nreturn batch.map((m, i) => {\n  const c = byCompany[m.company_id];\n  if (schemaFail) {\n    const detail = { outcome: 'schema_drift', source: 'apify_linkedin', linkedin_url: m.linkedin_url, dropped_schema: droppedSchema };\n    return { json: { company_id: m.company_id, run_id: stage.run_id, detail_json: JSON.stringify(detail), is_first: i === 0 ? 1 : 0, act: 0, drift: 1 } };\n  }\n  const detail = Object.assign({ outcome: c.returned === 0 ? 'searched_zero' : 'searched', source: 'apify_linkedin', linkedin_url: m.linkedin_url, dropped_schema: droppedSchema }, c);\n  return { json: { company_id: m.company_id, run_id: stage.run_id, detail_json: JSON.stringify(detail), is_first: i === 0 ? 1 : 0, act: 1, drift: 0 } };\n});"
+   }
+  },
+  {
+   "id": "9160f4ab-dbc8-4e04-b953-ecba44724b86",
+   "name": "DB - Mark Checked + Events",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    3400,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH u AS (\n  UPDATE companies SET linkedin_people_checked_at = now(), linkedin_people_next_check_at = NULL WHERE id = $1 AND $5 = 1\n  RETURNING id\n),\nrel AS (\n  UPDATE companies SET linkedin_people_claimed_at = NULL, linkedin_people_claim_run_id = NULL\n  WHERE id = $1 AND $6 = 1 AND linkedin_people_claim_run_id = $2\n  RETURNING id\n),\ne AS (\n  INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)\n  SELECT $2, $1, 'SF6b', 'apify_linkedin', $3::jsonb\n  WHERE EXISTS (SELECT 1 FROM u) OR EXISTS (SELECT 1 FROM rel)\n  RETURNING id\n),\nl AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $2, 'SF6b', 'apify', 'charge', 1, 0.005, $1::text, 'sf6b:apify-start:' || $2\n  WHERE $4 = 1 AND (EXISTS (SELECT 1 FROM u) OR EXISTS (SELECT 1 FROM rel))\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING id\n)\nSELECT (SELECT count(*) FROM u)::int AS updated",
+    "options": {
+     "queryReplacement": "={{ [ $json.company_id, $json.run_id, $json.detail_json, $json.is_first, $json.act, $json.drift || 0 ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "810daab9-8398-4cfb-a576-640a5dcdf24f",
+   "name": "Return - Summary",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3680,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "function tryAll(name) { try { return $(name).all().map(i => i.json); } catch (e) { return []; } }\nfunction tryFirst(name) { try { return $(name).first().json || {}; } catch (e) { return {}; } }\nconst stage = tryFirst('Stage Context');\nconst people = tryAll('Parse People').filter(p => !p.sentinel);\nconst saves = tryAll('DB - Save Person');\nconst saved = saves.filter(s => s.outcome === 'inserted').length;\nconst anyParse = tryAll('Parse People').find(p => p.run_counts);\nconst counts = (anyParse && anyParse.run_counts) || { returned: people.length, dropped_schema: 0 };\nconst chargedProfiles = people.reduce((a, p) => a + Number(p.charged || 0), 0);\nconst runApifyCost = chargedProfiles * 0.01 + ((stage.batch || []).length ? 0.005 : 0);\nconst mtdAfter = Number(stage.mtd_apify_usd || 0) + runApifyCost;\nlet failed = false;\ntry { failed = $('Build Failure Items').all().length > 0; } catch (e) {}\nreturn [{ json: {\n  success: !failed, stage: 'SF6b',\n  picked: Number(stage.picked_count || 0), slug_resolved: (stage.batch || []).length,\n  people_returned: counts.returned, dropped_schema: counts.dropped_schema, schema_drift: !!counts.schema_total_failure,\n  people_saved: saved, decision_makers_saved: saved,\n  non_dm_dropped: people.filter(p => p.drop_reason === 'non_dm').length,\n  association_dropped: people.filter(p => p.drop_reason === 'association_unverified').length,\n  dup_cross_company: saves.filter(s => s.outcome === 'dup_cross').length,\n  apify_profiles_charged: chargedProfiles,\n  apify_run_cost_usd: Math.round(runApifyCost * 1000) / 1000,\n  slug_search_cost_usd: Math.round(Number(stage.picked_count || 0) * 0.008 * 1000) / 1000,\n  total_stage_cost_usd: Math.round((runApifyCost + Number(stage.picked_count || 0) * 0.008) * 1000) / 1000,\n  mtd_apify_usd: Math.round(mtdAfter * 1000) / 1000,\n  mtd_warning: mtdAfter > 4.5,\n  apify_failed: failed,\n  cap_blocked: false, empty_run: false, gate_fail: false\n} }];"
+   }
+  },
+  {
+   "id": "8ffee6e6-9be1-4791-ab56-1a0536225005",
+   "name": "Build Failure Items",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    640
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const stage = $('Stage Context').first().json;\nlet usage = 0; let runId = stage.apify_run_id || '';\ntry { const pc = $('Poll Check').first().json; usage = Number(pc.usage_usd || 0); if (pc.apify_run_id) runId = String(pc.apify_run_id); } catch (e) {}\nconst batch = stage.batch || [];\nif (!batch.length) return [{ json: { company_id: '00000000-0000-0000-0000-000000000000', run_id: stage.run_id, usage_usd: 0, apify_run_id: runId, is_first: 0 } }];\nreturn batch.map((m, i) => ({ json: { company_id: m.company_id, run_id: stage.run_id, usage_usd: usage, apify_run_id: runId, is_first: i === 0 ? 1 : 0 } }));"
+   }
+  },
+  {
+   "id": "746f1f51-e7e5-44e1-b19e-ad1537da9420",
+   "name": "DB - Release Claims + Failure Events",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    2280,
+    640
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH u AS (\n  UPDATE companies SET linkedin_people_claimed_at = NULL, linkedin_people_claim_run_id = NULL WHERE id = $1 AND linkedin_people_claim_run_id = $2\n  RETURNING id\n),\ne AS (\n  INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)\n  SELECT $2, id, 'SF6b', 'apify_linkedin', '{\"outcome\":\"apify_failed\"}'::jsonb FROM u\n  RETURNING id\n),\nl AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $2, 'SF6b', 'apify', 'charge', 1, $3, $1::text, 'sf6b:apify-usage:' || $2 || ':' || $4\n  WHERE $5 = 1 AND EXISTS (SELECT 1 FROM u)\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING id\n)\nSELECT (SELECT count(*) FROM u)::int AS updated",
+    "options": {
+     "queryReplacement": "={{ [ $json.company_id, $json.run_id, $json.usage_usd, $json.apify_run_id, $json.is_first ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "b5a34100-ab6a-48a5-98a5-463b75873c4a",
+   "name": "Return - Summary (Run Failed)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2560,
+    640
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "function tryAll(name) { try { return $(name).all().map(i => i.json); } catch (e) { return []; } }\nfunction tryFirst(name) { try { return $(name).first().json || {}; } catch (e) { return {}; } }\nconst stage = tryFirst('Stage Context');\nconst people = tryAll('Parse People').filter(p => !p.sentinel);\nconst saves = tryAll('DB - Save Person');\nconst saved = saves.filter(s => s.outcome === 'inserted').length;\nconst anyParse = tryAll('Parse People').find(p => p.run_counts);\nconst counts = (anyParse && anyParse.run_counts) || { returned: people.length, dropped_schema: 0 };\nconst chargedProfiles = people.reduce((a, p) => a + Number(p.charged || 0), 0);\nconst runApifyCost = chargedProfiles * 0.01 + ((stage.batch || []).length ? 0.005 : 0);\nconst mtdAfter = Number(stage.mtd_apify_usd || 0) + runApifyCost;\nlet failed = false;\ntry { failed = $('Build Failure Items').all().length > 0; } catch (e) {}\nreturn [{ json: {\n  success: !failed, stage: 'SF6b',\n  picked: Number(stage.picked_count || 0), slug_resolved: (stage.batch || []).length,\n  people_returned: counts.returned, dropped_schema: counts.dropped_schema, schema_drift: !!counts.schema_total_failure,\n  people_saved: saved, decision_makers_saved: saved,\n  non_dm_dropped: people.filter(p => p.drop_reason === 'non_dm').length,\n  association_dropped: people.filter(p => p.drop_reason === 'association_unverified').length,\n  dup_cross_company: saves.filter(s => s.outcome === 'dup_cross').length,\n  apify_profiles_charged: chargedProfiles,\n  apify_run_cost_usd: Math.round(runApifyCost * 1000) / 1000,\n  slug_search_cost_usd: Math.round(Number(stage.picked_count || 0) * 0.008 * 1000) / 1000,\n  total_stage_cost_usd: Math.round((runApifyCost + Number(stage.picked_count || 0) * 0.008) * 1000) / 1000,\n  mtd_apify_usd: Math.round(mtdAfter * 1000) / 1000,\n  mtd_warning: mtdAfter > 4.5,\n  apify_failed: failed,\n  cap_blocked: false, empty_run: false, gate_fail: false\n} }];"
+   }
+  },
+  {
+   "id": "b05314c5-b3f3-4e32-aea6-0f40698fbac9",
+   "name": "Wait 15s",
+   "type": "n8n-nodes-base.wait",
+   "typeVersion": 1.1,
+   "position": [
+    1440,
+    640
+   ],
+   "parameters": {
+    "amount": 15
+   },
+   "webhookId": "2cbe6d99-2336-46c4-9a01-26fb4915a74f"
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

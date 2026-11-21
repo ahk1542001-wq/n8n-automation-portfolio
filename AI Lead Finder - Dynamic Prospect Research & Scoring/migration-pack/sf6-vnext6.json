@@ -1,0 +1,754 @@
+{
+ "id": "c9UrxhOwGjma1ZYY",
+ "name": "SF6 v-next.6 - Contact Waterfall + Social Attach Gate",
+ "active": false,
+ "isArchived": false,
+ "versionId": "bdf32934-0d2b-4b9a-b07d-cb10b00a3834",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 23,
+ "createdAt": "2026-11-19T09:32:44.300Z",
+ "updatedAt": "2026-11-19T09:32:46.978Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "DB - Load Spent",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Load Spent": {
+   "main": [
+    [
+     {
+      "node": "Stage Context",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Stage Context": {
+   "main": [
+    [
+     {
+      "node": "DB - Pick + Claim + Audit",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Pick + Claim + Audit": {
+   "main": [
+    [
+     {
+      "node": "Cap Gate",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cap Gate": {
+   "main": [
+    [
+     {
+      "node": "Has Work?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Has Work?": {
+   "main": [
+    [
+     {
+      "node": "Build Jobs",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Cap Blocked Ledger",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Jobs": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Search Facebook",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Search Facebook": {
+   "main": [
+    [
+     {
+      "node": "Reattach A",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach A": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Extract Site",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Extract Site": {
+   "main": [
+    [
+     {
+      "node": "Reattach B",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach B": {
+   "main": [
+    [
+     {
+      "node": "Parse Contacts",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Parse Contacts": {
+   "main": [
+    [
+     {
+      "node": "Build Provider Jobs",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Provider Jobs": {
+   "main": [
+    [
+     {
+      "node": "Apollo Needed?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Apollo Needed?": {
+   "main": [
+    [
+     {
+      "node": "Apollo - Org Enrich",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "DB - Save Contacts (No Provider)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Apollo - Org Enrich": {
+   "main": [
+    [
+     {
+      "node": "Merge Provider (Apollo)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Merge Provider (Apollo)": {
+   "main": [
+    [
+     {
+      "node": "DB - Save Contacts",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Save Contacts": {
+   "main": [
+    [
+     {
+      "node": "Return - Summary",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Save Contacts (No Provider)": {
+   "main": [
+    [
+     {
+      "node": "Return - Summary (No Provider)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Cap Blocked Ledger": {
+   "main": [
+    [
+     {
+      "node": "Return - Blocked/Empty Summary",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "c291ec3c-d7b6-4a02-90fe-b6f9e63af88f",
+   "name": "Sticky Note af7c393e",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF6 v-next - Contact Waterfall (owner-approved 2026-11-16). For scored companies (fit >= contact_min_fit, cap max_contact_companies, atomic claim, enrichment-once): (1) Facebook page via Tavily search with deterministic name match, (2) website + /contact extract for verbatim emails, FB links and stated size, (3) provider reveal SLOT - counted as provider_pending when provider_enabled and no email found; the Apollo HTTP node lands when the owner creates the Apollo credential (free-plan API access to be verified). Phone already lives on companies from Places and is surfaced by SF8 v-next.5. Every Tavily call writes cost_ledger rows (search $0.008, extract $0.008); spend_cap_usd honoured before any paid node. No send node anywhere.",
+    "color": 5
+   }
+  },
+  {
+   "id": "8706d103-6736-4f90-9d05-bcc45348d35b",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "contact_min_fit",
+       "type": "number"
+      },
+      {
+       "name": "max_contact_companies",
+       "type": "number"
+      },
+      {
+       "name": "spend_cap_usd",
+       "type": "number"
+      },
+      {
+       "name": "provider_enabled",
+       "type": "boolean"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "f5f63a3e-f6be-42b6-825d-461dbfd7f67c",
+   "name": "DB - Load Spent",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT COALESCE(SUM(cost_usd), 0)::float AS spent_usd FROM cost_ledger WHERE run_id = $1",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id || '' ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "7be77f10-b161-47c0-8bcd-d621d30d63f5",
+   "name": "Stage Context",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const t = $('When Executed by Another Workflow').first().json;\nconst spent = Number($input.first().json.spent_usd || 0);\nreturn [{ json: {\n  search_profile_id: t.search_profile_id,\n  profile_version: Number(t.profile_version || 1),\n  run_id: t.run_id || '',\n  contact_min_fit: Number(t.contact_min_fit ?? 30),\n  max_contact_companies: Number(t.max_contact_companies ?? 10),\n  spend_cap_usd: (t.spend_cap_usd === undefined || t.spend_cap_usd === null || t.spend_cap_usd === '') ? null : Number(t.spend_cap_usd),\n  provider_enabled: t.provider_enabled === true,\n  spent_usd: spent\n} }];"
+   }
+  },
+  {
+   "id": "433ada28-ec79-4d31-abf5-29b8c212e0dc",
+   "name": "DB - Pick + Claim + Audit",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH cand AS (\n  SELECT c.id, c.name, c.location, c.website, c.phone, c.source, (c.raw_payload->>'social_url') AS social_url, s.fit_score,\n         ROW_NUMBER() OVER (ORDER BY s.fit_score DESC, c.id ASC) AS rn\n  FROM companies c\n  JOIN scores s ON s.company_id = c.id\n    AND s.search_profile_id = $1 AND s.profile_version = $2\n  WHERE s.fit_score >= $3\n    AND c.contact_enriched_at IS NULL\n    AND c.quarantined_at IS NULL\n    AND (c.contact_claimed_at IS NULL OR c.contact_claimed_at < now() - interval '1 hour')\n),\naudit AS (\n  INSERT INTO selection_audit (run_id, workflow, company_id, rank, fit_score, cutoff, selection_reason, is_first_skipped)\n  SELECT $5, 'SF6', id::text, rn::int, fit_score, $3,\n         CASE WHEN rn <= $4 THEN 'selected' ELSE 'cap_reached' END,\n         (rn = $4 + 1)\n  FROM cand WHERE rn <= $4 + 1\n  ON CONFLICT DO NOTHING\n  RETURNING 1\n),\nclaim AS (\n  UPDATE companies c\n  SET contact_claimed_at = now(), contact_claim_run_id = $5\n  FROM cand\n  WHERE c.id = cand.id AND cand.rn <= $4\n  RETURNING c.id AS company_id, cand.name, cand.location, cand.website, cand.phone, cand.source, cand.social_url, cand.fit_score AS fit\n)\nSELECT company_id::text AS company_id, name, location, website, phone, source, social_url, fit, false AS empty_run FROM claim\nUNION ALL\nSELECT NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, true AS empty_run\nWHERE NOT EXISTS (SELECT 1 FROM claim)",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id, $json.profile_version, $json.contact_min_fit, $json.max_contact_companies, $json.run_id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "07577893-188b-4a45-b159-bab0c69d8108",
+   "name": "Cap Gate",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const ctx = $('Stage Context').first().json;\nconst rows = $input.all().map(i => i.json);\nconst picked = rows.filter(r => !r.empty_run);\nconst EST_PER_COMPANY = ctx.provider_enabled ? 0.026 : 0.016;\nconst cap = ctx.spend_cap_usd;\nconst blocked = cap !== null && picked.length > 0 && (ctx.spent_usd + EST_PER_COMPANY) > cap;\nif (!picked.length) {\n  return [{ json: { has_work: false, empty_run: true, cap_blocked: false, picked: 0, run_id: ctx.run_id } }];\n}\nreturn picked.map(r => ({ json: Object.assign({}, r, {\n  has_work: !blocked, cap_blocked: blocked, empty_run: false,\n  run_id: ctx.run_id, search_profile_id: ctx.search_profile_id,\n  profile_version: ctx.profile_version, provider_enabled: ctx.provider_enabled\n}) }));"
+   }
+  },
+  {
+   "id": "40d1056f-9878-47c8-b1f4-b776c496b715",
+   "name": "Has Work?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1440,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.has_work }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "57e59554-786a-44b6-826f-493b47737abe",
+   "name": "Build Jobs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1720,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "function contactUrl(w) {\n  const base = String(w).replace(/\\/+$/, '');\n  return base + '/contact';\n}\nreturn $input.all().map(i => {\n  const j = i.json;\n  const website = j.website || '';\n  const urls = website ? [website, contactUrl(website)] : [];\n  return { json: Object.assign({}, j, {\n    has_website: !!website,\n    mcp_fb: JSON.stringify({ query: '\"' + j.name + '\" ' + (j.location || '') + ' facebook', search_depth: 'basic', max_results: 5 }),\n    mcp_extract: JSON.stringify({ urls: urls, extract_depth: 'basic' })\n  }) };\n});"
+   }
+  },
+  {
+   "id": "5f1bcfb9-9ecc-4659-9436-5ae8374f28d6",
+   "name": "Tavily MCP - Search Facebook",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    2000,
+    320
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_search",
+     "cachedResultName": "tavily_search"
+    },
+    "jsonInput": "={{ $json.mcp_fb }}"
+   },
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "a3336948-317f-44b7-a625-15f1ec7c83d1",
+   "name": "Reattach A",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2280,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Build Jobs').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  let t = '';\n  try { t = typeof item.json === 'string' ? item.json : JSON.stringify(item.json); } catch (e) { t = String(item.json); }\n  return { json: Object.assign({}, job, { fb_text: t }) };\n});"
+   }
+  },
+  {
+   "id": "59b089a6-7b7c-43a0-9f5f-443fbb807b14",
+   "name": "Tavily MCP - Extract Site",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    2560,
+    320
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_extract",
+     "cachedResultName": "tavily_extract"
+    },
+    "jsonInput": "={{ $json.mcp_extract }}"
+   },
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "0efb60c7-d79a-4046-aa3b-1c8c7511b124",
+   "name": "Reattach B",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2840,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const prev = $('Reattach A').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const p = prev[idx] || {};\n  let t = '';\n  const j = item.json || {};\n  if (!j.error && !j.message) {\n    try { t = typeof j === 'string' ? j : JSON.stringify(j); } catch (e) { t = String(j); }\n  }\n  return { json: Object.assign({}, p, { extract_text: t, extract_attempted: !!p.has_website }) };\n});"
+   }
+  },
+  {
+   "id": "0586cb0b-6be0-4750-a000-9858c11a9775",
+   "name": "Parse Contacts",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3120,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const STOPWORDS = new Set(['the','and','co','ltd','company','store','shop','hotel','resort','bangkok','yangon','thailand','myanmar','facebook','page','official']);\nfunction normTokens(s) {\n  return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}\\s]/gu, ' ').split(/\\s+/).filter(w => w.length >= 3 && !STOPWORDS.has(w));\n}\nconst GENERIC = new Set(['training','service','services','mobile','phone','computer','electronics','hardware','fashion','trading','enterprise','enterprises','solution','solutions','technology','technologies','digital','media','express','global','international','modern','center','centre','group','beauty','star','king','best','top','world','accessories','garment','textile','food','travel','tour','tours','clinic','school','academy','studio','salon','cafe','restaurant','bakery','pharmacy','mart','market','online']);\nfunction pickFacebook(companyName, results, strictCtx) {\n  const strict = !!(strictCtx && strictCtx.strict);\n  const nameToks = new Set(normTokens(companyName));\n  if (!nameToks.size || !Array.isArray(results)) return null;\n  for (const r of results) {\n    const url = String((r && r.url) || '');\n    const m = url.match(/^https?:\\/\\/(?:www\\.)?facebook\\.com\\/([^/?#]+)/i);\n    if (!m) continue;\n    const slug = decodeURIComponent(m[1]);\n    if (['sharer','login','help','groups','watch','marketplace','gaming','profile.php'].includes(slug.toLowerCase())) continue;\n    const candToks = new Set([...normTokens(slug.replace(/[-_.]/g, ' ')), ...normTokens(r.title || '')]);\n    const matched = [];\n    for (const t of nameToks) { if (candToks.has(t)) matched.push(t); }\n    const slugFlat = slug.toLowerCase().replace(/[^a-z0-9]/g, '');\n    for (const t of nameToks) { if (!matched.includes(t) && t.length >= 4 && slugFlat.includes(t)) matched.push(t); }\n    const distinctive = matched.filter(t => !GENERIC.has(t));\n    if (distinctive.length >= 1 || matched.length >= 2) {\n      if (strict) {\n        const hay = ((r.title || '') + ' ' + (r.content || '')).toLowerCase();\n        const locHit = (strictCtx.locationToks || []).some(t => hay.includes(t));\n        const phoneHit = /\\+?\\d[\\d\\s\\-]{7,}\\d/.test(r.content || '');\n        const handle = (strictCtx.handle || '').toLowerCase();\n        const crossHit = !!handle && (slug.toLowerCase() === handle || hay.includes(handle));\n        if (!locHit && !phoneHit && !crossHit) continue;\n      }\n      return { facebook_url: 'https://www.facebook.com/' + slug, matched_token: distinctive[0] || matched[0] };\n    }\n  }\n  return null;\n}\nfunction pickFacebookFromText(companyName, text) {\n  if (!text) return null;\n  const urls = String(text).match(/https?:\\/\\/(?:www\\.)?facebook\\.com\\/[A-Za-z0-9_.\\-%]+/gi) || [];\n  return pickFacebook(companyName, urls.map(u => ({ url: u, title: '' })));\n}\nconst EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/g;\nfunction pickEmail(text) {\n  if (!text) return null;\n  const found = String(text).match(EMAIL_RE) || [];\n  for (const e of found) {\n    if (/^(noreply|no-reply|donotreply|mailer-daemon|postmaster)@/i.test(e)) continue;\n    if (/\\.(png|jpe?g|gif|svg|webp|css|js)$/i.test(e)) continue;\n    if (/example\\.(com|org|net)$/i.test(e)) continue;\n    if (/^(your|user|name|email)@/i.test(e)) continue;\n    return e;\n  }\n  return null;\n}\nfunction pickSize(text) {\n  if (!text) return null;\n  const s = String(text);\n  let m = s.match(/(\\d{1,4})\\s*(?:\\+\\s*)?(employees|staff members|team members)/i);\n  if (m) return m[1] + ' ' + m[2].toLowerCase();\n  m = s.match(/team of\\s*(\\d{1,4})/i);\n  if (m) return m[1] + ' team members';\n  m = s.match(/(\\d{1,4})\\s*(?:\\+\\s*)?(rooms|guest rooms)/i);\n  if (m) return m[1] + ' ' + m[2].toLowerCase();\n  return null;\n}\nfunction searchResults(text) {\n  try {\n    const outer = JSON.parse(text);\n    const inner = typeof outer === 'string' ? JSON.parse(outer) : outer;\n    if (inner && Array.isArray(inner.results)) return inner.results;\n    if (inner && inner.content) {\n      const c = typeof inner.content === 'string' ? JSON.parse(inner.content) : inner.content;\n      if (c && Array.isArray(c.results)) return c.results;\n    }\n  } catch (e) {}\n  return null;\n}\nreturn $input.all().map(i => {\n  const j = i.json;\n  let fb = null;\n  const strictCtx = { strict: (j.source === 'tavily_social' && !j.website), locationToks: normTokens(j.location || ''), handle: (String(j.social_url || '').split('/').filter(Boolean).pop() || '').replace(/^@/, '') };\n  const res = searchResults(j.fb_text || '');\n  if (res) fb = pickFacebook(j.name, res, strictCtx);\n  if (!fb && !strictCtx.strict) fb = pickFacebookFromText(j.name, j.fb_text || '');\n  if (!fb && !strictCtx.strict) fb = pickFacebookFromText(j.name, j.extract_text || '');\n  const email = pickEmail(j.extract_text || '');\n  const size = pickSize(j.extract_text || '');\n  return { json: {\n    company_id: j.company_id, run_id: j.run_id, name: j.name,\n    facebook_url: fb ? fb.facebook_url : '',\n    email: email || '',\n    company_size: size || '',\n    fb_found: !!fb, email_found: !!email, size_found: !!size,\n    extract_attempted: !!j.extract_attempted,\n    provider_enabled: !!j.provider_enabled\n  } };\n});"
+   }
+  },
+  {
+   "id": "c86467d0-5c93-4b8d-a4cf-91bb04699119",
+   "name": "Build Provider Jobs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3260,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "function domainOf(w) {\n  let s = String(w || '').trim().toLowerCase();\n  if (!s) return '';\n  s = s.replace(/^https?:\\/\\//, '').replace(/^www\\./, '');\n  s = s.split('/')[0].split('?')[0].split('#')[0].split(':')[0];\n  if (!s || s.includes('facebook.') || s.includes('instagram.') || s.includes('linktr.ee') || s.includes('google.') || s.includes('g.page')) return '';\n  return s;\n}\nconst sites = $('Reattach B').all().map(i => i.json);\nreturn $('Parse Contacts').all().map((i, idx) => {\n  const j = i.json;\n  const website = (sites[idx] && sites[idx].website) || '';\n  const domain = domainOf(website);\n  const need = j.provider_enabled === true && !!domain && (!j.email || !j.company_size);\n  return { json: Object.assign({}, j, {\n    website, domain, apollo_need: need,\n    phone_new: '', provider_used: false,\n    size_source: j.company_size ? 'website' : ''\n  }) };\n});"
+   }
+  },
+  {
+   "id": "71d67605-ac57-4fce-b277-89b3960503cc",
+   "name": "Apollo Needed?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    3400,
+    320
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.apollo_need }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "f808affd-476c-4c25-991a-35e6d2eb065b",
+   "name": "Apollo - Org Enrich",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    3540,
+    320
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.apollo.io/api/v1/organizations/enrich",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ domain: $json.domain }) }}",
+    "options": {
+     "timeout": 30000
+    }
+   },
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "c4nDlJtRtEyOzjmx",
+     "name": "Header Auth account"
+    }
+   }
+  },
+  {
+   "id": "3e26954c-11e1-4ab3-a1d1-bf6eb5b76a88",
+   "name": "Merge Provider (Apollo)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3680,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Build Provider Jobs').all().map(i => i.json).filter(j => j.apollo_need === true);\nreturn $input.all().map((item, idx) => {\n  const base = Object.assign({}, jobs[idx] || {});\n  const org = (item.json && item.json.organization) || null;\n  if (org) {\n    base.provider_used = true;\n    if (!base.facebook_url && org.facebook_url) base.facebook_url = String(org.facebook_url);\n    if (!base.company_size && org.estimated_num_employees) { base.company_size = String(org.estimated_num_employees); base.size_source = 'apollo'; }\n    if (org.phone) base.phone_new = String(org.phone);\n  }\n  return { json: base };\n});"
+   }
+  },
+  {
+   "id": "6a23a00d-717b-4bf4-9eb9-8161a2a92889",
+   "name": "DB - Save Contacts",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    3820,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH u AS (\n  UPDATE companies SET\n    facebook_url = CASE WHEN (facebook_url IS NULL OR facebook_url = '') AND NULLIF($3, '') IS NOT NULL THEN $3 ELSE facebook_url END,\n    email = CASE WHEN (email IS NULL OR email = '') AND NULLIF($4, '') IS NOT NULL THEN $4 ELSE email END,\n    email_source = CASE WHEN (email IS NULL OR email = '') AND NULLIF($4, '') IS NOT NULL THEN 'website' ELSE email_source END,\n    company_size = CASE WHEN (company_size IS NULL OR company_size = '') AND NULLIF($5, '') IS NOT NULL THEN $5 ELSE company_size END,\n    size_source = CASE WHEN (company_size IS NULL OR company_size = '') AND NULLIF($5, '') IS NOT NULL THEN $9 ELSE size_source END,\n    phone = COALESCE(NULLIF(phone, ''), NULLIF($7, '')),\n    contact_enriched_at = now()\n  WHERE id = $1 AND contact_claim_run_id = $2\n  RETURNING id\n),\nl1 AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  VALUES ($2, 'SF6', 'tavily', 'charge', 1, 0.008, $1::text, 'sf6:search:' || $2 || ':' || $1::text)\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING 1\n),\nl2 AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $2, 'SF6', 'tavily', 'charge', 1, 0.008, $1::text, 'sf6:extract:' || $2 || ':' || $1::text\n  WHERE $6 = 1\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING 1\n),\nl3 AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $2, 'SF6', 'people_finder', 'estimate', 1, 0.01, $1::text, 'sf6:apollo:' || $2 || ':' || $1::text\n  WHERE $8 = 1\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING 1\n)\nSELECT (SELECT count(*) FROM u)::int AS updated",
+    "options": {
+     "queryReplacement": "={{ [ $json.company_id, $json.run_id, $json.facebook_url || '', $json.email || '', $json.company_size || '', ($json.extract_attempted === true ? 1 : 0), $json.phone_new || '', ($json.provider_used === true ? 1 : 0), $json.size_source || 'website'] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "4f9a5aff-37d0-40ae-83fe-0210bdbceee1",
+   "name": "Return - Summary",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3960,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const parsed = $('Parse Contacts').all().map(i => i.json);\nlet provUsed = 0;\ntry { provUsed = $('Merge Provider (Apollo)').all().filter(m => m.json.provider_used).length; } catch (e) {}\nconst pending = parsed.filter(p => p.provider_enabled && !p.email_found).length;\nreturn [{ json: {\n  success: true, stage: 'SF6',\n  picked: parsed.length,\n  fb_found: parsed.filter(p => p.fb_found).length,\n  emails_found: parsed.filter(p => p.email_found).length,\n  size_found: parsed.filter(p => p.size_found).length,\n  provider_used: provUsed,\n  provider_pending: Math.max(0, pending - provUsed),\n  tavily_credits: parsed.length + parsed.filter(p => p.extract_attempted).length\n} }];"
+   }
+  },
+  {
+   "id": "c6374c75-c34f-48df-9d78-e2c4fa38e511",
+   "name": "DB - Save Contacts (No Provider)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    3540,
+    560
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH u AS (\n  UPDATE companies SET\n    facebook_url = CASE WHEN (facebook_url IS NULL OR facebook_url = '') AND NULLIF($3, '') IS NOT NULL THEN $3 ELSE facebook_url END,\n    email = CASE WHEN (email IS NULL OR email = '') AND NULLIF($4, '') IS NOT NULL THEN $4 ELSE email END,\n    email_source = CASE WHEN (email IS NULL OR email = '') AND NULLIF($4, '') IS NOT NULL THEN 'website' ELSE email_source END,\n    company_size = CASE WHEN (company_size IS NULL OR company_size = '') AND NULLIF($5, '') IS NOT NULL THEN $5 ELSE company_size END,\n    size_source = CASE WHEN (company_size IS NULL OR company_size = '') AND NULLIF($5, '') IS NOT NULL THEN $9 ELSE size_source END,\n    phone = COALESCE(NULLIF(phone, ''), NULLIF($7, '')),\n    contact_enriched_at = now()\n  WHERE id = $1 AND contact_claim_run_id = $2\n  RETURNING id\n),\nl1 AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  VALUES ($2, 'SF6', 'tavily', 'charge', 1, 0.008, $1::text, 'sf6:search:' || $2 || ':' || $1::text)\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING 1\n),\nl2 AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $2, 'SF6', 'tavily', 'charge', 1, 0.008, $1::text, 'sf6:extract:' || $2 || ':' || $1::text\n  WHERE $6 = 1\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING 1\n),\nl3 AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $2, 'SF6', 'people_finder', 'estimate', 1, 0.01, $1::text, 'sf6:apollo:' || $2 || ':' || $1::text\n  WHERE $8 = 1\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING 1\n)\nSELECT (SELECT count(*) FROM u)::int AS updated",
+    "options": {
+     "queryReplacement": "={{ [ $json.company_id, $json.run_id, $json.facebook_url || '', $json.email || '', $json.company_size || '', ($json.extract_attempted === true ? 1 : 0), $json.phone_new || '', ($json.provider_used === true ? 1 : 0), $json.size_source || 'website'] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "08cf7b22-af47-43e7-a4ad-73c27ebadd7d",
+   "name": "Return - Summary (No Provider)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3820,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const parsed = $('Parse Contacts').all().map(i => i.json);\nlet provUsed = 0;\ntry { provUsed = $('Merge Provider (Apollo)').all().filter(m => m.json.provider_used).length; } catch (e) {}\nconst pending = parsed.filter(p => p.provider_enabled && !p.email_found).length;\nreturn [{ json: {\n  success: true, stage: 'SF6',\n  picked: parsed.length,\n  fb_found: parsed.filter(p => p.fb_found).length,\n  emails_found: parsed.filter(p => p.email_found).length,\n  size_found: parsed.filter(p => p.size_found).length,\n  provider_used: provUsed,\n  provider_pending: Math.max(0, pending - provUsed),\n  tavily_credits: parsed.length + parsed.filter(p => p.extract_attempted).length\n} }];"
+   }
+  },
+  {
+   "id": "b2298c2e-d0d6-4fba-8476-5f62d5ffe4f3",
+   "name": "DB - Cap Blocked Ledger",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1720,
+    560
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nVALUES ($1, 'SF6', 'tavily', 'cap_blocked', 1, 0.016, $2, 'sf6:cap:' || $1 || ':' || $2)\nON CONFLICT (idempotency_key) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id, $json.company_id || '' ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "3c606fa4-b812-4ec6-87bf-4dc0e2eba282",
+   "name": "Return - Blocked/Empty Summary",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    560
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const rows = $input.all().map(i => i.json);\nconst first = rows[0] || {};\nreturn [{ json: {\n  success: true, stage: 'SF6',\n  picked: 0, fb_found: 0, emails_found: 0, size_found: 0, provider_pending: 0, tavily_credits: 0,\n  empty_run: !!first.empty_run, cap_blocked: !!first.cap_blocked\n} }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

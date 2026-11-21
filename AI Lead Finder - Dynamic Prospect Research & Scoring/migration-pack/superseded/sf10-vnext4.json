@@ -1,0 +1,1381 @@
+{
+ "workflow": {
+  "id": "06pshUNoZstK0xAd",
+  "name": "SF10 v-next.4 - Outreach Drafts (standalone)",
+  "active": false,
+  "isArchived": false,
+  "versionId": "fb422714-535e-4cd8-a101-c2b8347255cb",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "nodeCount": 43,
+  "createdAt": "2026-11-19T07:06:45.970Z",
+  "updatedAt": "2026-11-19T07:06:48.596Z",
+  "settings": {
+   "executionOrder": "v1",
+   "availableInMCP": true
+  },
+  "tags": [],
+  "parentFolderId": null,
+  "scopes": [
+   "execution:delete",
+   "execution:list",
+   "execution:read",
+   "execution:reveal",
+   "workflow:create",
+   "workflow:delete",
+   "workflow:disableRedaction",
+   "workflow:enableRedaction",
+   "workflow:execute",
+   "workflow:execute-chat",
+   "workflow:export",
+   "workflow:import",
+   "workflow:list",
+   "workflow:move",
+   "workflow:publish",
+   "workflow:read",
+   "workflow:share",
+   "workflow:unpublish",
+   "workflow:unshare",
+   "workflow:update"
+  ],
+  "canExecute": true,
+  "connections": {
+   "When Executed by Another Workflow": {
+    "main": [
+     [
+      {
+       "node": "DB - Load Profile",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Load Profile": {
+    "main": [
+     [
+      {
+       "node": "Config Gate",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Config Gate": {
+    "main": [
+     [
+      {
+       "node": "Config OK?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Config OK?": {
+    "main": [
+     [
+      {
+       "node": "Is Generate?",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "Return - Stopped",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Is Generate?": {
+    "main": [
+     [
+      {
+       "node": "Sheet - Read Control",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "Is Regen?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Sheet - Read Control": {
+    "main": [
+     [
+      {
+       "node": "Collect Control Rows",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Collect Control Rows": {
+    "main": [
+     [
+      {
+       "node": "DB - Upsert Suppression",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Upsert Suppression": {
+    "main": [
+     [
+      {
+       "node": "DB - Call Counts",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Call Counts": {
+    "main": [
+     [
+      {
+       "node": "DB - Select Eligible",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Select Eligible": {
+    "main": [
+     [
+      {
+       "node": "Preview + Preflight",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Preview + Preflight": {
+    "main": [
+     [
+      {
+       "node": "Proceed Generate?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Proceed Generate?": {
+    "main": [
+     [
+      {
+       "node": "Build LLM Request",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "Return - Preview",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Build LLM Request": {
+    "main": [
+     [
+      {
+       "node": "LLM - Generate",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "LLM - Generate": {
+    "main": [
+     [
+      {
+       "node": "Gates - Attempt 1",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Gates - Attempt 1": {
+    "main": [
+     [
+      {
+       "node": "DB - Ledger Call 1",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Ledger Call 1": {
+    "main": [
+     [
+      {
+       "node": "Restore - Gates 1",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Restore - Gates 1": {
+    "main": [
+     [
+      {
+       "node": "Gate 1 Pass?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Gate 1 Pass?": {
+    "main": [
+     [
+      {
+       "node": "DB - Insert Draft 1",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "DB - Insert Failure 1",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Is Regen?": {
+    "main": [
+     [
+      {
+       "node": "DB - Load Regen",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "DB - Load Sweep",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Load Regen": {
+    "main": [
+     [
+      {
+       "node": "DB - Regen Evidence",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Regen Evidence": {
+    "main": [
+     [
+      {
+       "node": "Regen - Carry Config",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Regen - Carry Config": {
+    "main": [
+     [
+      {
+       "node": "Build Regen Request",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Build Regen Request": {
+    "main": [
+     [
+      {
+       "node": "LLM - Regen",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "LLM - Regen": {
+    "main": [
+     [
+      {
+       "node": "Gates - Attempt 2",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Gates - Attempt 2": {
+    "main": [
+     [
+      {
+       "node": "DB - Ledger Call 2",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Ledger Call 2": {
+    "main": [
+     [
+      {
+       "node": "Restore - Gates 2",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Restore - Gates 2": {
+    "main": [
+     [
+      {
+       "node": "Gate 2 Pass?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Gate 2 Pass?": {
+    "main": [
+     [
+      {
+       "node": "DB - Insert Draft 2",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "DB - Insert Failure 2",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Insert Draft 2": {
+    "main": [
+     [
+      {
+       "node": "Restore - After Draft 2",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Restore - After Draft 2": {
+    "main": [
+     [
+      {
+       "node": "DB - Mark Regen Done",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Insert Failure 2": {
+    "main": [
+     [
+      {
+       "node": "Restore - After Failure 2",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Restore - After Failure 2": {
+    "main": [
+     [
+      {
+       "node": "DB - Mark Manual Queue",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Load Sweep": {
+    "main": [
+     [
+      {
+       "node": "Similarity Sweep",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Similarity Sweep": {
+    "main": [
+     [
+      {
+       "node": "DB - Sweep Reject",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Sweep Reject": {
+    "main": [
+     [
+      {
+       "node": "Return - Sweep",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   }
+  },
+  "nodes": [
+   {
+    "id": "64cb7e48-261a-48db-aba9-84fce8912f79",
+    "name": "Sticky Note 70915793",
+    "type": "n8n-nodes-base.stickyNote",
+    "typeVersion": 1,
+    "position": [
+     100,
+     448
+    ],
+    "parameters": {
+     "content": {
+      "content": "## SF10 v-next.4 - Outreach Drafts (standalone)\nOwner-triggered. Modes: generate (step-1 drafts for approved leads, deterministic gates, pending_audit), regen (one corrective pass for regen_pending failures), sweep (similarity gate over a batch). DRAFTS ONLY - no send node exists. Export = SF10X. Design: sf10/DESIGN.md v4 (Wonder READY TO BUILD).",
+      "position": [
+       -1200,
+       40
+      ],
+      "dimensions": {
+       "width": 560,
+       "height": 300
+      },
+      "color": 5
+     }
+    }
+   },
+   {
+    "id": "7a7f27de-9b1a-4ff2-8beb-165b40164d31",
+    "name": "When Executed by Another Workflow",
+    "type": "n8n-nodes-base.executeWorkflowTrigger",
+    "typeVersion": 1.1,
+    "position": [
+     -560,
+     260
+    ],
+    "parameters": {
+     "inputSource": "jsonExample",
+     "jsonExample": "{\"profile_id\": \"96824851-cdeb-4922-945a-f90bf7d9c227\", \"profile_version\": 1, \"run_id\": \"\", \"mode\": \"generate\", \"dry_run\": true, \"confirm\": false}"
+    }
+   },
+   {
+    "id": "693afee2-52e4-4062-8369-b369cc4ef8b3",
+    "name": "DB - Load Profile",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     -320,
+     260
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "SELECT id, version, status, business_context, profile\nFROM search_profiles WHERE id = $1 AND version = $2",
+     "options": {
+      "queryReplacement": "={{ [ $('When Executed by Another Workflow').first().json.profile_id, $('When Executed by Another Workflow').first().json.profile_version || 1 ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "107d2961-e979-481f-8d41-c32a2a05a69c",
+    "name": "Config Gate",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     -80,
+     260
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const trig = $('When Executed by Another Workflow').first().json;\nconst prof = $input.first().json || {};\nconst out = { proceed: false, stop_reason: '', mode: trig.mode || 'generate',\n  mode_generate: false, mode_regen: false, mode_sweep: false,\n  profile_id: trig.profile_id || '', profile_version: trig.profile_version || 1,\n  run_id: trig.run_id || '', dry_run: trig.dry_run !== false, confirm: trig.confirm === true };\nif (!prof || !prof.business_context) { out.stop_reason = 'profile_not_found'; return [{ json: out }]; }\nif (prof.status !== 'approved') { out.stop_reason = 'profile_not_approved'; return [{ json: out }]; }\nconst ctx = prof.business_context || {};\nconst oc = ctx.outreach || {};\nout.language = oc.language || '';\nout.sender_name = oc.sender_name || '';\nout.business_name = ctx.business_name || '';\nout.what_they_sell = ctx.what_they_sell || '';\nout.greeting = (oc.voice && oc.voice['greeting_' + out.language]) || '';\nout.signoff = (oc.voice && oc.voice['signoff_' + out.language]) || '';\nout.first_person_form = (oc.voice && oc.voice.first_person_form) || '';\nout.spend_cap_usd = (typeof oc.spend_cap_usd === 'number') ? oc.spend_cap_usd : null;\nout.min_fit = (typeof oc.min_fit === 'number') ? oc.min_fit : null;\nout.est_cost_per_call = (typeof oc.est_cost_per_call === 'number') ? oc.est_cost_per_call : null;\nout.max_calls_per_day = (typeof oc.max_calls_per_day === 'number') ? oc.max_calls_per_day : null;\nout.max_calls_per_week = (typeof oc.max_calls_per_week === 'number') ? oc.max_calls_per_week : null;\nout.max_batch = (typeof oc.max_batch === 'number') ? oc.max_batch : null;\nconst need = [];\nif (out.mode === 'generate' && oc.enabled !== true) need.push('outreach_not_enabled');\nif (!out.sender_name) need.push('sender_name');\nif (!out.business_name) need.push('business_name');\nif (!out.what_they_sell && out.mode !== 'sweep') need.push('what_they_sell');\nif (!['my', 'en'].includes(out.language)) need.push('language');\nif (!out.greeting) need.push('greeting');\nif (!out.signoff) need.push('signoff');\nif (out.language === 'my' && !out.first_person_form) need.push('first_person_form');\nif (out.spend_cap_usd === null || out.spend_cap_usd <= 0) need.push('spend_cap_usd');\nif (out.est_cost_per_call === null || out.est_cost_per_call <= 0) need.push('est_cost_per_call');\nif (out.max_calls_per_day === null) need.push('max_calls_per_day');\nif (out.max_calls_per_week === null) need.push('max_calls_per_week');\nif (out.max_batch === null) need.push('max_batch');\nif (out.mode === 'generate' && out.min_fit === null) need.push('min_fit');\nif (need.length) { out.stop_reason = 'config_missing:' + need.join(','); return [{ json: out }]; }\nout.proceed = true;\nout.mode_generate = out.mode === 'generate';\nout.mode_regen = out.mode === 'regen';\nout.mode_sweep = out.mode === 'sweep';\nreturn [{ json: out }];"
+    }
+   },
+   {
+    "id": "72cea81e-5f60-4099-af2c-201b86403f4d",
+    "name": "Config OK?",
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.2,
+    "position": [
+     160,
+     260
+    ],
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "loose",
+       "version": 2
+      },
+      "conditions": [
+       {
+        "leftValue": "={{ $json.proceed }}",
+        "operator": {
+         "type": "boolean",
+         "operation": "true"
+        }
+       }
+      ],
+      "combinator": "and"
+     }
+    }
+   },
+   {
+    "id": "e26a50f0-f7e2-4ffe-9771-7efa96e0bc88",
+    "name": "Is Generate?",
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.2,
+    "position": [
+     400,
+     160
+    ],
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "loose",
+       "version": 2
+      },
+      "conditions": [
+       {
+        "leftValue": "={{ $json.mode_generate }}",
+        "operator": {
+         "type": "boolean",
+         "operation": "true"
+        }
+       }
+      ],
+      "combinator": "and"
+     }
+    }
+   },
+   {
+    "id": "4d5970f5-e13a-4256-af9b-09bbf75382e1",
+    "name": "Sheet - Read Control",
+    "type": "n8n-nodes-base.googleSheets",
+    "typeVersion": 4.2,
+    "position": [
+     640,
+     60
+    ],
+    "parameters": {
+     "resource": "sheet",
+     "operation": "read",
+     "documentId": {
+      "__rl": true,
+      "mode": "id",
+      "value": "1dF2mdjUFc6D0jFTvhxbby6DJxWo4T6Fw0UrWEHI20JM",
+      "cachedResultName": "Lead Finder - Approval View (v-next F32)"
+     },
+     "sheetName": {
+      "__rl": true,
+      "mode": "name",
+      "value": "Outreach Control",
+      "cachedResultName": "Outreach Control"
+     },
+     "options": {}
+    },
+    "alwaysOutputData": true,
+    "credentials": {
+     "googleSheetsOAuth2Api": {
+      "id": "wvhan6bLKL00ty7F",
+      "name": "Google Sheets account"
+     }
+    }
+   },
+   {
+    "id": "983b12ae-669f-40d0-a799-60a894f5a3c1",
+    "name": "Collect Control Rows",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     880,
+     60
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const rows = $('Sheet - Read Control').all().map(i => i.json);\nconst map = { sent: 'owner_contacted', discarded: 'discarded', do_not_contact: 'do_not_contact' };\nconst list = [];\nfor (const r of rows) {\n  const a = String(r.Action || '').trim().toLowerCase();\n  if (r.company_id && map[a]) list.push({ company_id: String(r.company_id), person_key: '', reason: map[a] });\n}\nreturn [{ json: { payload: JSON.stringify(list), count: list.length } }];"
+    }
+   },
+   {
+    "id": "1c7985ec-9432-43b9-9e74-3b009f2fcfc1",
+    "name": "DB - Upsert Suppression",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     1120,
+     60
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "INSERT INTO outreach_suppression (company_id, person_key, reason, created_by)\nSELECT (r->>'company_id')::uuid, NULLIF(r->>'person_key',''), r->>'reason', $2\nFROM jsonb_array_elements($1::jsonb) r\nON CONFLICT (company_id, person_key, reason) DO NOTHING\nRETURNING company_id",
+     "options": {
+      "queryReplacement": "={{ [ $json.payload, 'sheet:Outreach Control' ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "9d518859-f52f-4d92-9056-95c1436645cb",
+    "name": "DB - Call Counts",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     1360,
+     60
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "SELECT\n  (SELECT count(*) FROM cost_ledger WHERE workflow = 'SF10' AND event_type = 'charge' AND created_at >= date_trunc('day', now())) AS day_calls,\n  (SELECT count(*) FROM cost_ledger WHERE workflow = 'SF10' AND event_type = 'charge' AND created_at >= date_trunc('week', now())) AS week_calls",
+     "options": {}
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "561b8ff3-35a9-4fbd-b02f-8007eb9bb4fb",
+    "name": "DB - Select Eligible",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     1600,
+     60
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "WITH prof AS (SELECT profile FROM search_profiles WHERE id = $1 AND version = $2),\nfields AS (SELECT jsonb_array_elements_text(profile->'research_fields') AS f FROM prof)\nSELECT c.id AS company_id, c.name AS company_name, c.category, c.location,\n       c.email AS company_email, c.facebook_url, s.fit_score,\n       a.decided_at AS approval_at,\n       ev.evidence_quote, ev.evidence_url, ev.observed_at,\n       p.id AS person_id, p.full_name AS person_name, p.title AS person_title,\n       p.email AS person_email,\n       (c.id::text || '|' || COALESCE(p.full_name, '')) AS person_key,\n       CASE\n         WHEN p.email IS NOT NULL AND p.email_status = 'verified'\n              AND p.email !~* '^(info|contact|admin|hello|support|sales)@'\n           THEN 'email'\n         WHEN c.email IS NOT NULL AND c.email <> '' THEN 'email'\n         WHEN c.facebook_url IS NOT NULL AND c.facebook_url <> '' THEN 'messenger'\n       END AS channel,\n       CASE\n         WHEN p.email IS NOT NULL AND p.email_status = 'verified'\n              AND p.email !~* '^(info|contact|admin|hello|support|sales)@'\n           THEN 'person'\n         ELSE 'business'\n       END AS addressee,\n       CASE\n         WHEN p.email IS NOT NULL AND p.email_status = 'verified'\n              AND p.email !~* '^(info|contact|admin|hello|support|sales)@'\n           THEN 'verified direct email of decision-maker'\n         WHEN c.email IS NOT NULL AND c.email <> '' THEN 'company email (generic route)'\n         ELSE 'facebook page (business route)'\n       END AS targeting_reason\nFROM companies c\nJOIN scores s ON s.company_id = c.id AND s.search_profile_id = $1 AND s.profile_version = $2\nJOIN LATERAL (\n  SELECT decision, decided_at FROM approvals\n  WHERE company_id = c.id ORDER BY decided_at DESC LIMIT 1\n) a ON a.decision = 'approved' AND a.decided_at >= now() - interval '14 days'\nJOIN LATERAL (\n  SELECT ra.value->>'evidence_quote' AS evidence_quote,\n         COALESCE(ra.value->>'evidence_url', ra.source_url) AS evidence_url,\n         COALESCE((ra.value->>'observed_at')::timestamptz, ra.created_at) AS observed_at\n  FROM research_artifacts ra\n  WHERE ra.company_id = c.id\n    AND ra.field_name IN (SELECT f FROM fields)\n    AND ra.value->>'evidence_quote' IS NOT NULL\n    AND COALESCE((ra.value->>'observed_at')::timestamptz, ra.created_at) >= now() - interval '30 days'\n  ORDER BY COALESCE((ra.value->>'observed_at')::timestamptz, ra.created_at) DESC\n  LIMIT 1\n) ev ON true\nLEFT JOIN LATERAL (\n  SELECT pp.* FROM people pp\n  WHERE pp.company_id = c.id AND pp.is_decision_maker = true\n    AND NOT EXISTS (SELECT 1 FROM outreach_suppression sx\n                    WHERE sx.company_id = c.id\n                      AND sx.person_key = (c.id::text || '|' || pp.full_name))\n  ORDER BY (pp.source = 'tavily_xray') DESC, pp.created_at\n  LIMIT 1\n) p ON true\nWHERE c.search_profile_id = $1\n  AND c.quarantined_at IS NULL\n  AND s.fit_score >= $3\n  AND NOT EXISTS (SELECT 1 FROM outreach_suppression sx WHERE sx.company_id = c.id AND sx.person_key IS NULL)\n  AND NOT EXISTS (SELECT 1 FROM outreach_drafts d WHERE d.company_id = c.id AND d.step = 1)\n  AND (p.email IS NOT NULL OR (c.email IS NOT NULL AND c.email <> '') OR (c.facebook_url IS NOT NULL AND c.facebook_url <> ''))\nORDER BY s.fit_score DESC\nLIMIT 30",
+     "options": {
+      "queryReplacement": "={{ [ $('Config Gate').first().json.profile_id, $('Config Gate').first().json.profile_version, $('Config Gate').first().json.min_fit ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "7c9162a6-cd9f-4e60-a71e-0a423d7145a0",
+    "name": "Preview + Preflight",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     1840,
+     60
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const cfg = $('Config Gate').first().json;\nconst counts = $('DB - Call Counts').first().json || { day_calls: 0, week_calls: 0 };\nconst items = $input.all().map(i => i.json);\nconst n = items.length;\nconst byChannel = {};\nfor (const it of items) byChannel[it.channel] = (byChannel[it.channel] || 0) + 1;\nconst worstCalls = n * 2;\nconst worstCost = worstCalls * cfg.est_cost_per_call;\nconst dayRoom = Math.floor((cfg.max_calls_per_day - Number(counts.day_calls || 0)) / 2);\nconst weekRoom = Math.floor((cfg.max_calls_per_week - Number(counts.week_calls || 0)) / 2);\nlet slice = Math.min(n, cfg.max_batch, Math.max(0, dayRoom), Math.max(0, weekRoom));\nlet reason = '';\nif (worstCost > cfg.spend_cap_usd) { slice = 0; reason = 'preflight_over_spend_cap'; }\nif (!cfg.confirm) reason = reason || 'not_confirmed';\nif (cfg.dry_run) reason = reason || 'dry_run';\nconst preview = { eligible: n, by_channel: byChannel, worst_case_calls: worstCalls,\n  worst_case_cost_usd: worstCost, day_calls_so_far: Number(counts.day_calls || 0),\n  week_calls_so_far: Number(counts.week_calls || 0), will_generate: slice,\n  dry_run: cfg.dry_run, confirm: cfg.confirm };\nif (cfg.dry_run || !cfg.confirm || slice <= 0) {\n  return [{ json: { proceed_generate: false, preview, reason: reason || 'caps_exhausted' } }];\n}\nreturn items.slice(0, slice).map(it => ({ json: { ...it, ...cfg, attempt: 1, proceed_generate: true, preview } }));"
+    }
+   },
+   {
+    "id": "a2003eb4-34d4-4b4f-8736-e76685c37a79",
+    "name": "Proceed Generate?",
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.2,
+    "position": [
+     2080,
+     60
+    ],
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "loose",
+       "version": 2
+      },
+      "conditions": [
+       {
+        "leftValue": "={{ $json.proceed_generate }}",
+        "operator": {
+         "type": "boolean",
+         "operation": "true"
+        }
+       }
+      ],
+      "combinator": "and"
+     }
+    }
+   },
+   {
+    "id": "eeba3d6d-cb39-4c52-b33f-cdd8d70c27d8",
+    "name": "Build LLM Request",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     2320,
+     60
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const outs = [];\nfor (const item of $input.all()) {\nconst it = item.json;\nconst firstName = it.person_name ? String(it.person_name).split(' ')[0] : '';\nconst facts = [\n  'Sender business: ' + it.business_name,\n  'What the sender sells: ' + it.what_they_sell,\n  'Target company: ' + it.company_name + ' (' + (it.category || '') + ', ' + (it.location || '') + ')',\n  it.addressee === 'person'\n    ? 'Addressee: the decision-maker, first name ' + firstName + (it.person_title ? ', title ' + it.person_title : '') + '. You may use the first name once.'\n    : 'Addressee: the business team. Do NOT name any individual person.',\n  'Evidence (the only specific fact you may use): \"' + it.evidence_quote + '\"'\n].join('\\n');\nconst langRule = it.language === 'my'\n  ? 'Write middle_text in Myanmar (Burmese) Unicode script only. Use the first-person form ' + it.first_person_form + '. Plain respectful business register.'\n  : 'Write middle_text in English. Plain respectful business register.';\nlet user = facts + '\\n\\n' + langRule;\nif (it.attempt === 2 && it.reason_codes) {\n  user += '\\n\\nYour previous draft was rejected for these reasons: ' + it.reason_codes + '. Fix exactly those problems.';\n}\nconst system = 'You write the MIDDLE section of one short first outreach message. Return ONLY a JSON object: {\"subject\": string|null, \"middle_text\": string, \"evidence_quote_used\": string}. Rules: base one sentence on the evidence and copy the evidence text exactly into evidence_quote_used; invent NOTHING (no numbers, prices, dates, names, links, results, or promises that are not in the facts); no hype, no urgency, no guarantees; ' +\n  (it.channel === 'email' ? 'subject: a short honest subject line (never starting with Re: or Fw:).' : 'subject: must be null (this is a Messenger message).');\nouts.push({ json: { ...it, payload: { model: 'muse-spark-1.3', temperature: 0.4,\n  messages: [ { role: 'system', content: system }, { role: 'user', content: user } ] } } });\n}\nreturn outs;"
+    }
+   },
+   {
+    "id": "1bafd860-0dca-437f-b68a-dee2defed8a7",
+    "name": "LLM - Generate",
+    "type": "n8n-nodes-base.httpRequest",
+    "typeVersion": 4.2,
+    "position": [
+     2560,
+     60
+    ],
+    "parameters": {
+     "method": "POST",
+     "url": "https://api.meta.ai/v1/chat/completions",
+     "authentication": "genericCredentialType",
+     "genericAuthType": "httpHeaderAuth",
+     "sendBody": true,
+     "contentType": "json",
+     "specifyBody": "json",
+     "jsonBody": "={{ $json.payload }}",
+     "options": {
+      "timeout": 240000
+     }
+    },
+    "credentials": {
+     "httpHeaderAuth": {
+      "id": "c4nDlJtRtEyOzjmx",
+      "name": "Header Auth account"
+     }
+    }
+   },
+   {
+    "id": "95140232-4f8d-4d0d-b2de-7dc4cc86877d",
+    "name": "Gates - Attempt 1",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     2800,
+     60
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const src = $('Build LLM Request').all();\nconst outs = [];\nconst norm = s => (s || '').normalize('NFC').replace(/\\s+/g, ' ').trim();\nconst BANNED_EN = ['guaranteed', 'guarantee', 'risk-free', 'risk free', '#1', 'number one', 'limited time', 'limited-time', 'act now', 'double your', 'increase revenue', 'boost sales', 'for free', 'free trial', 'no risk'];\nconst BANNED_MY = ['\u1021\u102c\u1019\u1001\u1036', '\u1021\u1001\u1019\u1032\u1037', '\u1021\u1000\u1031\u102c\u1004\u103a\u1038\u1006\u102f\u1036\u1038', '\u101c\u1000\u103a\u1019\u101c\u103d\u1010\u103a', '\u1021\u1001\u103b\u102d\u1014\u103a\u1021\u1000\u1014\u1037\u103a\u1021\u101e\u1010\u103a'];\nconst RECENT_EN = ['recently', 'just opened', 'newly'];\nconst RECENT_MY = ['\u1019\u1000\u103c\u102c\u101e\u1031\u1038\u1001\u1004\u103a', '\u101c\u1010\u103a\u1010\u101c\u1031\u102c', '\u1001\u102f\u1010\u101c\u1031\u102c', '\u1019\u1000\u103c\u102c\u101e\u1031\u1038\u1019\u102e'];\nfor (let idx = 0; idx < $input.all().length; idx++) {\n  const it = src[idx].json;\n  const resp = $input.all()[idx].json || {};\n  let raw = '';\n  try { raw = resp.choices[0].message.content || ''; } catch (e) { raw = ''; }\n  let parsed = null;\n  try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); } catch (e) { parsed = null; }\n  const reasons = [];\n  const middle = parsed && typeof parsed.middle_text === 'string' ? parsed.middle_text : '';\n  const subject = parsed && typeof parsed.subject === 'string' ? parsed.subject : (parsed ? null : null);\n  if (!parsed) reasons.push('unparseable_output');\n  if (parsed && !middle) reasons.push('empty_middle');\n  const lowMid = middle.toLowerCase(), lowSub = (subject || '').toLowerCase();\n  // evidence substring gate\n  const q = norm(parsed && parsed.evidence_quote_used);\n  const art = norm(it.evidence_quote);\n  if (!q || q.length < 12 || !art.includes(q)) reasons.push('evidence_mismatch');\n  // invented numbers\n  const blob = norm(it.evidence_quote + ' ' + it.company_name).replace(/,/g, '');\n  const nums = (middle + ' ' + (subject || '')).match(/[0-9][0-9,]*(\\.[0-9]+)?%?/g) || [];\n  for (const tk of nums) { if (!blob.includes(tk.replace(/,/g, ''))) { reasons.push('invented_number'); break; } }\n  // links / addresses\n  if (/https?:\\/\\/|www\\.|@/.test(middle) || /https?:\\/\\/|www\\./.test(subject || '')) reasons.push('unapproved_link');\n  // banned lexicon\n  for (const w of BANNED_EN) { if (lowMid.includes(w) || lowSub.includes(w)) { reasons.push('banned_claim'); break; } }\n  for (const w of BANNED_MY) { if (middle.includes(w) || (subject || '').includes(w)) { reasons.push('banned_claim'); break; } }\n  // placeholders / leakage\n  if (/\\{\\{|\\}\\}|\\[(name|company|insert|your)/i.test(middle) || /as an ai|i am an ai|language model|lorem/i.test(middle)) reasons.push('placeholder_or_leakage');\n  // foreign scripts (thai/cjk/kana/hangul/cyrillic)\n  if (/[\\u0E00-\\u0E7F\\u4E00-\\u9FFF\\u3040-\\u31FF\\uAC00-\\uD7AF\\u0400-\\u04FF]/.test(middle)) reasons.push('foreign_script');\n  // language + script gates\n  if (it.language === 'my') {\n    if (!/[\\u1000-\\u109F]/.test(middle)) reasons.push('wrong_language');\n    if (/[\\u1060-\\u1097]/.test(middle)) reasons.push('zawgyi_suspect');\n    if (middle.normalize('NFC') !== middle) reasons.push('non_nfc');\n    const wrong = it.first_person_form === '\u1000\u103b\u103d\u1014\u103a\u1010\u1031\u102c\u103a' ? '\u1000\u103b\u103d\u1014\u103a\u1019' : '\u1000\u103b\u103d\u1014\u103a\u1010\u1031\u102c\u103a';\n    if (middle.includes(wrong)) reasons.push('wrong_first_person_form');\n    if (middle.includes('\u1004\u102b\u1010\u102d\u102f\u1037') || middle.includes('\u1004\u102b\u1037')) reasons.push('wrong_first_person_form');\n    if ([...middle].length > 600) reasons.push('too_long');\n  } else {\n    if (middle.split(/\\s+/).filter(Boolean).length > 120) reasons.push('too_long');\n  }\n  // recency\n  const ageDays = (Date.now() - new Date(it.observed_at).getTime()) / 86400000;\n  if (ageDays > 7) {\n    for (const w of RECENT_EN) { if (lowMid.includes(w)) { reasons.push('unsupported_recency'); break; } }\n    if (!reasons.includes('unsupported_recency')) for (const w of RECENT_MY) { if (middle.includes(w)) { reasons.push('unsupported_recency'); break; } }\n  }\n  // targeting: business drafts must not name the person\n  if (it.addressee === 'business' && it.person_name && middle.includes(it.person_name)) reasons.push('person_named_in_business_draft');\n  // subject rules\n  if (it.channel === 'email') {\n    if (!subject) reasons.push('subject_missing');\n    else {\n      if (subject.length > 80) reasons.push('subject_too_long');\n      if (/^(re|fw|fwd)\\s*:/i.test(subject)) reasons.push('fake_thread_subject');\n    }\n  } else if (subject) reasons.push('messenger_subject_present');\n  const pass = reasons.length === 0;\n  outs.push({ json: { ...it, gate_pass: pass, reason_codes: [...new Set(reasons)],\n    subject: it.channel === 'email' ? subject : null,\n    body: pass ? (it.greeting + '\\n\\n' + middle + '\\n\\n' + it.signoff) : '',\n    body_text: middle || raw.slice(0, 2000) } });\n}\nreturn outs;"
+    }
+   },
+   {
+    "id": "fa1f5641-6bce-4e34-a559-6cf547859862",
+    "name": "DB - Ledger Call 1",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     3040,
+     60
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nVALUES ($1, 'SF10', 'llm', 'charge', 1, $2, $3, 'sf10:call:' || $1 || ':' || $3::text || ':' || $4::text)\nON CONFLICT (idempotency_key) DO NOTHING\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.run_id, $json.est_cost_per_call, $json.company_id, $json.attempt ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "3d913c20-c6e0-4b24-89f3-acfc07b4a3db",
+    "name": "Restore - Gates 1",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     3280,
+     60
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "return $('Gates - Attempt 1').all();"
+    }
+   },
+   {
+    "id": "941af8cf-e0bc-45f9-a19c-bd8111691abd",
+    "name": "Gate 1 Pass?",
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.2,
+    "position": [
+     3520,
+     60
+    ],
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "loose",
+       "version": 2
+      },
+      "conditions": [
+       {
+        "leftValue": "={{ $json.gate_pass }}",
+        "operator": {
+         "type": "boolean",
+         "operation": "true"
+        }
+       }
+      ],
+      "combinator": "and"
+     }
+    }
+   },
+   {
+    "id": "f6087b33-f078-4224-a9bb-ef81d7afc582",
+    "name": "DB - Insert Draft 1",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     3760,
+     -40
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "INSERT INTO outreach_drafts (run_id, profile_id, company_id, person_id, person_key, channel, addressee,\n  targeting_reason, language, step, subject, body, evidence_quote, evidence_source_url, evidence_observed_at,\n  status, export_key)\nVALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 1, $10, $11, $12, $13, $14, 'pending_audit', $3::text)\nON CONFLICT (company_id, step) DO NOTHING\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.run_id, $json.profile_id, $json.company_id, $json.person_id, $json.person_key, $json.channel, $json.addressee, $json.targeting_reason, $json.language, $json.subject, $json.body, $json.evidence_quote, $json.evidence_url, $json.observed_at ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "2efb8ef2-61f7-48c5-ad05-bdee3f7beb22",
+    "name": "DB - Insert Failure 1",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     3760,
+     160
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "INSERT INTO outreach_failures (run_id, profile_id, company_id, reason_codes, body_text, output_hash, cost_usd, review_status)\nVALUES ($1, $2, $3, string_to_array($4, ','), $5, md5($5), $6, $7)\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.run_id, $json.profile_id, $json.company_id, $json.reason_codes.join(','), $json.body_text, $json.est_cost_per_call, 'regen_pending' ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "5ddaf513-d933-47d9-bcdb-8b25d69f7381",
+    "name": "Return - Preview",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     2320,
+     260
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "return [{ json: { success: true, stage: 'SF10', mode: 'generate', preview_only: true, preview: $json.preview, reason: $json.reason } }];"
+    }
+   },
+   {
+    "id": "f701f22c-9b53-4c38-9686-52e9dfba2f6d",
+    "name": "Is Regen?",
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.2,
+    "position": [
+     400,
+     560
+    ],
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "loose",
+       "version": 2
+      },
+      "conditions": [
+       {
+        "leftValue": "={{ $json.mode_regen }}",
+        "operator": {
+         "type": "boolean",
+         "operation": "true"
+        }
+       }
+      ],
+      "combinator": "and"
+     }
+    }
+   },
+   {
+    "id": "64f902ae-0611-4acb-9a04-4c841d900861",
+    "name": "DB - Load Regen",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     640,
+     460
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "SELECT f.id AS failure_id, f.company_id, f.reason_codes, c.name AS company_name,\n       c.category, c.location, c.email AS company_email, c.facebook_url\nFROM outreach_failures f\nJOIN companies c ON c.id = f.company_id\nWHERE f.profile_id = $1 AND f.review_status = 'regen_pending'\nORDER BY f.created_at\nLIMIT 10",
+     "options": {
+      "queryReplacement": "={{ [ $('Config Gate').first().json.profile_id ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "4907475f-950e-4d81-a4e6-19a2f6cc5113",
+    "name": "DB - Regen Evidence",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     880,
+     460
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "WITH prof AS (SELECT profile FROM search_profiles WHERE id = $1 AND version = $2),\nfields AS (SELECT jsonb_array_elements_text(profile->'research_fields') AS f FROM prof)\nSELECT $4::uuid AS failure_id, $5 AS reason_codes, c.id AS company_id, c.name AS company_name, c.category, c.location,\n       ev.evidence_quote, ev.evidence_url, ev.observed_at,\n       p.id AS person_id, p.full_name AS person_name, p.title AS person_title,\n       p.email AS person_email,\n       (c.id::text || '|' || COALESCE(p.full_name, '')) AS person_key,\n       CASE\n         WHEN p.email IS NOT NULL AND p.email_status = 'verified'\n              AND p.email !~* '^(info|contact|admin|hello|support|sales)@' THEN 'email'\n         WHEN c.email IS NOT NULL AND c.email <> '' THEN 'email'\n         ELSE 'messenger' END AS channel,\n       CASE\n         WHEN p.email IS NOT NULL AND p.email_status = 'verified'\n              AND p.email !~* '^(info|contact|admin|hello|support|sales)@' THEN 'person'\n         ELSE 'business' END AS addressee,\n       CASE\n         WHEN p.email IS NOT NULL AND p.email_status = 'verified'\n              AND p.email !~* '^(info|contact|admin|hello|support|sales)@' THEN 'verified direct email of decision-maker'\n         WHEN c.email IS NOT NULL AND c.email <> '' THEN 'company email (generic route)'\n         ELSE 'facebook page (business route)' END AS targeting_reason\nFROM companies c\nJOIN LATERAL (\n  SELECT ra.value->>'evidence_quote' AS evidence_quote,\n         COALESCE(ra.value->>'evidence_url', ra.source_url) AS evidence_url,\n         COALESCE((ra.value->>'observed_at')::timestamptz, ra.created_at) AS observed_at\n  FROM research_artifacts ra\n  WHERE ra.company_id = c.id AND ra.field_name IN (SELECT f FROM fields)\n    AND ra.value->>'evidence_quote' IS NOT NULL\n  ORDER BY COALESCE((ra.value->>'observed_at')::timestamptz, ra.created_at) DESC LIMIT 1\n) ev ON true\nLEFT JOIN LATERAL (\n  SELECT pp.* FROM people pp WHERE pp.company_id = c.id AND pp.is_decision_maker = true\n  ORDER BY (pp.source = 'tavily_xray') DESC, pp.created_at LIMIT 1\n) p ON true\nWHERE c.id = $3",
+     "options": {
+      "queryReplacement": "={{ [ $('Config Gate').first().json.profile_id, $('Config Gate').first().json.profile_version, $json.company_id, $json.failure_id, $json.reason_codes.join(',') ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "2994712a-059b-4faa-a385-f449f53c1643",
+    "name": "Regen - Carry Config",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     1120,
+     460
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const cfg = $('Config Gate').first().json; return $input.all().map(i => ({ json: { ...i.json, ...cfg, attempt: 2 } }));"
+    }
+   },
+   {
+    "id": "4592f24f-3f4d-4513-8e8c-7c7915d9a96d",
+    "name": "Build Regen Request",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     1360,
+     460
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const outs = [];\nfor (const item of $input.all()) {\nconst it = item.json;\nconst firstName = it.person_name ? String(it.person_name).split(' ')[0] : '';\nconst facts = [\n  'Sender business: ' + it.business_name,\n  'What the sender sells: ' + it.what_they_sell,\n  'Target company: ' + it.company_name + ' (' + (it.category || '') + ', ' + (it.location || '') + ')',\n  it.addressee === 'person'\n    ? 'Addressee: the decision-maker, first name ' + firstName + (it.person_title ? ', title ' + it.person_title : '') + '. You may use the first name once.'\n    : 'Addressee: the business team. Do NOT name any individual person.',\n  'Evidence (the only specific fact you may use): \"' + it.evidence_quote + '\"'\n].join('\\n');\nconst langRule = it.language === 'my'\n  ? 'Write middle_text in Myanmar (Burmese) Unicode script only. Use the first-person form ' + it.first_person_form + '. Plain respectful business register.'\n  : 'Write middle_text in English. Plain respectful business register.';\nlet user = facts + '\\n\\n' + langRule;\nif (it.attempt === 2 && it.reason_codes) {\n  user += '\\n\\nYour previous draft was rejected for these reasons: ' + it.reason_codes + '. Fix exactly those problems.';\n}\nconst system = 'You write the MIDDLE section of one short first outreach message. Return ONLY a JSON object: {\"subject\": string|null, \"middle_text\": string, \"evidence_quote_used\": string}. Rules: base one sentence on the evidence and copy the evidence text exactly into evidence_quote_used; invent NOTHING (no numbers, prices, dates, names, links, results, or promises that are not in the facts); no hype, no urgency, no guarantees; ' +\n  (it.channel === 'email' ? 'subject: a short honest subject line (never starting with Re: or Fw:).' : 'subject: must be null (this is a Messenger message).');\nouts.push({ json: { ...it, payload: { model: 'muse-spark-1.3', temperature: 0.4,\n  messages: [ { role: 'system', content: system }, { role: 'user', content: user } ] } } });\n}\nreturn outs;"
+    }
+   },
+   {
+    "id": "6ed0a9cd-c3ba-46e9-b259-cc19310d2e49",
+    "name": "LLM - Regen",
+    "type": "n8n-nodes-base.httpRequest",
+    "typeVersion": 4.2,
+    "position": [
+     1600,
+     460
+    ],
+    "parameters": {
+     "method": "POST",
+     "url": "https://api.meta.ai/v1/chat/completions",
+     "authentication": "genericCredentialType",
+     "genericAuthType": "httpHeaderAuth",
+     "sendBody": true,
+     "contentType": "json",
+     "specifyBody": "json",
+     "jsonBody": "={{ $json.payload }}",
+     "options": {
+      "timeout": 240000
+     }
+    },
+    "credentials": {
+     "httpHeaderAuth": {
+      "id": "c4nDlJtRtEyOzjmx",
+      "name": "Header Auth account"
+     }
+    }
+   },
+   {
+    "id": "98b41e42-51d8-413b-a84a-d681aba4a50d",
+    "name": "Gates - Attempt 2",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     1840,
+     460
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const src = $('Build Regen Request').all();\nconst outs = [];\nconst norm = s => (s || '').normalize('NFC').replace(/\\s+/g, ' ').trim();\nconst BANNED_EN = ['guaranteed', 'guarantee', 'risk-free', 'risk free', '#1', 'number one', 'limited time', 'limited-time', 'act now', 'double your', 'increase revenue', 'boost sales', 'for free', 'free trial', 'no risk'];\nconst BANNED_MY = ['\u1021\u102c\u1019\u1001\u1036', '\u1021\u1001\u1019\u1032\u1037', '\u1021\u1000\u1031\u102c\u1004\u103a\u1038\u1006\u102f\u1036\u1038', '\u101c\u1000\u103a\u1019\u101c\u103d\u1010\u103a', '\u1021\u1001\u103b\u102d\u1014\u103a\u1021\u1000\u1014\u1037\u103a\u1021\u101e\u1010\u103a'];\nconst RECENT_EN = ['recently', 'just opened', 'newly'];\nconst RECENT_MY = ['\u1019\u1000\u103c\u102c\u101e\u1031\u1038\u1001\u1004\u103a', '\u101c\u1010\u103a\u1010\u101c\u1031\u102c', '\u1001\u102f\u1010\u101c\u1031\u102c', '\u1019\u1000\u103c\u102c\u101e\u1031\u1038\u1019\u102e'];\nfor (let idx = 0; idx < $input.all().length; idx++) {\n  const it = src[idx].json;\n  const resp = $input.all()[idx].json || {};\n  let raw = '';\n  try { raw = resp.choices[0].message.content || ''; } catch (e) { raw = ''; }\n  let parsed = null;\n  try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); } catch (e) { parsed = null; }\n  const reasons = [];\n  const middle = parsed && typeof parsed.middle_text === 'string' ? parsed.middle_text : '';\n  const subject = parsed && typeof parsed.subject === 'string' ? parsed.subject : (parsed ? null : null);\n  if (!parsed) reasons.push('unparseable_output');\n  if (parsed && !middle) reasons.push('empty_middle');\n  const lowMid = middle.toLowerCase(), lowSub = (subject || '').toLowerCase();\n  // evidence substring gate\n  const q = norm(parsed && parsed.evidence_quote_used);\n  const art = norm(it.evidence_quote);\n  if (!q || q.length < 12 || !art.includes(q)) reasons.push('evidence_mismatch');\n  // invented numbers\n  const blob = norm(it.evidence_quote + ' ' + it.company_name).replace(/,/g, '');\n  const nums = (middle + ' ' + (subject || '')).match(/[0-9][0-9,]*(\\.[0-9]+)?%?/g) || [];\n  for (const tk of nums) { if (!blob.includes(tk.replace(/,/g, ''))) { reasons.push('invented_number'); break; } }\n  // links / addresses\n  if (/https?:\\/\\/|www\\.|@/.test(middle) || /https?:\\/\\/|www\\./.test(subject || '')) reasons.push('unapproved_link');\n  // banned lexicon\n  for (const w of BANNED_EN) { if (lowMid.includes(w) || lowSub.includes(w)) { reasons.push('banned_claim'); break; } }\n  for (const w of BANNED_MY) { if (middle.includes(w) || (subject || '').includes(w)) { reasons.push('banned_claim'); break; } }\n  // placeholders / leakage\n  if (/\\{\\{|\\}\\}|\\[(name|company|insert|your)/i.test(middle) || /as an ai|i am an ai|language model|lorem/i.test(middle)) reasons.push('placeholder_or_leakage');\n  // foreign scripts (thai/cjk/kana/hangul/cyrillic)\n  if (/[\\u0E00-\\u0E7F\\u4E00-\\u9FFF\\u3040-\\u31FF\\uAC00-\\uD7AF\\u0400-\\u04FF]/.test(middle)) reasons.push('foreign_script');\n  // language + script gates\n  if (it.language === 'my') {\n    if (!/[\\u1000-\\u109F]/.test(middle)) reasons.push('wrong_language');\n    if (/[\\u1060-\\u1097]/.test(middle)) reasons.push('zawgyi_suspect');\n    if (middle.normalize('NFC') !== middle) reasons.push('non_nfc');\n    const wrong = it.first_person_form === '\u1000\u103b\u103d\u1014\u103a\u1010\u1031\u102c\u103a' ? '\u1000\u103b\u103d\u1014\u103a\u1019' : '\u1000\u103b\u103d\u1014\u103a\u1010\u1031\u102c\u103a';\n    if (middle.includes(wrong)) reasons.push('wrong_first_person_form');\n    if (middle.includes('\u1004\u102b\u1010\u102d\u102f\u1037') || middle.includes('\u1004\u102b\u1037')) reasons.push('wrong_first_person_form');\n    if ([...middle].length > 600) reasons.push('too_long');\n  } else {\n    if (middle.split(/\\s+/).filter(Boolean).length > 120) reasons.push('too_long');\n  }\n  // recency\n  const ageDays = (Date.now() - new Date(it.observed_at).getTime()) / 86400000;\n  if (ageDays > 7) {\n    for (const w of RECENT_EN) { if (lowMid.includes(w)) { reasons.push('unsupported_recency'); break; } }\n    if (!reasons.includes('unsupported_recency')) for (const w of RECENT_MY) { if (middle.includes(w)) { reasons.push('unsupported_recency'); break; } }\n  }\n  // targeting: business drafts must not name the person\n  if (it.addressee === 'business' && it.person_name && middle.includes(it.person_name)) reasons.push('person_named_in_business_draft');\n  // subject rules\n  if (it.channel === 'email') {\n    if (!subject) reasons.push('subject_missing');\n    else {\n      if (subject.length > 80) reasons.push('subject_too_long');\n      if (/^(re|fw|fwd)\\s*:/i.test(subject)) reasons.push('fake_thread_subject');\n    }\n  } else if (subject) reasons.push('messenger_subject_present');\n  const pass = reasons.length === 0;\n  outs.push({ json: { ...it, gate_pass: pass, reason_codes: [...new Set(reasons)],\n    subject: it.channel === 'email' ? subject : null,\n    body: pass ? (it.greeting + '\\n\\n' + middle + '\\n\\n' + it.signoff) : '',\n    body_text: middle || raw.slice(0, 2000) } });\n}\nreturn outs;"
+    }
+   },
+   {
+    "id": "bfb2c060-d165-4e67-824d-d946c270fb2e",
+    "name": "DB - Ledger Call 2",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     2080,
+     460
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nVALUES ($1, 'SF10', 'llm', 'charge', 1, $2, $3, 'sf10:call:' || $1 || ':' || $3::text || ':' || $4::text)\nON CONFLICT (idempotency_key) DO NOTHING\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.run_id, $json.est_cost_per_call, $json.company_id, $json.attempt ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "1775260c-7e58-44e2-8843-270243745afb",
+    "name": "Restore - Gates 2",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     2320,
+     460
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "return $('Gates - Attempt 2').all();"
+    }
+   },
+   {
+    "id": "dfa6d359-4a2e-4b6f-b519-8e6808961bb1",
+    "name": "Gate 2 Pass?",
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.2,
+    "position": [
+     2560,
+     460
+    ],
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "loose",
+       "version": 2
+      },
+      "conditions": [
+       {
+        "leftValue": "={{ $json.gate_pass }}",
+        "operator": {
+         "type": "boolean",
+         "operation": "true"
+        }
+       }
+      ],
+      "combinator": "and"
+     }
+    }
+   },
+   {
+    "id": "4342b32e-8ed1-4779-b086-93425fadd55b",
+    "name": "DB - Insert Draft 2",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     2800,
+     360
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "INSERT INTO outreach_drafts (run_id, profile_id, company_id, person_id, person_key, channel, addressee,\n  targeting_reason, language, step, subject, body, evidence_quote, evidence_source_url, evidence_observed_at,\n  status, export_key)\nVALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 1, $10, $11, $12, $13, $14, 'pending_audit', $3::text)\nON CONFLICT (company_id, step) DO NOTHING\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.run_id, $json.profile_id, $json.company_id, $json.person_id, $json.person_key, $json.channel, $json.addressee, $json.targeting_reason, $json.language, $json.subject, $json.body, $json.evidence_quote, $json.evidence_url, $json.observed_at ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "72c2f875-a1a5-408a-a157-cabeceaef4fe",
+    "name": "Restore - After Draft 2",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     3040,
+     360
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "return $('Gates - Attempt 2').all();"
+    }
+   },
+   {
+    "id": "c57c0cf0-9668-47b9-adc0-17d637a44ebb",
+    "name": "DB - Mark Regen Done",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     3280,
+     360
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "UPDATE outreach_failures SET review_status = 'regen_passed'\nWHERE id = $1 AND review_status = 'regen_pending'\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.failure_id ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "a4be6419-4710-4253-947b-8311641c25fb",
+    "name": "DB - Insert Failure 2",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     2800,
+     560
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "INSERT INTO outreach_failures (run_id, profile_id, company_id, reason_codes, body_text, output_hash, cost_usd, review_status)\nVALUES ($1, $2, $3, string_to_array($4, ','), $5, md5($5), $6, $7)\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.run_id, $json.profile_id, $json.company_id, $json.reason_codes.join(','), $json.body_text, $json.est_cost_per_call, 'manual_queue' ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "229e176e-04a3-43e9-8b0f-dcae1aa325f4",
+    "name": "Restore - After Failure 2",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     3040,
+     560
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "return $('Gates - Attempt 2').all();"
+    }
+   },
+   {
+    "id": "72f9349c-451b-43c9-8379-2a2d7ca8b670",
+    "name": "DB - Mark Manual Queue",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     3280,
+     560
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "UPDATE outreach_failures SET review_status = 'manual_queue'\nWHERE id = $1 AND review_status = 'regen_pending'\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.failure_id ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "54b7d4e9-4bcc-4e40-ac60-c76701d50cfb",
+    "name": "DB - Load Sweep",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     640,
+     760
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "SELECT d.id AS draft_id, d.company_id, d.body, d.created_at, 'batch' AS kind,\n       c.name AS company_name, COALESCE(p.full_name, '') AS person_name, d.evidence_quote\nFROM outreach_drafts d\nJOIN companies c ON c.id = d.company_id\nLEFT JOIN people p ON p.id = d.person_id\nWHERE d.run_id = $1 AND d.status = 'pending_audit'\nUNION ALL\nSELECT d.id, d.company_id, d.body, d.created_at, 'pool',\n       c.name, COALESCE(p.full_name, ''), d.evidence_quote\nFROM outreach_drafts d\nJOIN companies c ON c.id = d.company_id\nLEFT JOIN people p ON p.id = d.person_id\nWHERE d.profile_id = $2 AND d.run_id <> $1 AND d.created_at >= now() - interval '30 days'\n  AND d.status IN ('pending_audit', 'audited', 'exported')",
+     "options": {
+      "queryReplacement": "={{ [ $('When Executed by Another Workflow').first().json.run_id, $('Config Gate').first().json.profile_id ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "929a8902-731c-4dfe-b21a-ae2bdf8ce70c",
+    "name": "Similarity Sweep",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     880,
+     760
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const rows = $input.all().map(i => i.json);\nconst batch = rows.filter(r => r.kind === 'batch');\nconst pool = rows.filter(r => r.kind === 'pool');\nfunction grams(text, strip) {\n  let t = (text || '').toLowerCase();\n  for (const s of strip) if (s) t = t.split(String(s).toLowerCase()).join(' ');\n  t = t.replace(/[^a-z0-9\\u1000-\\u109F]+/g, ' ').replace(/\\s+/g, ' ').trim();\n  const set = new Set();\n  const words = t.split(' ').filter(w => w.length > 1);\n  for (const w of words) set.add('w:' + w);\n  const flat = t.replace(/ /g, '');\n  for (let i = 0; i + 4 <= flat.length; i++) set.add('g:' + flat.slice(i, i + 4));\n  return set;\n}\nfunction jac(a, b) {\n  let inter = 0;\n  for (const x of a) if (b.has(x)) inter++;\n  const uni = a.size + b.size - inter;\n  return uni ? inter / uni : 0;\n}\nconst poolSets = pool.map(r => ({ id: r.draft_id, g: grams(r.body, [r.company_name, r.person_name, r.evidence_quote]) }));\nconst batchSets = batch.map(r => ({ id: r.draft_id, company_id: r.company_id, body: r.body, g: grams(r.body, [r.company_name, r.person_name, r.evidence_quote]) }));\nconst rejects = [];\nconst seen = [];\nfor (const b of batchSets) {\n  let bad = false;\n  for (const p of poolSets) { if (jac(b.g, p.g) > 0.85) { bad = true; break; } }\n  if (!bad) for (const s of seen) { if (jac(b.g, s.g) > 0.85) { bad = true; break; } }\n  if (bad) rejects.push({ draft_id: b.id, body: b.body });\n  else seen.push(b);\n}\nreturn [{ json: { rejects_json: JSON.stringify(rejects), rejected: rejects.length, batch_size: batch.length } }];"
+    }
+   },
+   {
+    "id": "42b8a5d6-0278-4a9f-accf-6020b101ee08",
+    "name": "DB - Sweep Reject",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     1120,
+     760
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "WITH del AS (\n  DELETE FROM outreach_drafts\n  WHERE id IN (SELECT (r->>'draft_id')::uuid FROM jsonb_array_elements($1::jsonb) r)\n  RETURNING id, company_id, run_id, profile_id\n)\nINSERT INTO outreach_failures (run_id, profile_id, company_id, reason_codes, body_text, output_hash, cost_usd, review_status)\nSELECT d.run_id, d.profile_id, d.company_id, ARRAY['similarity'], r->>'body', md5(r->>'body'), 0, 'manual_queue'\nFROM del d\nJOIN jsonb_array_elements($1::jsonb) r ON (r->>'draft_id')::uuid = d.id\nRETURNING id",
+     "options": {
+      "queryReplacement": "={{ [ $json.rejects_json ] }}"
+     }
+    },
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "48be3220-3b30-4953-8964-eba31f9b4434",
+    "name": "Return - Sweep",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     1360,
+     760
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const s = $('Similarity Sweep').first().json; return [{ json: { success: true, stage: 'SF10', mode: 'sweep', batch_size: s.batch_size, similarity_rejected: s.rejected } }];"
+    }
+   },
+   {
+    "id": "cebaf236-b06a-42c3-8612-d805735d156b",
+    "name": "Return - Stopped",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     400,
+     460
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const c = $('Config Gate').first().json; return [{ json: { success: false, stage: 'SF10', stop_reason: c.stop_reason, mode: c.mode } }];"
+    }
+   }
+  ],
+  "nodeGroups": [],
+  "activeVersion": null,
+  "meta": {
+   "aiBuilderAssisted": true,
+   "builderVariant": "mcp"
+  }
+ },
+ "triggerInfo": "This workflow's trigger(s) are not supported for direct execution through MCP: When Executed by Another Workflow. Only Schedule, Webhook, Form, and Chat triggers can be executed directly through MCP, so this workflow cannot be executed through MCP. Its trigger(s) still run normally when the workflow is active."
+}

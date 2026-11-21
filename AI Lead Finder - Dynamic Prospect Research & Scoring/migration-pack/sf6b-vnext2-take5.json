@@ -1,0 +1,813 @@
+{
+ "id": "dKd9XfRdTAZ5kfNs",
+ "name": "SF6b v-next.2 - LinkedIn People (Apify, dynamic)",
+ "active": false,
+ "isArchived": false,
+ "versionId": "307a302b-351f-4a66-8d98-e5d39b12556f",
+ "activeVersionId": null,
+ "triggerCount": 0,
+ "nodeCount": 25,
+ "createdAt": "2026-11-17T10:13:38.229Z",
+ "updatedAt": "2026-11-17T10:31:21.557Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true,
+  "errorWorkflow": "CsGScTpPxfp9E8Un"
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "DB - Load Profile + Spent",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Load Profile + Spent": {
+   "main": [
+    [
+     {
+      "node": "Stage Context",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Stage Context": {
+   "main": [
+    [
+     {
+      "node": "DB - Pick + Claim + Audit",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Pick + Claim + Audit": {
+   "main": [
+    [
+     {
+      "node": "Cap Gate",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cap Gate": {
+   "main": [
+    [
+     {
+      "node": "Has Work?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Has Work?": {
+   "main": [
+    [
+     {
+      "node": "Build Jobs",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Return - Blocked/Gate Summary",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Jobs": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Search LinkedIn",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Search LinkedIn": {
+   "main": [
+    [
+     {
+      "node": "Reattach A",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach A": {
+   "main": [
+    [
+     {
+      "node": "Tavily MCP - Extract Website",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tavily MCP - Extract Website": {
+   "main": [
+    [
+     {
+      "node": "Reattach A2",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach A2": {
+   "main": [
+    [
+     {
+      "node": "Resolve Slugs",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Resolve Slugs": {
+   "main": [
+    [
+     {
+      "node": "DB - Mark + Slug Ledger",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Mark + Slug Ledger": {
+   "main": [
+    [
+     {
+      "node": "Reattach B",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach B": {
+   "main": [
+    [
+     {
+      "node": "Build Apify Batch",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Apify Batch": {
+   "main": [
+    [
+     {
+      "node": "Batch Empty?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Batch Empty?": {
+   "main": [
+    [
+     {
+      "node": "Return - Summary (Batch Empty)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Apify - Start Run",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Apify - Start Run": {
+   "main": [
+    [
+     {
+      "node": "Prep Poll",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Prep Poll": {
+   "main": [
+    [
+     {
+      "node": "DB - Persist Run Id",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Persist Run Id": {
+   "main": [
+    [
+     {
+      "node": "Reattach Run",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reattach Run": {
+   "main": [
+    [
+     {
+      "node": "Build Fetch Inputs",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Fetch Inputs": {
+   "main": [
+    [
+     {
+      "node": "Call SF6c - People Fetch",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "9d9bb327-8cae-4f7d-a415-c5de7cbe6aad",
+   "name": "Sticky Note f4769ee8",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "SF6b v-next.2 - LinkedIn People via Apify (2026-11-17, Wonder design ruling). DYNAMIC: decision-maker status derives ONLY from the pinned search profile decision_maker_titles (deterministic phrase match on the verbatim headline); zero hardcoded titles. Save gate = DM match AND SF6 distinctive-token association gate. Picks fit-scored companies (claim + audit, affordability truncation BEFORE claim), resolves each company LinkedIn page with token verification (no first-result trust), then ONE async Apify run (build pinned) with run-id persisted in cost_ledger, polling, dataset fetch by id. Ledger: Tavily slug search $0.008, Apify $0.01 per charged profile, $0.005 actor start per run. People saved with headline as evidence quote + 12-month retention. No send node anywhere.",
+    "color": 5
+   }
+  },
+  {
+   "id": "2c031c23-5fe0-4ff9-ab7f-fb54b381a6df",
+   "name": "When Executed by Another Workflow",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "search_profile_id",
+       "type": "string"
+      },
+      {
+       "name": "profile_version",
+       "type": "number"
+      },
+      {
+       "name": "run_id",
+       "type": "string"
+      },
+      {
+       "name": "linkedin_min_fit",
+       "type": "number"
+      },
+      {
+       "name": "max_linkedin_companies",
+       "type": "number"
+      },
+      {
+       "name": "spend_cap_usd",
+       "type": "number"
+      },
+      {
+       "name": "max_employees",
+       "type": "number"
+      },
+      {
+       "name": "linkedin_people_enabled",
+       "type": "boolean"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "f547b721-3538-4f13-903d-268454434104",
+   "name": "DB - Load Profile + Spent",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT\n  (SELECT profile->'decision_maker_titles' FROM search_profiles WHERE id = $1 AND version = $2) AS dm_titles,\n  (SELECT COALESCE(SUM(cost_usd), 0)::float FROM cost_ledger WHERE run_id = $3) AS spent_usd,\n  (SELECT COALESCE(SUM(cost_usd), 0)::float FROM cost_ledger WHERE provider = 'apify' AND created_at >= date_trunc('month', now())) AS mtd_apify_usd",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id, $json.profile_version, $json.run_id ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "59856fc7-965b-497a-8384-456e2695efee",
+   "name": "Stage Context",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const t = $('When Executed by Another Workflow').first().json;\nconst prof = $input.first().json || {};\nconst spent = Number(prof.spent_usd || 0);\nconst mtd = Number(prof.mtd_apify_usd || 0);\nlet titles = [];\ntry { const raw = typeof prof.dm_titles === 'string' ? JSON.parse(prof.dm_titles) : prof.dm_titles; if (Array.isArray(raw)) titles = raw.map(x => String(x || '').trim()).filter(Boolean); } catch (e) { titles = []; }\nconst maxEmployees = Number(t.max_employees ?? 10);\nconst maxCompanies = Number(t.max_linkedin_companies ?? 10);\nconst cap = (t.spend_cap_usd === undefined || t.spend_cap_usd === null || t.spend_cap_usd === '') ? null : Number(t.spend_cap_usd);\nconst perCompany = 0.008 + maxEmployees * 0.01;\nlet affordable = maxCompanies;\nif (cap !== null) affordable = Math.max(0, Math.min(maxCompanies, Math.floor((cap - spent - 0.005) / perCompany)));\nreturn [{ json: {\n  search_profile_id: t.search_profile_id,\n  profile_version: Number(t.profile_version || 1),\n  run_id: t.run_id || '',\n  linkedin_min_fit: Number(t.linkedin_min_fit ?? 30),\n  max_linkedin_companies: maxCompanies,\n  max_employees: maxEmployees,\n  spend_cap_usd: cap,\n  spent_usd: spent,\n  mtd_apify_usd: mtd,\n  dm_titles: titles,\n  titles_ok: titles.length > 0,\n  titles_ok_int: titles.length > 0 ? 1 : 0,\n  linkedin_enabled_int: t.linkedin_people_enabled === true ? 1 : 0,\n  affordable: affordable,\n  per_company_est: perCompany\n} }];"
+   }
+  },
+  {
+   "id": "e2f1a791-4279-4c84-9a60-7471141f1f1a",
+   "name": "DB - Pick + Claim + Audit",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH cand AS (\n  SELECT c.id, c.name, c.location, c.website, c.linkedin_url, s.fit_score,\n         ROW_NUMBER() OVER (ORDER BY s.fit_score DESC, c.id ASC) AS rn\n  FROM companies c\n  JOIN scores s ON s.company_id = c.id\n    AND s.search_profile_id = $1 AND s.profile_version = $2\n  WHERE s.fit_score >= $3\n    AND (c.linkedin_people_checked_at IS NULL OR (c.linkedin_people_next_check_at IS NOT NULL AND c.linkedin_people_next_check_at <= now()))\n    AND (c.linkedin_people_claimed_at IS NULL OR c.linkedin_people_claimed_at < now() - interval '1 hour')\n    AND $6 = 1\n    AND $7 = 1\n),\naudit AS (\n  INSERT INTO selection_audit (run_id, workflow, company_id, rank, fit_score, cutoff, selection_reason, is_first_skipped)\n  SELECT $5, 'SF6b', id::text, rn::int, fit_score, $3,\n         CASE WHEN rn <= $4 THEN 'selected' ELSE 'cap_reached' END,\n         (rn = $4 + 1)\n  FROM cand WHERE rn <= $4 + 1\n  ON CONFLICT DO NOTHING\n  RETURNING 1\n),\nclaim AS (\n  UPDATE companies c\n  SET linkedin_people_claimed_at = now(), linkedin_people_claim_run_id = $5\n  FROM cand\n  WHERE c.id = cand.id AND cand.rn <= $4\n  RETURNING c.id AS company_id, cand.name, cand.location, cand.website, cand.linkedin_url, cand.fit_score AS fit\n)\nSELECT company_id::text AS company_id, name, location, website, linkedin_url, fit, false AS empty_run, (SELECT count(*)::int FROM cand) AS candidates, false AS gate_fail, false AS linkedin_disabled FROM claim\nUNION ALL\nSELECT NULL, NULL, NULL, NULL, NULL, NULL, true AS empty_run, (SELECT count(*)::int FROM cand) AS candidates, ($6 = 0) AS gate_fail, ($7 = 0) AS linkedin_disabled\nWHERE NOT EXISTS (SELECT 1 FROM claim)",
+    "options": {
+     "queryReplacement": "={{ [ $json.search_profile_id, $json.profile_version, $json.linkedin_min_fit, $json.affordable, $json.run_id, $json.titles_ok_int, $json.linkedin_enabled_int ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "461e32dc-7194-4c66-9e7f-cb309eb14245",
+   "name": "Cap Gate",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1440,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const ctx = $('Stage Context').first().json;\nconst rows = $input.all().map(i => i.json);\nconst picked = rows.filter(r => !r.empty_run);\nconst sentinel = rows.find(r => r.empty_run) || {};\nconst candidates = Number(sentinel.candidates || 0);\nif (!picked.length) {\n  return [{ json: { has_work: false, empty_run: candidates === 0 && !sentinel.linkedin_disabled, cap_blocked: candidates > 0 && !sentinel.linkedin_disabled, gate_fail: !!sentinel.gate_fail, linkedin_disabled: !!sentinel.linkedin_disabled, picked: 0, candidates: candidates, run_id: ctx.run_id } }];\n}\nreturn picked.map(r => ({ json: Object.assign({}, r, {\n  has_work: true, cap_blocked: false, empty_run: false,\n  run_id: ctx.run_id, search_profile_id: ctx.search_profile_id,\n  profile_version: ctx.profile_version, max_employees: ctx.max_employees\n}) }));"
+   }
+  },
+  {
+   "id": "faaa0d17-4d5c-4167-9429-28a99e6b4173",
+   "name": "Has Work?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1720,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.has_work }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "798e8fe0-5697-4871-af93-42806ee51bec",
+   "name": "Build Jobs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const STOPWORDS = new Set(['the', 'and', 'co', 'ltd', 'company', 'store', 'shop', 'hotel', 'resort', 'bangkok', 'yangon', 'thailand', 'myanmar', 'facebook', 'page', 'official']);\nconst GENERIC = new Set(['training', 'service', 'services', 'mobile', 'phone', 'computer', 'electronics', 'hardware', 'fashion', 'trading', 'enterprise', 'enterprises', 'solution', 'solutions', 'technology', 'technologies', 'digital', 'media', 'express', 'global', 'international', 'modern', 'center', 'centre', 'group', 'beauty', 'star', 'king', 'best', 'top', 'world', 'accessories', 'garment', 'textile', 'food', 'travel', 'tour', 'tours', 'clinic', 'school', 'academy', 'studio', 'salon', 'cafe', 'restaurant', 'bakery', 'pharmacy', 'mart', 'market', 'online']);\nfunction normTokens(s) {\n  return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}\\s]/gu, ' ').split(/\\s+/).filter(w => w.length >= 3 && !STOPWORDS.has(w));\n}\nfunction normPhrase(s) {\n  return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}]+/gu, ' ').replace(/\\s+/g, ' ').trim();\n}\nfunction hashId(s) { let h = 5381; const str = String(s || ''); for (let i = 0; i < str.length; i++) { h = ((h * 33) ^ str.charCodeAt(i)) >>> 0; } return h.toString(16); }return $input.all().map(i => {\n  const j = i.json;\n  const nameToks = normTokens(j.name);\n  const distinctive = nameToks.filter(t => !GENERIC.has(t));\n  return { json: Object.assign({}, j, {\n    name_tokens: nameToks,\n    distinctive_tokens: distinctive,\n    mcp_slug: JSON.stringify({ query: '\"' + j.name + '\" linkedin company', search_depth: 'basic', max_results: 5 }),\n    mcp_extract: JSON.stringify({ urls: j.website ? [j.website] : [], query: 'linkedin company page', extract_depth: 'basic', format: 'text' })\n  }) };\n});"
+   }
+  },
+  {
+   "id": "5de85516-4278-4799-bad7-38c34c4af927",
+   "name": "Tavily MCP - Search LinkedIn",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    2280,
+    320
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_search",
+     "cachedResultName": "tavily_search"
+    },
+    "jsonInput": "={{ $json.mcp_slug }}"
+   },
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "853482eb-2650-4983-b46d-82db976fd2f9",
+   "name": "Reattach A",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2560,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Build Jobs').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  let t = '';\n  try { t = typeof item.json === 'string' ? item.json : JSON.stringify(item.json); } catch (e) { t = String(item.json); }\n  return { json: Object.assign({}, job, { slug_text: t }) };\n});"
+   }
+  },
+  {
+   "id": "17c66091-93cb-4d4b-97d1-e5c6a46d7228",
+   "name": "Tavily MCP - Extract Website",
+   "type": "@n8n/n8n-nodes-langchain.mcpClient",
+   "typeVersion": 1.1,
+   "position": [
+    2840,
+    320
+   ],
+   "parameters": {
+    "serverTransport": "httpStreamable",
+    "endpointUrl": "https://mcp.tavily.com/mcp/",
+    "authentication": "mcpOAuth2Api",
+    "inputMode": "json",
+    "options": {
+     "timeout": 120000,
+     "convertToBinary": false
+    },
+    "tool": {
+     "__rl": true,
+     "mode": "list",
+     "value": "tavily_extract",
+     "cachedResultName": "tavily_extract"
+    },
+    "jsonInput": "={{ $json.mcp_extract }}"
+   },
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "mcpOAuth2Api": {
+     "id": "5lbTqdPpE630l6R5",
+     "name": "Tavily MCP (generic)"
+    }
+   }
+  },
+  {
+   "id": "0e8174dc-edaa-4bc0-bca8-8a7c636be3fb",
+   "name": "Reattach A2",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2980,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Reattach A').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  let t = '';\n  try { t = typeof item.json === 'string' ? item.json : JSON.stringify(item.json); } catch (e) { t = String(item.json); }\n  return { json: Object.assign({}, job, { site_text: t }) };\n});"
+   }
+  },
+  {
+   "id": "1936c16d-fc02-4161-8cca-65605b1f21b1",
+   "name": "Resolve Slugs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2840,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const STOPWORDS = new Set(['the', 'and', 'co', 'ltd', 'company', 'store', 'shop', 'hotel', 'resort', 'bangkok', 'yangon', 'thailand', 'myanmar', 'facebook', 'page', 'official']);\nconst GENERIC = new Set(['training', 'service', 'services', 'mobile', 'phone', 'computer', 'electronics', 'hardware', 'fashion', 'trading', 'enterprise', 'enterprises', 'solution', 'solutions', 'technology', 'technologies', 'digital', 'media', 'express', 'global', 'international', 'modern', 'center', 'centre', 'group', 'beauty', 'star', 'king', 'best', 'top', 'world', 'accessories', 'garment', 'textile', 'food', 'travel', 'tour', 'tours', 'clinic', 'school', 'academy', 'studio', 'salon', 'cafe', 'restaurant', 'bakery', 'pharmacy', 'mart', 'market', 'online']);\nfunction normTokens(s) {\n  return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}\\s]/gu, ' ').split(/\\s+/).filter(w => w.length >= 3 && !STOPWORDS.has(w));\n}\nfunction normPhrase(s) {\n  return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}]+/gu, ' ').replace(/\\s+/g, ' ').trim();\n}\nfunction hashId(s) { let h = 5381; const str = String(s || ''); for (let i = 0; i < str.length; i++) { h = ((h * 33) ^ str.charCodeAt(i)) >>> 0; } return h.toString(16); }function digResults(text) {\n  let cur = text;\n  for (let depth = 0; depth < 4; depth++) {\n    let obj = null;\n    try { obj = typeof cur === 'string' ? JSON.parse(cur) : cur; } catch (e) { break; }\n    if (!obj || typeof obj !== 'object') break;\n    if (Array.isArray(obj.results)) return obj.results;\n    if (Array.isArray(obj.content)) { const c = obj.content.find(x => x && typeof x.text === 'string'); cur = c ? c.text : ''; continue; }\n    if (typeof obj.text === 'string') { cur = obj.text; continue; }\n    if (obj.data) { cur = obj.data; continue; }\n    break;\n  }\n  return null;\n}\nfunction slugOf(url) {\n  const m = String(url || '').match(/linkedin\\.com\\/company\\/([a-zA-Z0-9\\-_%\\.]+)/i);\n  return m ? m[1].replace(/\\.+$/, '') : '';\n}\nfunction verifySlug(j, slug, title) {\n  if (!slug) return false;\n  const candToks = new Set([...normTokens(slug.replace(/[-_%\\.]/g, ' ')), ...normTokens(title || '')]);\n  const matched = (j.name_tokens || []).filter(t => candToks.has(t));\n  const distinctive = matched.filter(t => (j.distinctive_tokens || []).includes(t));\n  if (distinctive.length >= 1 || matched.length >= 2) return true;\n  const flat = slug.toLowerCase().replace(/[^a-z0-9]/g, '');\n  return (j.distinctive_tokens || []).some(t => t.length >= 4 && flat.includes(t));\n}\nreturn $input.all().map(item => {\n  const j = item.json;\n  const text = String(j.slug_text || '');\n  let candidates = [];\n  const results = digResults(text);\n  if (results) {\n    for (const r of results) { const s = slugOf(r && r.url); if (s) candidates.push({ slug: s, title: String((r && r.title) || '') }); }\n  } else {\n    const urls = text.match(/https?:\\/\\/[^\\s\"'\\)]+linkedin\\.com\\/company\\/[^\\s\"'\\)]+/gi) || [];\n    for (const u of urls) { const s = slugOf(u); if (s) candidates.push({ slug: s, title: '' }); }\n  }\n  // The company's OWN website outranks search results: a LinkedIn link in the\n  // site text is the company pointing at its own page (highest precision).\n  const siteText = String(j.site_text || '');\n  const siteUrls = siteText.match(/https?:\\/\\/[^\\s\"'\\)]+linkedin\\.com\\/company\\/[^\\s\"'\\)]+/gi) || [];\n  const siteCandidates = [];\n  for (const u of siteUrls) { const s = slugOf(u); if (s && !siteCandidates.includes(s)) siteCandidates.push({ slug: s, title: '' }); }\n  const allCandidates = [...siteCandidates, ...candidates];\n  const storedSlug = j.linkedin_url ? slugOf(j.linkedin_url) : '';\n  const passing = [];\n  for (const c of allCandidates) { if (verifySlug(j, c.slug, c.title) && !passing.includes(c.slug)) passing.push(c.slug); }\n  let resolution, slug = '', url = '';\n  if (storedSlug) {\n    const storedOk = verifySlug(j, storedSlug, '');\n    if (!storedOk) { resolution = 'slug_conflict'; }\n    else if (passing.length && !passing.includes(storedSlug)) { resolution = 'slug_conflict'; }\n    else { resolution = 'stored_verified'; slug = storedSlug; url = j.linkedin_url; }\n  } else if (!passing.length) { resolution = 'none'; }\n  else {\n    const flatName = normPhrase(j.name || '').replace(/ /g, '');\n    const exact = passing.find(s => s.toLowerCase() === flatName);\n    if (exact) { resolution = 'resolved'; slug = exact; url = 'https://www.linkedin.com/company/' + exact; }\n    else if (passing.length > 1) { resolution = 'ambiguous'; }\n    else { resolution = 'resolved'; slug = passing[0]; url = 'https://www.linkedin.com/company/' + slug; }\n  }\n  return { json: Object.assign({}, j, { resolution: resolution, slug: slug, resolved_url: url }) };\n});"
+   }
+  },
+  {
+   "id": "8fa09163-cf32-4f85-9095-665d1548a276",
+   "name": "DB - Mark + Slug Ledger",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    3120,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH u AS (\n  UPDATE companies SET\n    linkedin_url = CASE WHEN $4 = 'resolved' THEN COALESCE(NULLIF(linkedin_url, ''), NULLIF($3, '')) ELSE linkedin_url END,\n    linkedin_people_checked_at = CASE WHEN $4 IN ('none', 'ambiguous', 'slug_conflict') THEN now() ELSE linkedin_people_checked_at END,\n    linkedin_people_next_check_at = CASE WHEN $4 IN ('none', 'ambiguous', 'slug_conflict') THEN now() + interval '90 days' ELSE linkedin_people_next_check_at END\n  WHERE id = $1\n  RETURNING id\n),\nl AS (\n  INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\n  SELECT $2, 'SF6b', 'tavily', 'charge', 1, 0.008, $1::text, 'sf6b:slug:' || $2 || ':' || $1::text\n  WHERE EXISTS (SELECT 1 FROM u)\n  ON CONFLICT (idempotency_key) DO NOTHING\n  RETURNING id\n),\ne AS (\n  INSERT INTO people_search_events (run_id, company_id, workflow, stage, detail)\n  SELECT $2, id, 'SF6b', 'apify_linkedin',\n         jsonb_build_object('outcome', CASE $4 WHEN 'none' THEN 'no_linkedin_page' WHEN 'ambiguous' THEN 'ambiguous_slug' ELSE 'slug_conflict' END)\n  FROM u WHERE $4 IN ('none', 'ambiguous', 'slug_conflict')\n  RETURNING id\n)\nSELECT (SELECT count(*) FROM u)::int AS updated",
+    "options": {
+     "queryReplacement": "={{ [ $json.company_id, $json.run_id, $json.resolved_url || '', $json.resolution ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "f399e6d3-3ab5-4093-bbf6-bd2f9038b9c2",
+   "name": "Reattach B",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3400,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const jobs = $('Resolve Slugs').all().map(i => i.json);\nreturn $input.all().map((item, idx) => {\n  const job = jobs[idx] || {};\n  return { json: Object.assign({}, job, { mark_updated: (item.json || {}).updated }) };\n});"
+   }
+  },
+  {
+   "id": "6ec1be3a-d040-4875-891f-79be9fcadaff",
+   "name": "Build Apify Batch",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3680,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const ctx = $('Stage Context').first().json;\nconst items = $input.all().map(i => i.json);\nconst ok = items.filter(r => r.resolution === 'resolved' || r.resolution === 'stored_verified');\nconst batch = ok.map(r => ({ company_id: r.company_id, name: r.name, slug: r.slug, linkedin_url: r.resolved_url, distinctive_tokens: r.distinctive_tokens || [] }));\nconst urls = batch.map(b => b.linkedin_url);\nreturn [{ json: {\n  run_id: ctx.run_id, batch: batch, batch_empty: batch.length === 0,\n  apify_input: { companies: urls, companyUrls: urls, maxEmployees: ctx.max_employees, maxItems: urls.length * ctx.max_employees },\n  picked_count: items.length\n} }];"
+   }
+  },
+  {
+   "id": "4af0e0ce-8be2-4ff4-8477-819716b04f14",
+   "name": "Batch Empty?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    3960,
+    320
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.batch_empty }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "13b11d35-806e-4e86-b88e-77fc736ff769",
+   "name": "Return - Summary (Batch Empty)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4240,
+    720
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "function tryAll(name) { try { return $(name).all().map(i => i.json); } catch (e) { return []; } }\nfunction tryFirst(name) { try { return $(name).first().json || {}; } catch (e) { return {}; } }\nconst ctx = tryFirst('Stage Context');\nconst cap = tryAll('Cap Gate');\nconst picked = cap.filter(r => !r.empty_run && r.has_work).length;\nconst batchItem = tryFirst('Build Apify Batch');\nconst people = tryAll('Parse People').filter(p => !p.sentinel);\nconst saves = tryAll('DB - Save Person');\nconst saved = saves.filter(s => s.outcome === 'inserted').length;\nconst counts = (people[0] && people[0].run_counts) || { returned: people.length, dropped_schema: 0 };\nconst chargedProfiles = people.reduce((a, p) => a + Number(p.charged || 0), 0);\nconst runApifyCost = chargedProfiles * 0.01 + ((batchItem.batch || []).length ? 0.005 : 0);\nconst mtdAfter = Number(ctx.mtd_apify_usd || 0) + runApifyCost;\nlet failed = false;\ntry { failed = $('Build Failure Items A').all().length > 0; } catch (e) {}\nif (!failed) { try { failed = $('Build Failure Items B').all().length > 0; } catch (e) {} }\nreturn [{ json: {\n  success: !failed, stage: 'SF6b',\n  picked: picked, slug_resolved: (batchItem.batch || []).length,\n  people_returned: counts.returned, dropped_schema: counts.dropped_schema,\n  people_saved: saved, decision_makers_saved: saved,\n  non_dm_dropped: people.filter(p => p.drop_reason === 'non_dm').length,\n  association_dropped: people.filter(p => p.drop_reason === 'association_unverified').length,\n  dup_cross_company: saves.filter(s => s.outcome === 'dup_cross').length,\n  apify_profiles_charged: chargedProfiles,\n  apify_run_cost_usd: Math.round(runApifyCost * 1000) / 1000,\n  slug_search_cost_usd: Math.round(picked * 0.008 * 1000) / 1000,\n  total_stage_cost_usd: Math.round((runApifyCost + picked * 0.008) * 1000) / 1000,\n  mtd_apify_usd: Math.round(mtdAfter * 1000) / 1000,\n  mtd_warning: mtdAfter > 4.5,\n  apify_failed: failed,\n  cap_blocked: false, empty_run: picked === 0\n} }];"
+   }
+  },
+  {
+   "id": "59a80d6d-c8ff-43a1-ac15-0dbdc786e285",
+   "name": "Apify - Start Run",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    4240,
+    320
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.apify.com/v2/acts/george.the.developer~linkedin-company-employees-scraper/runs?memory=1024&build=2.3.42",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "contentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "={{ $json.apify_input }}",
+    "options": {
+     "timeout": 120000
+    }
+   },
+   "alwaysOutputData": true,
+   "onError": "continueRegularOutput",
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "knrRqdSihRdH7fFq",
+     "name": "Header Auth account 2"
+    }
+   }
+  },
+  {
+   "id": "78e73685-c156-4fa8-8cc1-74e4888d8b77",
+   "name": "Prep Poll",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4520,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const batchItem = $('Build Apify Batch').first().json;\nconst j = $input.first().json || {};\nconst data = j.data || {};\nconst ok = !!data.id;\nreturn [{ json: {\n  apify_run_id: ok ? String(data.id) : '',\n  dataset_id: ok ? String(data.defaultDatasetId || '') : '',\n  start_ok: ok,\n  start_ok_int: ok ? 1 : 0,\n  run_id: batchItem.run_id,\n  start_error: ok ? '' : JSON.stringify(j).slice(0, 300)\n} }];"
+   }
+  },
+  {
+   "id": "227a319e-d1cb-4b6d-9913-79188b9ec555",
+   "name": "DB - Persist Run Id",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    5080,
+    320
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "INSERT INTO cost_ledger (run_id, workflow, provider, event_type, units, cost_usd, company_id, idempotency_key)\nSELECT $1, 'SF6b', 'apify', 'estimate', 0, 0, '', 'sf6b:run:' || $1 || ':' || $2\nWHERE $3 = 1\nON CONFLICT (idempotency_key) DO NOTHING",
+    "options": {
+     "queryReplacement": "={{ [ $json.run_id, $json.apify_run_id, $json.start_ok_int ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "17789a41-39cc-4b2d-913e-944e630983d1",
+   "name": "Reattach Run",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    5360,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const p = $('Prep Poll').first().json;\nreturn [{ json: p }];"
+   }
+  },
+  {
+   "id": "35f34160-03f2-4269-95cf-7dcffb2747ad",
+   "name": "Build Fetch Inputs",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    5640,
+    320
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const prep = $('Prep Poll').first().json;\nconst batchItem = $('Build Apify Batch').first().json;\nconst ctx = $('Stage Context').first().json;\nconst cap = $('Cap Gate').all().map(i => i.json);\nreturn [{ json: {\n  apify_run_id: prep.apify_run_id || '',\n  dataset_id: prep.dataset_id || '',\n  run_id: ctx.run_id,\n  batch_json: JSON.stringify(batchItem.batch || []),\n  dm_titles_json: JSON.stringify(ctx.dm_titles || []),\n  profile_version: ctx.profile_version,\n  mtd_apify_usd: ctx.mtd_apify_usd,\n  picked_count: cap.filter(r => !r.empty_run && r.has_work).length\n} }];"
+   }
+  },
+  {
+   "id": "f09b13a5-90a7-4ff4-a153-43bc63d834e6",
+   "name": "Call SF6c - People Fetch",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    5920,
+    320
+   ],
+   "parameters": {
+    "source": "database",
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "97PalXcd45nGnNTO",
+     "cachedResultName": "SF6c v-next - People Fetch (poll + save)"
+    },
+    "workflowInputs": {
+     "mappingMode": "passthrough"
+    },
+    "mode": "once",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "92ee90ca-031b-48c8-8a27-100281181228",
+   "name": "Return - Blocked/Gate Summary",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    720
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const rows = $input.all().map(i => i.json);\nconst first = rows[0] || {};\nif (first.gate_fail) {\n  return [{ json: {\n    success: false, stage: 'SF6b', reason: 'no_decision_maker_titles_in_profile',\n    picked: 0, slug_resolved: 0, people_returned: 0, dropped_schema: 0,\n    people_saved: 0, decision_makers_saved: 0, non_dm_dropped: 0, association_dropped: 0,\n    dup_cross_company: 0, apify_profiles_charged: 0, apify_run_cost_usd: 0,\n    mtd_apify_usd: 0, mtd_warning: false, apify_failed: false,\n    cap_blocked: false, empty_run: false, gate_fail: true\n  } }];\n}\nif (first.linkedin_disabled) {\n  return [{ json: {\n    success: true, stage: 'SF6b', reason: 'linkedin_people_disabled',\n    picked: 0, slug_resolved: 0, people_returned: 0, dropped_schema: 0,\n    people_saved: 0, decision_makers_saved: 0, non_dm_dropped: 0, association_dropped: 0,\n    dup_cross_company: 0, apify_profiles_charged: 0, apify_run_cost_usd: 0,\n    mtd_apify_usd: 0, mtd_warning: false, apify_failed: false,\n    cap_blocked: false, empty_run: false, gate_fail: false, linkedin_disabled: true\n  } }];\n}\nreturn [{ json: {\n  success: true, stage: 'SF6b',\n  picked: 0, slug_resolved: 0, people_returned: 0, dropped_schema: 0,\n  people_saved: 0, decision_makers_saved: 0, non_dm_dropped: 0, association_dropped: 0,\n  dup_cross_company: 0, apify_profiles_charged: 0, apify_run_cost_usd: 0,\n  mtd_apify_usd: 0, mtd_warning: false, apify_failed: false,\n  empty_run: !!first.empty_run, cap_blocked: !!first.cap_blocked, gate_fail: false, linkedin_disabled: false\n} }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": null,
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}

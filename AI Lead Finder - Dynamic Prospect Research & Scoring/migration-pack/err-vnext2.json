@@ -1,0 +1,259 @@
+{
+ "id": "fbzswy3Sh36OeqTt",
+ "name": "ERR v-next.2 - Lead Finder Run Failure Handler (D12)",
+ "active": true,
+ "isArchived": false,
+ "versionId": "db902172-b498-4a67-9e89-6b80e0a85e9c",
+ "activeVersionId": "db902172-b498-4a67-9e89-6b80e0a85e9c",
+ "triggerCount": 0,
+ "nodeCount": 8,
+ "createdAt": "2026-11-16T04:37:55.690Z",
+ "updatedAt": "2026-11-16T04:37:59.122Z",
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true
+ },
+ "tags": [],
+ "parentFolderId": null,
+ "scopes": [
+  "execution:delete",
+  "execution:list",
+  "execution:read",
+  "execution:reveal",
+  "workflow:create",
+  "workflow:delete",
+  "workflow:disableRedaction",
+  "workflow:enableRedaction",
+  "workflow:execute",
+  "workflow:execute-chat",
+  "workflow:export",
+  "workflow:import",
+  "workflow:list",
+  "workflow:move",
+  "workflow:publish",
+  "workflow:read",
+  "workflow:share",
+  "workflow:unpublish",
+  "workflow:unshare",
+  "workflow:update"
+ ],
+ "canExecute": true,
+ "connections": {
+  "Error Trigger": {
+   "main": [
+    [
+     {
+      "node": "Build Failure Note",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Failure Note": {
+   "main": [
+    [
+     {
+      "node": "DB - Mark Runs Failed (v-next.2 combined)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "DB - Mark Runs Failed (v-next.2 combined)": {
+   "main": [
+    [
+     {
+      "node": "Build Alert",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build Alert": {
+   "main": [
+    [
+     {
+      "node": "Any Flipped?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Any Flipped?": {
+   "main": [
+    [
+     {
+      "node": "Gmail - Alert Draft (NEVER SENDS)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Return",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodes": [
+  {
+   "id": "5641e84f-cfd5-4b5e-a3d0-43dd49186fa0",
+   "name": "Sticky Note de341361",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    100,
+    592
+   ],
+   "parameters": {
+    "content": "ERR v-next.2 (D12 combined error rule, Wonder FINAL VERIFY fix, 2026-11-16). On an error event from WF00 v-next: (a) EVENT FLIP - fresh runs of the v-next orchestrator (config_snapshot orchestrator = wf00-vnext) stuck under 1 hour flip to failed immediately; (b) SWEEP - any run still started after 1 hour flips, NO upper age bound. Together an errored run flips at any age. Known residual: a concurrent healthy v-next run inside the fresh window can be flipped by the event half (same semantics the old v8 handler had). Flips get failed + note + a Gmail-draft alert. Sends nothing.",
+    "color": 5
+   }
+  },
+  {
+   "id": "fb0c6c3a-5f6e-48d6-8084-64488ec23383",
+   "name": "Error Trigger",
+   "type": "n8n-nodes-base.errorTrigger",
+   "typeVersion": 1,
+   "position": [
+    40,
+    400
+   ],
+   "parameters": {}
+  },
+  {
+   "id": "fc343dc4-b20a-4a78-aab1-77a4ed7ee08a",
+   "name": "Build Failure Note",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    320,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const j = $input.first().json || {};\nconst exec = j.execution || {};\nconst err = (exec.error && exec.error.message) || (j.error && j.error.message) || 'unknown error';\nconst wf = (j.workflow && j.workflow.name) || 'unknown workflow';\nconst note = ('error handler v-next: ' + wf + ' failed at ' + (exec.lastNodeExecuted || 'unknown node') + ' - ' + String(err)).slice(0, 300);\nreturn [{ json: { note } }];"
+   }
+  },
+  {
+   "id": "fa784a65-ce86-4eae-b241-5b146f12e4ee",
+   "name": "DB - Mark Runs Failed (v-next.2 combined)",
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    600,
+    400
+   ],
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "WITH ev AS (\n  UPDATE runs SET status = 'failed', finished_at = now(), notes = COALESCE(notes, '') || ' [' || $1 || ' | event-flip]'\n  WHERE status = 'started' AND started_at > now() - interval '1 hour' AND config_snapshot->>'orchestrator' = 'wf00-vnext'\n  RETURNING id\n), sw AS (\n  UPDATE runs SET status = 'failed', finished_at = now(), notes = COALESCE(notes, '') || ' [' || $1 || ' | sweep]'\n  WHERE status = 'started' AND started_at < now() - interval '1 hour'\n  RETURNING id\n)\nSELECT id FROM ev UNION ALL SELECT id FROM sw",
+    "options": {
+     "queryReplacement": "={{ [ $json.note ] }}"
+    }
+   },
+   "credentials": {
+    "postgres": {
+     "id": "MpjjNGB3euuSq58i",
+     "name": "Postgres account"
+    }
+   }
+  },
+  {
+   "id": "d8d4f06c-52eb-4131-b220-61512890e9e9",
+   "name": "Build Alert",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    400
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "const rows = $input.all().map(i => i.json).filter(r => r.id);\nconst ids = rows.map(r => r.id);\nconst body = 'ERR v-next.2 flipped ' + ids.length + ' stuck run(s) to failed:\\n' + ids.join('\\n');\nreturn [{ json: { count: ids.length, has_flips: ids.length > 0, sendTo: 'victor.job154@gmail.com', subject: 'ERR v-next.2 ALERT - runs flipped (event + sweep)', body } }];"
+   }
+  },
+  {
+   "id": "5817dcdb-9b21-4cb5-8846-e2c935f6fdd4",
+   "name": "Any Flipped?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1020,
+    400
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "conditions": [
+      {
+       "leftValue": "={{ $json.has_flips }}",
+       "operator": {
+        "type": "boolean",
+        "operation": "true"
+       }
+      }
+     ],
+     "combinator": "and"
+    }
+   }
+  },
+  {
+   "id": "34d6892c-5c10-41cf-a60a-ffb0edbb9551",
+   "name": "Gmail - Alert Draft (NEVER SENDS)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1160,
+    400
+   ],
+   "parameters": {
+    "resource": "draft",
+    "operation": "create",
+    "sendTo": "={{ $json.sendTo }}",
+    "subject": "={{ $json.subject }}",
+    "emailType": "text",
+    "message": "={{ $json.body }}",
+    "options": {}
+   },
+   "webhookId": "23b1eed8-bc68-4a0d-9dd7-9c208b1c9c86",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "zntM9UZyeSBO3YjV",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "id": "e2839b0c-7e0c-4995-928b-4a1f080cc934",
+   "name": "Return",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1160,
+    640
+   ],
+   "parameters": {
+    "mode": "runOnceForAllItems",
+    "jsCode": "return [{ json: { success: true } }];"
+   }
+  }
+ ],
+ "nodeGroups": [],
+ "activeVersion": {
+  "sameAsDraft": true
+ },
+ "meta": {
+  "aiBuilderAssisted": true,
+  "builderVariant": "mcp"
+ }
+}
