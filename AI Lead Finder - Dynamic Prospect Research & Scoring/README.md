@@ -102,5 +102,4 @@ rather than trusting the model's draft. It passed a frozen 50-case
 evaluation (30 realistic, 20 adversarial) at 28 of 30 with zero unsafe
 drafts saved; every saved draft was re-validated and every model call was
 provenance-checked. The complete current workflow set, exactly as exported
-from the live system with a hashed manifest, is in the `migration-pack/`
-folder of this case.
+from the live system, is in the `migration-pack/` folder of this case.
