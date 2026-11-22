@@ -7,6 +7,26 @@ the same code has run end-to-end for a B2B professional-services context and
 for a local retail/services context, driven only by a different business
 context at runtime.
 
+## Current state (2026-11-22)
+
+Canonical live heads: WF00 v-next.14 (orchestrator), SF0 v-next.13 (the
+business-context planner, promoted 2026-11-21 after a golden-set campaign
+scored 28/30 with zero unsafe plans), SF2 v-next.5, SF4 v-next.3,
+SF7 v-next.5, SF5 v-next.7, SF6 v-next.6, SF6d v-next.3, SF9, SF8 v-next.10,
+SF10 v-next.9 (outreach drafts). The full workflow exports live in
+`migration-pack/`.
+
+The system has run end to end on live data: a plan created from a plain
+language business description, approved by the owner, then discovery,
+dedupe, scoring, research and human approval publishing, with every cost
+written to a spend ledger. Discovery is multi-source: Google Maps places,
+Tavily web search and Tavily social (Facebook and TikTok), plus a manual
+import path, all behind a 24 hour discovery cache. SF2 and SF4 were hardened
+on 2026-11-21 against malformed unicode in provider data (lone surrogate
+pairs in scraped text are stripped at each stage's data chokepoint before
+any database write). Outreach stays drafts only; nothing is ever sent
+automatically.
+
 ## How it works
 
 1. **SF1 — Search Profile Generator.** An LLM turns the business context into
@@ -14,9 +34,9 @@ context at runtime.
    and a scoring rubric (deterministic fit criteria summing to 70 points,
    plus a bounded LLM judgement of at most 30). A human approves the profile
    before anything runs.
-2. **SF2 — Discovery.** Google Maps places via Apify, run sequentially inside
-   the free-plan concurrency limits, hard-bounded per run by the profile's
-   own query set.
+2. **SF2 — Discovery.** Google Maps places, Tavily web search and Tavily
+   social sources, hard-bounded per run by the profile's own query set and
+   served through a 24 hour discovery cache.
 3. **SF4 — Dedupe + Exclusion.** One deterministic SQL statement checks the
    suppression ledger and existing companies before any company is inserted
    and before any downstream spend. Domain matches require the same location,

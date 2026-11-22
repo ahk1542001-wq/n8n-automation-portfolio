@@ -1,182 +1,185 @@
 {
- "id": "ZER7z4xcdFWGbZJI",
- "name": "SF4 v-next.3 - Dedupe + Exclusion",
- "active": false,
- "isArchived": false,
- "versionId": "44897c44-5bcd-44a5-8426-5244df655af2",
- "activeVersionId": null,
- "triggerCount": 0,
- "nodeCount": 5,
- "createdAt": "2026-11-19T09:26:18.607Z",
- "updatedAt": "2026-11-19T09:26:22.139Z",
- "settings": {
-  "executionOrder": "v1",
-  "availableInMCP": true
- },
- "tags": [],
- "parentFolderId": null,
- "scopes": [
-  "execution:delete",
-  "execution:list",
-  "execution:read",
-  "execution:reveal",
-  "workflow:create",
-  "workflow:delete",
-  "workflow:disableRedaction",
-  "workflow:enableRedaction",
-  "workflow:execute",
-  "workflow:execute-chat",
-  "workflow:export",
-  "workflow:import",
-  "workflow:list",
-  "workflow:move",
-  "workflow:publish",
-  "workflow:read",
-  "workflow:share",
-  "workflow:unpublish",
-  "workflow:unshare",
-  "workflow:update"
- ],
- "canExecute": true,
- "connections": {
-  "When Executed by Another Workflow": {
-   "main": [
-    [
-     {
-      "node": "Normalize + Build Payload",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
+ "workflow": {
+  "id": "ZER7z4xcdFWGbZJI",
+  "name": "SF4 v-next.3 - Dedupe + Exclusion",
+  "active": false,
+  "isArchived": false,
+  "versionId": "6387e170-9014-43b5-9493-740d08f2f166",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "nodeCount": 5,
+  "createdAt": "2026-11-19T09:26:18.607Z",
+  "updatedAt": "2026-11-21T15:02:22.169Z",
+  "settings": {
+   "executionOrder": "v1",
+   "availableInMCP": true
   },
-  "Normalize + Build Payload": {
-   "main": [
-    [
-     {
-      "node": "DB - Dedupe + Insert",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "DB - Dedupe + Insert": {
-   "main": [
-    [
-     {
-      "node": "Summarize + Return",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  }
- },
- "nodes": [
-  {
-   "id": "7812818c-e03f-45b2-96c1-9ba69471fdb3",
-   "name": "Sticky Note 8bee5c1e",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    100,
-    592
-   ],
-   "parameters": {
-    "content": "SF4 - Dedupe + Exclusion. Input: { search_profile_id, profile_version, run_id, candidates[] } in the common raw-lead contract. Normalises names/domains, then ONE deterministic SQL statement checks the suppression ledger and existing companies (place_id, domain, name+location keys), inserts only genuinely new companies, and returns a per-candidate outcome: inserted | duplicate | suppressed. Dedupe runs BEFORE any paid enrichment spend.",
-    "color": 5
-   }
-  },
-  {
-   "id": "2649bee1-9b5c-4496-8e4d-487d98105fad",
-   "name": "When Executed by Another Workflow",
-   "type": "n8n-nodes-base.executeWorkflowTrigger",
-   "typeVersion": 1.1,
-   "position": [
-    40,
-    400
-   ],
-   "parameters": {
-    "workflowInputs": {
-     "values": [
+  "tags": [],
+  "parentFolderId": null,
+  "scopes": [
+   "execution:delete",
+   "execution:list",
+   "execution:read",
+   "execution:reveal",
+   "workflow:create",
+   "workflow:delete",
+   "workflow:disableRedaction",
+   "workflow:enableRedaction",
+   "workflow:execute",
+   "workflow:execute-chat",
+   "workflow:export",
+   "workflow:import",
+   "workflow:list",
+   "workflow:move",
+   "workflow:publish",
+   "workflow:read",
+   "workflow:share",
+   "workflow:unpublish",
+   "workflow:unshare",
+   "workflow:update"
+  ],
+  "canExecute": true,
+  "connections": {
+   "When Executed by Another Workflow": {
+    "main": [
+     [
       {
-       "name": "search_profile_id",
-       "type": "string"
-      },
-      {
-       "name": "profile_version",
-       "type": "number"
-      },
-      {
-       "name": "run_id",
-       "type": "string"
-      },
-      {
-       "name": "candidates",
-       "type": "array"
+       "node": "Normalize + Build Payload",
+       "type": "main",
+       "index": 0
       }
      ]
-    }
+    ]
+   },
+   "Normalize + Build Payload": {
+    "main": [
+     [
+      {
+       "node": "DB - Dedupe + Insert",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "DB - Dedupe + Insert": {
+    "main": [
+     [
+      {
+       "node": "Summarize + Return",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
    }
   },
-  {
-   "id": "defa1eb3-a10d-4111-b8be-7629406f4444",
-   "name": "Normalize + Build Payload",
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    320,
-    400
-   ],
-   "parameters": {
-    "mode": "runOnceForAllItems",
-    "jsCode": "const inp = $input.item.json || {};\nfunction normName(s){ if(s===null||s===undefined) return ''; let t = String(s).toLowerCase().replace(/[^a-z0-9\\u1000-\\u109F ]+/g,' ').replace(/\\s+/g,' ').trim(); t = t.replace(/\\b(co ltd|company limited|limited|ltd|llc|inc|corp|company|pte|sdn bhd|gmbh)\\b/g,' ').replace(/\\s+/g,' ').trim(); return t; }\nfunction normDomain(d, w){ let v = (d || w || ''); if(!v) return null; v = String(v).toLowerCase().trim().replace(/^https?:\\/\\//,'').replace(/^www\\./,'').split('/')[0].split('?')[0].trim(); return v || null; }\nconst cands = (inp.candidates || []).map(c => ({\n  source: c.source || 'manual',\n  source_id: c.source_id || c.place_id || null,\n  name: c.name || '',\n  normalised_name: normName(c.name),\n  domain: normDomain(c.domain, c.website),\n  place_id: c.place_id || null,\n  registration_no: c.registration_no || null,\n  category: c.category || null,\n  location: c.location || null,\n  website: c.website || null,\n  phone: c.phone || null,\n  rating: (c.rating === undefined ? null : c.rating),\n  review_count: (c.review_count === undefined ? null : c.review_count),\n  raw: c.raw || c\n}));\nconst payload = { search_profile_id: inp.search_profile_id || null, profile_version: inp.profile_version || 1, run_id: inp.run_id || null, candidates: cands };\nreturn { json: { payload_json: JSON.stringify(payload), candidate_count: cands.length } };"
-   }
-  },
-  {
-   "id": "73faf963-837d-4b27-9e57-a3860c2981c2",
-   "name": "DB - Dedupe + Insert",
-   "type": "n8n-nodes-base.postgres",
-   "typeVersion": 2.6,
-   "position": [
-    600,
-    400
-   ],
-   "parameters": {
-    "operation": "executeQuery",
-    "query": "-- SF4 Dedupe + Exclusion \u2014 single deterministic statement.\n-- Franchise rule (Wonder review fix, 2026-11-15): a shared domain alone NEVER makes a\n-- duplicate \u2014 domain matches require the same location too, so distinct chain branches\n-- (same domain, different city) are separate companies. Pairs with the\n-- companies_domain_loc_uq index on (lower(domain), location).\n-- $1 = JSON payload: {search_profile_id, profile_version, run_id, candidates:[...]}\n-- Candidates arrive PRE-NORMALISED (normalised_name, domain lowercased/host-extracted).\nWITH p AS (SELECT $1::jsonb AS j),\ncand AS (\n  SELECT t.idx,\n         t.elem->>'source' AS source,\n         t.elem->>'source_id' AS source_id,\n         t.elem->>'name' AS name,\n         t.elem->>'normalised_name' AS normalised_name,\n         t.elem->>'domain' AS domain,\n         t.elem->>'place_id' AS place_id,\n         t.elem->>'registration_no' AS registration_no,\n         t.elem->>'category' AS category,\n         t.elem->>'location' AS location,\n         t.elem->>'website' AS website,\n         t.elem->>'phone' AS phone,\n         (t.elem->>'rating')::numeric AS rating,\n         (t.elem->>'review_count')::int AS review_count,\n         t.elem->'raw' AS raw,\n         (p.j->>'search_profile_id')::uuid AS spid,\n         (p.j->>'profile_version')::int AS ver,\n         (p.j->>'run_id')::uuid AS runid,\n         coalesce(t.elem->>'place_id',\n                  lower(t.elem->>'domain') || '|' || coalesce(t.elem->>'location',''),\n                  (t.elem->>'normalised_name') || '|' || coalesce(t.elem->>'location','')) AS dkey\n  FROM p, jsonb_array_elements(p.j->'candidates') WITH ORDINALITY AS t(elem, idx)\n),\nsupp AS (\n  SELECT c.idx FROM cand c\n  WHERE EXISTS (SELECT 1 FROM suppressions s WHERE\n    (s.match_type = 'place_id' AND c.place_id IS NOT NULL AND s.match_value = c.place_id)\n    OR (s.match_type = 'domain' AND c.domain IS NOT NULL AND s.match_value = lower(c.domain))\n    OR (s.match_type = 'name_location' AND s.match_value = c.normalised_name || '|' || coalesce(c.location,'')))\n),\nexist AS (\n  SELECT c.idx,\n         (SELECT co.id FROM companies co\n          WHERE (c.place_id IS NOT NULL AND co.place_id = c.place_id)\n             OR (c.domain IS NOT NULL AND lower(co.domain) = lower(c.domain)\n                 AND coalesce(co.location,'') = coalesce(c.location,''))\n             OR (co.normalised_name = c.normalised_name AND coalesce(co.location,'') = coalesce(c.location,''))\n          ORDER BY co.created_at LIMIT 1) AS company_id\n  FROM cand c WHERE c.idx NOT IN (SELECT idx FROM supp)\n),\nins AS (\n  INSERT INTO companies (search_profile_id, profile_version, run_id, name, normalised_name,\n                         domain, place_id, registration_no, category, location, website,\n                         phone, rating, review_count, source, source_ids, raw_payload, status,\n                         quarantined_at, quarantine_reason)\n  SELECT spid, ver, runid, name, normalised_name, domain, place_id, registration_no, category,\n         location, website, phone, rating, review_count, source,\n         jsonb_build_object(source, source_id), raw, 'new',\n         CASE WHEN source = 'tavily_social' THEN now() END,\n         CASE WHEN source = 'tavily_social' THEN 'social_unverified' END\n  FROM (SELECT DISTINCT ON (dkey) * FROM cand\n        WHERE idx NOT IN (SELECT idx FROM supp)\n          AND idx NOT IN (SELECT idx FROM exist WHERE company_id IS NOT NULL)\n        ORDER BY dkey, idx) firsts\n  ON CONFLICT DO NOTHING\n  RETURNING id, name, place_id, domain, normalised_name, location\n),\nins_d AS (\n  SELECT id, coalesce(place_id, lower(domain) || '|' || coalesce(location,''), normalised_name || '|' || coalesce(location,'')) AS dkey\n  FROM ins\n),\nfirsts AS (\n  SELECT dkey, min(idx) AS idx FROM cand\n  WHERE idx NOT IN (SELECT idx FROM supp)\n    AND idx NOT IN (SELECT idx FROM exist WHERE company_id IS NOT NULL)\n  GROUP BY dkey\n)\nSELECT c.name,\n       CASE WHEN c.idx IN (SELECT idx FROM supp) THEN 'suppressed'\n            WHEN c.idx IN (SELECT idx FROM exist WHERE company_id IS NOT NULL) THEN 'duplicate'\n            WHEN c.idx IN (SELECT idx FROM firsts) AND c.dkey IN (SELECT dkey FROM ins_d) THEN 'inserted'\n            ELSE 'duplicate' END AS outcome,\n       CASE WHEN c.idx IN (SELECT idx FROM exist WHERE company_id IS NOT NULL)\n              THEN (SELECT company_id FROM exist WHERE idx = c.idx)\n            WHEN c.dkey IN (SELECT dkey FROM ins_d)\n              THEN (SELECT id FROM ins_d WHERE dkey = c.dkey)\n            ELSE NULL END AS company_id\nFROM cand c\nORDER BY c.idx;\n",
-    "options": {
-     "queryReplacement": "={{ [ $json.payload_json ] }}"
+  "nodes": [
+   {
+    "id": "7812818c-e03f-45b2-96c1-9ba69471fdb3",
+    "name": "Sticky Note 8bee5c1e",
+    "type": "n8n-nodes-base.stickyNote",
+    "typeVersion": 1,
+    "position": [
+     100,
+     592
+    ],
+    "parameters": {
+     "content": "SF4 - Dedupe + Exclusion. Input: { search_profile_id, profile_version, run_id, candidates[] } in the common raw-lead contract. Normalises names/domains, then ONE deterministic SQL statement checks the suppression ledger and existing companies (place_id, domain, name+location keys), inserts only genuinely new companies, and returns a per-candidate outcome: inserted | duplicate | suppressed. Dedupe runs BEFORE any paid enrichment spend.",
+     "color": 5
     }
    },
-   "alwaysOutputData": true,
-   "credentials": {
-    "postgres": {
-     "id": "MpjjNGB3euuSq58i",
-     "name": "Postgres account"
+   {
+    "id": "2649bee1-9b5c-4496-8e4d-487d98105fad",
+    "name": "When Executed by Another Workflow",
+    "type": "n8n-nodes-base.executeWorkflowTrigger",
+    "typeVersion": 1.1,
+    "position": [
+     40,
+     400
+    ],
+    "parameters": {
+     "workflowInputs": {
+      "values": [
+       {
+        "name": "search_profile_id",
+        "type": "string"
+       },
+       {
+        "name": "profile_version",
+        "type": "number"
+       },
+       {
+        "name": "run_id",
+        "type": "string"
+       },
+       {
+        "name": "candidates",
+        "type": "array"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "id": "defa1eb3-a10d-4111-b8be-7629406f4444",
+    "name": "Normalize + Build Payload",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     320,
+     400
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "function fixStr(s){ return s.replace(/[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])/g, '').replace(/(?<![\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]/g, ''); }\nfunction deepFix(v){ if (typeof v === 'string') return fixStr(v); if (Array.isArray(v)) return v.map(deepFix); if (v && typeof v === 'object') { const o = {}; for (const k of Object.keys(v)) o[k] = deepFix(v[k]); return o; } return v; }\nconst inp = $input.item.json || {};\nfunction normName(s){ if(s===null||s===undefined) return ''; let t = String(s).toLowerCase().replace(/[^a-z0-9\\u1000-\\u109F ]+/g,' ').replace(/\\s+/g,' ').trim(); t = t.replace(/\\b(co ltd|company limited|limited|ltd|llc|inc|corp|company|pte|sdn bhd|gmbh)\\b/g,' ').replace(/\\s+/g,' ').trim(); return t; }\nfunction normDomain(d, w){ let v = (d || w || ''); if(!v) return null; v = String(v).toLowerCase().trim().replace(/^https?:\\/\\//,'').replace(/^www\\./,'').split('/')[0].split('?')[0].trim(); return v || null; }\nconst cands = (inp.candidates || []).map(c => ({\n  source: c.source || 'manual',\n  source_id: c.source_id || c.place_id || null,\n  name: c.name || '',\n  normalised_name: normName(c.name),\n  domain: normDomain(c.domain, c.website),\n  place_id: c.place_id || null,\n  registration_no: c.registration_no || null,\n  category: c.category || null,\n  location: c.location || null,\n  website: c.website || null,\n  phone: c.phone || null,\n  rating: (c.rating === undefined ? null : c.rating),\n  review_count: (c.review_count === undefined ? null : c.review_count),\n  raw: c.raw || c\n}));\nconst payload = { search_profile_id: inp.search_profile_id || null, profile_version: inp.profile_version || 1, run_id: inp.run_id || null, candidates: cands };\nreturn { json: { payload_json: JSON.stringify(deepFix(payload)), candidate_count: cands.length } };"
+    }
+   },
+   {
+    "id": "73faf963-837d-4b27-9e57-a3860c2981c2",
+    "name": "DB - Dedupe + Insert",
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     600,
+     400
+    ],
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "-- SF4 Dedupe + Exclusion — single deterministic statement.\n-- Franchise rule (Wonder review fix, 2026-11-15): a shared domain alone NEVER makes a\n-- duplicate — domain matches require the same location too, so distinct chain branches\n-- (same domain, different city) are separate companies. Pairs with the\n-- companies_domain_loc_uq index on (lower(domain), location).\n-- $1 = JSON payload: {search_profile_id, profile_version, run_id, candidates:[...]}\n-- Candidates arrive PRE-NORMALISED (normalised_name, domain lowercased/host-extracted).\nWITH p AS (SELECT $1::jsonb AS j),\ncand AS (\n  SELECT t.idx,\n         t.elem->>'source' AS source,\n         t.elem->>'source_id' AS source_id,\n         t.elem->>'name' AS name,\n         t.elem->>'normalised_name' AS normalised_name,\n         t.elem->>'domain' AS domain,\n         t.elem->>'place_id' AS place_id,\n         t.elem->>'registration_no' AS registration_no,\n         t.elem->>'category' AS category,\n         t.elem->>'location' AS location,\n         t.elem->>'website' AS website,\n         t.elem->>'phone' AS phone,\n         (t.elem->>'rating')::numeric AS rating,\n         (t.elem->>'review_count')::int AS review_count,\n         t.elem->'raw' AS raw,\n         (p.j->>'search_profile_id')::uuid AS spid,\n         (p.j->>'profile_version')::int AS ver,\n         (p.j->>'run_id')::uuid AS runid,\n         coalesce(t.elem->>'place_id',\n                  lower(t.elem->>'domain') || '|' || coalesce(t.elem->>'location',''),\n                  (t.elem->>'normalised_name') || '|' || coalesce(t.elem->>'location','')) AS dkey\n  FROM p, jsonb_array_elements(p.j->'candidates') WITH ORDINALITY AS t(elem, idx)\n),\nsupp AS (\n  SELECT c.idx FROM cand c\n  WHERE EXISTS (SELECT 1 FROM suppressions s WHERE\n    (s.match_type = 'place_id' AND c.place_id IS NOT NULL AND s.match_value = c.place_id)\n    OR (s.match_type = 'domain' AND c.domain IS NOT NULL AND s.match_value = lower(c.domain))\n    OR (s.match_type = 'name_location' AND s.match_value = c.normalised_name || '|' || coalesce(c.location,'')))\n),\nexist AS (\n  SELECT c.idx,\n         (SELECT co.id FROM companies co\n          WHERE (c.place_id IS NOT NULL AND co.place_id = c.place_id)\n             OR (c.domain IS NOT NULL AND lower(co.domain) = lower(c.domain)\n                 AND coalesce(co.location,'') = coalesce(c.location,''))\n             OR (co.normalised_name = c.normalised_name AND coalesce(co.location,'') = coalesce(c.location,''))\n          ORDER BY co.created_at LIMIT 1) AS company_id\n  FROM cand c WHERE c.idx NOT IN (SELECT idx FROM supp)\n),\nins AS (\n  INSERT INTO companies (search_profile_id, profile_version, run_id, name, normalised_name,\n                         domain, place_id, registration_no, category, location, website,\n                         phone, rating, review_count, source, source_ids, raw_payload, status,\n                         quarantined_at, quarantine_reason)\n  SELECT spid, ver, runid, name, normalised_name, domain, place_id, registration_no, category,\n         location, website, phone, rating, review_count, source,\n         jsonb_build_object(source, source_id), raw, 'new',\n         CASE WHEN source = 'tavily_social' THEN now() END,\n         CASE WHEN source = 'tavily_social' THEN 'social_unverified' END\n  FROM (SELECT DISTINCT ON (dkey) * FROM cand\n        WHERE idx NOT IN (SELECT idx FROM supp)\n          AND idx NOT IN (SELECT idx FROM exist WHERE company_id IS NOT NULL)\n        ORDER BY dkey, idx) firsts\n  ON CONFLICT DO NOTHING\n  RETURNING id, name, place_id, domain, normalised_name, location\n),\nins_d AS (\n  SELECT id, coalesce(place_id, lower(domain) || '|' || coalesce(location,''), normalised_name || '|' || coalesce(location,'')) AS dkey\n  FROM ins\n),\nfirsts AS (\n  SELECT dkey, min(idx) AS idx FROM cand\n  WHERE idx NOT IN (SELECT idx FROM supp)\n    AND idx NOT IN (SELECT idx FROM exist WHERE company_id IS NOT NULL)\n  GROUP BY dkey\n)\nSELECT c.name,\n       CASE WHEN c.idx IN (SELECT idx FROM supp) THEN 'suppressed'\n            WHEN c.idx IN (SELECT idx FROM exist WHERE company_id IS NOT NULL) THEN 'duplicate'\n            WHEN c.idx IN (SELECT idx FROM firsts) AND c.dkey IN (SELECT dkey FROM ins_d) THEN 'inserted'\n            ELSE 'duplicate' END AS outcome,\n       CASE WHEN c.idx IN (SELECT idx FROM exist WHERE company_id IS NOT NULL)\n              THEN (SELECT company_id FROM exist WHERE idx = c.idx)\n            WHEN c.dkey IN (SELECT dkey FROM ins_d)\n              THEN (SELECT id FROM ins_d WHERE dkey = c.dkey)\n            ELSE NULL END AS company_id\nFROM cand c\nORDER BY c.idx;\n",
+     "options": {
+      "queryReplacement": "={{ [ $json.payload_json ] }}"
+     }
+    },
+    "alwaysOutputData": true,
+    "credentials": {
+     "postgres": {
+      "id": "MpjjNGB3euuSq58i",
+      "name": "Postgres account"
+     }
+    }
+   },
+   {
+    "id": "97cb1290-15e6-44f9-a1de-795f5d5ceba9",
+    "name": "Summarize + Return",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     880,
+     400
+    ],
+    "parameters": {
+     "mode": "runOnceForAllItems",
+     "jsCode": "const rows = $input.all().map(i => i.json);\nconst counts = { inserted: 0, duplicates: 0, suppressed: 0 };\nconst real = rows.filter(r => r && r.outcome);\nfor (const r of real) { if (r.outcome === 'inserted') counts.inserted++; else if (r.outcome === 'suppressed') counts.suppressed++; else counts.duplicates++; }\nreturn { json: { success: true, inserted: counts.inserted, duplicates: counts.duplicates, suppressed: counts.suppressed, results: real } };"
     }
    }
-  },
-  {
-   "id": "97cb1290-15e6-44f9-a1de-795f5d5ceba9",
-   "name": "Summarize + Return",
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    880,
-    400
-   ],
-   "parameters": {
-    "mode": "runOnceForAllItems",
-    "jsCode": "const rows = $input.all().map(i => i.json);\nconst counts = { inserted: 0, duplicates: 0, suppressed: 0 };\nconst real = rows.filter(r => r && r.outcome);\nfor (const r of real) { if (r.outcome === 'inserted') counts.inserted++; else if (r.outcome === 'suppressed') counts.suppressed++; else counts.duplicates++; }\nreturn { json: { success: true, inserted: counts.inserted, duplicates: counts.duplicates, suppressed: counts.suppressed, results: real } };"
-   }
+  ],
+  "nodeGroups": [],
+  "activeVersion": null,
+  "meta": {
+   "aiBuilderAssisted": true,
+   "builderVariant": "mcp"
   }
- ],
- "nodeGroups": [],
- "activeVersion": null,
- "meta": {
-  "aiBuilderAssisted": true,
-  "builderVariant": "mcp"
- }
+ },
+ "triggerInfo": "This workflow's trigger(s) are not supported for direct execution through MCP: When Executed by Another Workflow. Only Schedule, Webhook, Form, and Chat triggers can be executed directly through MCP, so this workflow cannot be executed through MCP. Its trigger(s) still run normally when the workflow is active."
 }
