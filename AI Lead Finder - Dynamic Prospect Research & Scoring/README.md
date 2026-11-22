@@ -123,3 +123,7 @@ evaluation (30 realistic, 20 adversarial) at 28 of 30 with zero unsafe
 drafts saved; every saved draft was re-validated and every model call was
 provenance-checked. The complete current workflow set, exactly as exported
 from the live system, is in the `migration-pack/` folder of this case.
+
+## Engine swap in progress (2026-11-22)
+
+The Google Maps discovery engine is being swapped from Apify (paid, exhausted free tier) to a self-hosted open-source scraper (gosom, MIT), behind a config flag with Apify kept as instant rollback. The planner-facing source name stays the same; every candidate now records which engine found it. Design approved with conditions by the reviewing model; the new engine becomes the default only after the promotion checklist passes on the self-hosted deployment. New exports: migration-pack/sf2-vnext6.json and migration-pack/sf2maps-vnext6.json (the maps engine now lives in its own sub-workflow, SF2-MAPS).
